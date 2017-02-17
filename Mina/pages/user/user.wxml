@@ -6,68 +6,28 @@
 
 <view class="user-contain">
     <view class="sub-title">观看历史<text class="more">更多</text></view>
-    <scroll-view scroll-x="true" class="mod-listvideo">
+    <view class="list-placeh" wx:if="{{dload == 'loading'}}"><image src="../../static/reload-m.gif"></image></view>
+    <view class="list-placeh" wx:elif="{{dload == 'noresult'}}">没有观看记录 :(</view>
+    <scroll-view scroll-x="true" class="mod-listvideo" wx:else>
+        <block wx:for="{{newHisList}}">
         <view class="item" bindtap="getdetail" id="{{item.vid}}">
-            <image src="http://yechtv-upload.stor.sinaapp.com/album2016001.jpg"></image>
-            <!--<view class="mask"><image src="../../static/icon-time.png"></image>3分钟前</view>-->
+            <image src="{{item.imgurl}}"></image>
             <view class="like"><image src="../../static/icon-heart.png"></image></view>
-            <view class="tit">一分钟懒人运动01</view>
-            <view class="time"><image src="../../static/icon-time.png"></image>3分钟前</view>
+            <view class="tit">{{item.title}}</view>
+            <view class="time"><image src="../../static/icon-time.png"></image>{{item.time}}</view>
         </view>
-        <view class="item" bindtap="getdetail" id="{{item.vid}}">
-            <image src="http://yechtv-upload.stor.sinaapp.com/album2016001.jpg"></image>
-            <view class="like"><image src="../../static/icon-heart.png"></image></view>
-            <view class="tit">一分钟懒人运动01</view>
-            <view class="time"><image src="../../static/icon-time.png"></image>3分钟前</view>
-        </view>
-        <view class="item" bindtap="getdetail" id="{{item.vid}}">
-            <image src="http://yechtv-upload.stor.sinaapp.com/album2016001.jpg"></image>
-            <view class="like"><image src="../../static/icon-heart.png"></image></view>
-            <view class="tit">一分钟懒人运动01</view>
-            <view class="time"><image src="../../static/icon-time.png"></image>3分钟前</view>
-        </view>
-        <view class="item" bindtap="getdetail" id="{{item.vid}}">
-            <image src="http://yechtv-upload.stor.sinaapp.com/album2016001.jpg"></image>
-            <view class="like"><image src="../../static/icon-heart.png"></image></view>
-            <view class="tit">一分钟懒人运动01</view>
-            <view class="time"><image src="../../static/icon-time.png"></image>3分钟前</view>
-        </view>
-        <view class="item" bindtap="getdetail" id="{{item.vid}}">
-            <image src="http://yechtv-upload.stor.sinaapp.com/album2016001.jpg"></image>
-            <view class="like"><image src="../../static/icon-heart.png"></image></view>
-            <view class="tit">一分钟懒人运动01</view>
-            <view class="time"><image src="../../static/icon-time.png"></image>3分钟前</view>
-        </view>
+        </block>
     </scroll-view>
 
     <view class="sub-title">我的收藏<text class="more">更多</text></view>
-    <scroll-view scroll-x="true" class="mod-listvideo">
+    <view class="list-placeh" ><image src="../../static/reload-m.gif"></image></view>
+    <!--<scroll-view scroll-x="true" class="mod-listvideo">
         <view class="item" bindtap="getdetail" id="{{item.vid}}">
             <image src="http://yechtv-upload.stor.sinaapp.com/album2016001.jpg"></image>
             <view class="like"><image src="../../static/icon-heart-cur.png"></image></view>
             <view class="tit">一分钟懒人运动01</view>
         </view>
-        <view class="item" bindtap="getdetail" id="{{item.vid}}">
-            <image src="http://yechtv-upload.stor.sinaapp.com/album2016001.jpg"></image>
-            <view class="like"><image src="../../static/icon-heart-cur.png"></image></view>
-            <view class="tit">一分钟懒人运动01</view>
-        </view>
-        <view class="item" bindtap="getdetail" id="{{item.vid}}">
-            <image src="http://yechtv-upload.stor.sinaapp.com/album2016001.jpg"></image>
-            <view class="like"><image src="../../static/icon-heart-cur.png"></image></view>
-            <view class="tit">一分钟懒人运动01</view>
-        </view>
-        <view class="item" bindtap="getdetail" id="{{item.vid}}">
-            <image src="http://yechtv-upload.stor.sinaapp.com/album2016001.jpg"></image>
-            <view class="like"><image src="../../static/icon-heart-cur.png"></image></view>
-            <view class="tit">一分钟懒人运动01</view>
-        </view>
-        <view class="item" bindtap="getdetail" id="{{item.vid}}">
-            <image src="http://yechtv-upload.stor.sinaapp.com/album2016001.jpg"></image>
-            <view class="like"><image src="../../static/icon-heart-cur.png"></image></view>
-            <view class="tit">一分钟懒人运动01</view>
-        </view>
-    </scroll-view>
+    </scroll-view>-->
 
     <button type="default" class="clearStor" bindtap="clearStor">清除本地缓存({{storage}}kb)</button>
 </view>

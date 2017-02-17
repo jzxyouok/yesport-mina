@@ -8,7 +8,6 @@ Page({
     curUrl: '',
     cursummary: '',
     curPro: '',
-    originData: '',
     ramDataArr: '',
     listAlbum: '',
     listRecom: ''
@@ -47,7 +46,6 @@ Page({
           });
 
           that.setData({
-            originData: res.data,
             ramDataArr: newDataArr,
             listAlbum: curdata,
             curvideo: curdata[0].source,
@@ -59,7 +57,13 @@ Page({
 
           wx.setNavigationBarTitle({
             title: curdata[0].title
-          })
+          });
+
+          //存储一份数据给观看历史记录用，不用再次拉新数据
+          wx.setStorage({
+            key: 'reqApiData',
+            data: res.data
+          });
           
         },
         fail: function() {
