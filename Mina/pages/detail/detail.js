@@ -10,7 +10,8 @@ Page({
     curPro: '',
     ramDataArr: '',
     listAlbum: '',
-    listRecom: ''
+    listRecom: '',
+    loadst: 'loading'
   },
   onShareAppMessage: function () {
     return {
@@ -52,7 +53,8 @@ Page({
             curtitle: curdata[0].title,
             curUrl: '/page/detail/detail?vid='+curdata[0].title,
             cursummary: curdata[0].content,
-            curPro: curdata[0].production
+            curPro: curdata[0].production,
+            loadst: "normal"
           });
 
           wx.setNavigationBarTitle({
@@ -70,6 +72,9 @@ Page({
           wx.showToast({
             title: '请求数据错误~'
           });
+          this.setData({
+            loadst: fail
+          })
         }
       })
   },

@@ -61,7 +61,8 @@ page {
   top: -100rpx;
   transform: translateX(-50%);
   border-radius: 10rpx;
-  background: #fff url(http://yechtv-upload.stor.sinaapp.com/loading.gif);
+  background: #fff url(http://yechtv-upload.stor.sinaapp.com/reload-m.gif) center center no-repeat;
+  background-size: 40rpx 40rpx;
 }
 
 .detail-summary {
