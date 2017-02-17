@@ -1,0 +1,32 @@
+page{
+    padding-bottom: 30rpx;
+}
+.user-contain{
+    padding: 0 20rpx;
+}
+.userinfo{
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+    margin: 40rpx 0;
+    padding-bottom: 50rpx;
+}
+.avatar{
+    width: 160rpx;
+    height: 160rpx;
+    border-radius: 50%;
+    margin-bottom: 16rpx;
+    border: 1px solid #ddd;
+}
+.nickname{
+    display: block;
+    font-size: 24rpx;
+    color: #666;
+}
+.clearStor{
+    width: 440rpx;
+    height: 70rpx;
+    line-height: 70rpx;
+    display: block;
+    font-size: 26rpx;
+    color: #666;
+}

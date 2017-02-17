@@ -1,0 +1,19 @@
+/* pages/subscript/subscript.wxss */
+.section-subscript{
+    font-size: 28rpx;
+    text-align: center;
+    padding: 25% 30rpx 0 30rpx;
+}
+.section-subscript image{
+    width: 220rpx;
+    height: 220rpx;
+}
+.section-subscript .title{
+    color: #999;
+    margin: 30rpx 0 40rpx;
+}
+.section-subscript .txt{
+    border: 1px solid #ccc;
+    height: 90rpx;
+    margin-bottom: 20rpx;
+}

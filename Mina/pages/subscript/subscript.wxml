@@ -1,0 +1,7 @@
+<view class="section-subscript">
+    <!--<icon type="waiting_circle" size="120" color="#f28300"></icon>-->
+    <image src="../../static/icon-alert-large.png"></image>
+    <view class="title">{{tipsTit}}</view>
+    <input type="text" class="txt" bindinput="bindKeyInput" />
+    <button type="{{btntype}}" bindtap="addemail">提交</button>
+</view>

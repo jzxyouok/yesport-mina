@@ -1,0 +1,73 @@
+<!--pages/user/user.wxml-->
+<view class="userinfo">
+    <image class="avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+    <text class="nickname">{{userInfo.nickName}}</text>
+</view>
+
+<view class="user-contain">
+    <view class="sub-title">观看历史<text class="more">更多</text></view>
+    <scroll-view scroll-x="true" class="mod-listvideo">
+        <view class="item" bindtap="getdetail" id="{{item.vid}}">
+            <image src="http://yechtv-upload.stor.sinaapp.com/album2016001.jpg"></image>
+            <!--<view class="mask"><image src="../../static/icon-time.png"></image>3分钟前</view>-->
+            <view class="like"><image src="../../static/icon-heart.png"></image></view>
+            <view class="tit">一分钟懒人运动01</view>
+            <view class="time"><image src="../../static/icon-time.png"></image>3分钟前</view>
+        </view>
+        <view class="item" bindtap="getdetail" id="{{item.vid}}">
+            <image src="http://yechtv-upload.stor.sinaapp.com/album2016001.jpg"></image>
+            <view class="like"><image src="../../static/icon-heart.png"></image></view>
+            <view class="tit">一分钟懒人运动01</view>
+            <view class="time"><image src="../../static/icon-time.png"></image>3分钟前</view>
+        </view>
+        <view class="item" bindtap="getdetail" id="{{item.vid}}">
+            <image src="http://yechtv-upload.stor.sinaapp.com/album2016001.jpg"></image>
+            <view class="like"><image src="../../static/icon-heart.png"></image></view>
+            <view class="tit">一分钟懒人运动01</view>
+            <view class="time"><image src="../../static/icon-time.png"></image>3分钟前</view>
+        </view>
+        <view class="item" bindtap="getdetail" id="{{item.vid}}">
+            <image src="http://yechtv-upload.stor.sinaapp.com/album2016001.jpg"></image>
+            <view class="like"><image src="../../static/icon-heart.png"></image></view>
+            <view class="tit">一分钟懒人运动01</view>
+            <view class="time"><image src="../../static/icon-time.png"></image>3分钟前</view>
+        </view>
+        <view class="item" bindtap="getdetail" id="{{item.vid}}">
+            <image src="http://yechtv-upload.stor.sinaapp.com/album2016001.jpg"></image>
+            <view class="like"><image src="../../static/icon-heart.png"></image></view>
+            <view class="tit">一分钟懒人运动01</view>
+            <view class="time"><image src="../../static/icon-time.png"></image>3分钟前</view>
+        </view>
+    </scroll-view>
+
+    <view class="sub-title">我的收藏<text class="more">更多</text></view>
+    <scroll-view scroll-x="true" class="mod-listvideo">
+        <view class="item" bindtap="getdetail" id="{{item.vid}}">
+            <image src="http://yechtv-upload.stor.sinaapp.com/album2016001.jpg"></image>
+            <view class="like"><image src="../../static/icon-heart-cur.png"></image></view>
+            <view class="tit">一分钟懒人运动01</view>
+        </view>
+        <view class="item" bindtap="getdetail" id="{{item.vid}}">
+            <image src="http://yechtv-upload.stor.sinaapp.com/album2016001.jpg"></image>
+            <view class="like"><image src="../../static/icon-heart-cur.png"></image></view>
+            <view class="tit">一分钟懒人运动01</view>
+        </view>
+        <view class="item" bindtap="getdetail" id="{{item.vid}}">
+            <image src="http://yechtv-upload.stor.sinaapp.com/album2016001.jpg"></image>
+            <view class="like"><image src="../../static/icon-heart-cur.png"></image></view>
+            <view class="tit">一分钟懒人运动01</view>
+        </view>
+        <view class="item" bindtap="getdetail" id="{{item.vid}}">
+            <image src="http://yechtv-upload.stor.sinaapp.com/album2016001.jpg"></image>
+            <view class="like"><image src="../../static/icon-heart-cur.png"></image></view>
+            <view class="tit">一分钟懒人运动01</view>
+        </view>
+        <view class="item" bindtap="getdetail" id="{{item.vid}}">
+            <image src="http://yechtv-upload.stor.sinaapp.com/album2016001.jpg"></image>
+            <view class="like"><image src="../../static/icon-heart-cur.png"></image></view>
+            <view class="tit">一分钟懒人运动01</view>
+        </view>
+    </scroll-view>
+
+    <button type="default" class="clearStor" bindtap="clearStor">清除本地缓存({{storage}}kb)</button>
+</view>

@@ -1,0 +1,24 @@
+<view class="mod-loading" wx:if="{{loading}}"><image src="../../static/loading.gif"></image></view>
+
+<view class="albumbg">
+    <image src="{{bannerimg}}" mode="aspectFill"></image>
+    <view class="icon-play"><image src="../../static/icon-play.png"></image></view>
+</view>
+
+<swiper indicator-dots="{{indicatorDots}}" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}" class="scroll-view" bindchange="setbanner">
+
+<block wx:for="{{outlist}}">
+
+  <swiper-item class="section" id="{{item.cate}}" data-banner="{{item.banner}}" bindtap="reqdetail">
+
+      <view class="detail-summary">
+          <image src="{{item.albumimg}}" class="ab-avatar"></image>
+          <view class="sum-title">{{item.title}}</view>
+          <view class="sum-title-sub">{{item.subtitle}}</view>
+          <view class="obtxt">出品方：<text id="">{{item.production}}</text></view>
+          <view class="obtxt">赞助商：<text id="">{{item.sponsor}}</text></view>
+      </view>
+  </swiper-item>
+
+</block>
+</swiper>

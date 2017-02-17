@@ -1,0 +1,31 @@
+<view class="contain-player">
+    <video src="{{curvideo}}" controls></video>
+</view>
+
+<scroll-view scroll-y="true" bindscroll="scroll" scroll-top="{{scrollTop}}" class="content">
+    <view class="title">{{curtitle}}</view>
+    <view class="summary">{{cursummary}}</view>
+    <view class="summary subs sumlast">出品方：{{curPro}}</view>
+
+    <view class="sub-title">专辑列表<text class="more">更多</text></view>
+    <scroll-view scroll-x="true" class="mod-listvideo">
+        <block wx:for="{{listAlbum}}">
+        <view class="item" bindtap="getdetail" id="{{item.vid}}">
+            <image src="{{item.imgurl}}"></image>
+            <view class="like" bindtap="likeit"><image src="../../static/icon-heart.png"></image></view>
+            <view class="tit">{{item.title}}</view>
+        </view>
+        </block>
+    </scroll-view>
+
+    <view class="sub-title">精彩推荐<text class="more">更多</text></view>
+    <scroll-view scroll-x="true" class="mod-listvideo">
+        <block wx:for="{{ramDataArr}}">
+        <view class="item" bindtap="getAlbum" id="{{item[0].vid}}">
+            <image src="{{item[0].imgurl}}"></image>
+            <view class="tit">{{item[0].title}}</view>
+        </view>
+        </block>
+    </scroll-view>
+
+</scroll-view>

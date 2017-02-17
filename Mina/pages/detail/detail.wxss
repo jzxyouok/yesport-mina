@@ -1,0 +1,45 @@
+page{
+  padding-top: 420rpx;
+  position: relative;
+  height: 100%;
+  font-size: 24rpx;
+  color: #666;
+  box-sizing: border-box;
+}
+.contain-player{
+  height: 420rpx;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.contain-player video{
+  width: 100%;
+  height: 100%;
+}
+.content{
+  height: 100%;
+  padding: 0 20rpx 0 20rpx;
+  box-sizing: border-box;
+}
+.content .title{
+  font-size: 32rpx;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 40rpx 0 20rpx;
+  color: #f28300;
+}
+.content .summary{
+  font-size: 28rpx;
+  line-height: 1.6;
+  margin-bottom: 10rpx;
+  color: #666;
+}
+.content .subs{
+  color: #999;
+}
+.content .sumlast{
+  margin-bottom: 40rpx;
+}
