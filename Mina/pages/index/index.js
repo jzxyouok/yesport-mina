@@ -50,12 +50,12 @@ Page({
     // console.log(this.data.outlist);
   },
   reqdetail: function (e) {
-    var cate = e.currentTarget.id;
+    var vid = e.currentTarget.id;
     wx.navigateTo({
-      url: '../detail/detail?vid=' + cate
+      url: '../detail/detail?vid=' + vid
     });
 
-    utils.setStorage(cate);
+    utils.setStorage(vid);
   },
   setbanner: function(e){
     //每滚动一次都会触发

@@ -3,7 +3,7 @@
 </view>
 
 <scroll-view scroll-y="true" bindscroll="scroll" scroll-top="{{scrollTop}}" class="content">
-    <view class="title">{{curtitle}}</view>
+    <view class="title">{{curtitle}}<view class="like" bindtap="likeit" id="{{vid}}"><image src="../../static/icon-heart-{{iconlike}}.png"></image></view></view>
     <view class="list-placeh" wx:if="{{loadst == 'loading'}}"><image src="../../static/reload-m.gif"></image></view>
     <view class="list-placeh" wx:elif="{{loadst == 'fail'}}">加载错误请返回再试 :(</view>
     <view class="summary" wx:else>{{cursummary}}</view>
@@ -16,7 +16,7 @@
         <block wx:for="{{listAlbum}}">
         <view class="item" bindtap="getdetail" id="{{item.vid}}">
             <image src="{{item.imgurl}}"></image>
-            <view class="like" bindtap="likeit"><image src="../../static/icon-heart.png"></image></view>
+            <view class="like"><image src="../../static/icon-heart.png"></image></view>
             <view class="tit">{{item.title}}</view>
         </view>
         </block>

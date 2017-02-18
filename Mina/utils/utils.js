@@ -1,6 +1,6 @@
 function setStorage(vid){
     //传入值是001三位数字长度为cateid，需要补全默认第一个视频vid，否则就为vid
-    var vid = vid.length > 3 ? vid : "2016"+vid+"001";
+    // var vid = vid.length > 3 ? vid : "2016"+vid+"001";
 
     var time = new Date().getTime(),
         obj = {};
@@ -68,6 +68,10 @@ function getCate(vid){
   return vid.substring(4,7);
 };
 
+function returnVid(cateID){
+  return "2016"+cateID+"001";
+};
+
 function isEmail(str){
    var re=/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
    if (re.test(str) != true) {
@@ -116,6 +120,7 @@ module.exports = {
   setStorage: setStorage,
   formatTime: formatTime,
   getCate: getCate,
+  returnVid: returnVid,
   isEmail: isEmail,
   timeFormat: timeFormat
 }

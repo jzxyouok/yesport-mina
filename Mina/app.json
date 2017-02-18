@@ -1,9 +1,9 @@
 {
   "pages":[
+    "pages/detail/detail",
     "pages/index/index",
     "pages/user/user",
-    "pages/subscript/subscript",
-    "pages/detail/detail"
+    "pages/subscript/subscript"
   ],
   "window":{
     "backgroundTextStyle":"light",
