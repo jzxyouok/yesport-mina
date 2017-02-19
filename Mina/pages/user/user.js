@@ -56,26 +56,7 @@ Page({
     wx.getStorage({
       key: 'historyStor',
       success: function(res){
-        var storArray = res.data.reverse();//按时间倒序排列记录
-      var apiData = that.data.reqApiData;
-      var arr = [];
-
-      for(var i = 0;i < storArray.length;i++){
-        var curVid = storArray[i].vid;
-        var cateID = utils.getCate(curVid);
-        var o = {};
-
-        for(var j = 0;j < apiData[cateID].length;j++){
-
-          if(apiData[cateID][j].vid === curVid){
-            o.vid = apiData[cateID][j].vid;
-            o.imgurl = apiData[cateID][j].imgurl;
-            o.title = apiData[cateID][j].title;
-            o.time = utils.timeFormat(storArray[i].time);
-            arr.push(o);
-          }
-        }
-      }
+        var arr = getLocalHis(res);
         
         that.setData({
           newHisList: arr,
@@ -94,26 +75,7 @@ Page({
     wx.getStorage({
       key: 'likelist',
       success: function(res){
-        var storArray = res.data.reverse();//按时间倒序排列记录
-      var apiData = that.data.reqApiData;
-      var arr = [];
-
-      for(var i = 0;i < storArray.length;i++){
-        var curVid = storArray[i].vid;
-        var cateID = utils.getCate(curVid);
-        var o = {};
-
-        for(var j = 0;j < apiData[cateID].length;j++){
-
-          if(apiData[cateID][j].vid === curVid){
-            o.vid = apiData[cateID][j].vid;
-            o.imgurl = apiData[cateID][j].imgurl;
-            o.title = apiData[cateID][j].title;
-            o.time = utils.timeFormat(storArray[i].time);
-            arr.push(o);
-          }
-        }
-      }
+        var arr = getLocalHis(res);
 
         that.setData({
           likeList: arr,

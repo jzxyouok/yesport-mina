@@ -28,6 +28,7 @@ Page({
     });
   },
   addemail: function(e){
+    var that = this;
     if(!utils.isEmail(this.data.inputTxt)){
       //如果不是邮箱
       wx.showToast({
@@ -38,6 +39,24 @@ Page({
       });
       
       return;
+    }else{
+      /*
+        http://www.yechtv.com/plus/search.php?q=
+       */
+      wx.request({
+        url: 'https://dev.yechtv.com/api/',
+        data: {
+          'type': 'addemial',
+          'data': that.data.inputTxt
+        },
+        method: 'POST',
+        success: function(res){
+          console.log(res.data);
+        },
+        fail: function() {
+          // fail
+        }
+      });
     }
   }
 })

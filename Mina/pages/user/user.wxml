@@ -21,7 +21,7 @@
 
     <view class="sub-title">我的收藏<text class="more">更多</text></view>
     <view class="list-placeh" wx:if="{{likeload == 'loading'}}"><image src="../../static/reload-m.gif"></image></view>
-    <view class="list-placeh" wx:elif="{{likeload == 'noresult'}}">没有观看记录 :(</view>
+    <view class="list-placeh" wx:elif="{{likeload == 'noresult'}}">还没有收藏记录 :(</view>
     <scroll-view scroll-x="true" class="mod-listvideo" wx:else>
         <block wx:for="{{likeList}}">
         <view class="item" bindtap="getdetail" id="{{item.vid}}">

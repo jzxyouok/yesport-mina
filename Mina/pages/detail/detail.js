@@ -6,7 +6,7 @@ Page({
     scrollTop: 0,
     curvideo: '',
     curtitle: '',
-    curUrl: '',
+    // curUrl: '',
     cursummary: '',
     curPro: '',
     ramDataArr: '',
@@ -18,7 +18,7 @@ Page({
   onShareAppMessage: function () {
     return {
       title: this.data.curtitle,
-      path: this.data.curUrl
+      path: '/pages/detail/detail?vid='+this.data.vid
     }
   },
   onLoad:function(options){
@@ -52,7 +52,7 @@ Page({
             listAlbum: curdata,
             curvideo: curdata[0].source,
             curtitle: curdata[0].title,
-            curUrl: '/page/detail/detail?vid='+curdata[0].vid,
+            // curUrl: '/page/detail/detail?vid='+curdata[0].vid,
             cursummary: curdata[0].content,
             curPro: curdata[0].production,
             loadst: "normal"
@@ -103,7 +103,7 @@ Page({
         this.setData({
           curvideo: listAlbum[i].source,
           curtitle: listAlbum[i].title,
-          curUrl: '/page/detail/detail?vid='+listAlbum[i].vid,
+          // curUrl: '/page/detail/detail?vid='+listAlbum[i].vid,
           cursummary: listAlbum[i].content,
           curPro: listAlbum[i].production
         })
@@ -126,7 +126,7 @@ Page({
     wx.redirectTo({
       url: '../detail/detail?vid=' + vid
     });
-    
+
     //写入历史记录storage
     utils.setStorage(vid);
   },
