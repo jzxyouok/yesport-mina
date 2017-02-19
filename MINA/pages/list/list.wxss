@@ -1,0 +1,48 @@
+page{
+    padding: 20rpx;
+    font-size: 28rpx;
+    color: #666;
+    box-sizing: border-box;
+}
+.sub-title{
+    margin-bottom: 10rpx;
+}
+.item-list{
+    border-bottom: 1rpx #ddd solid;
+    padding: 20rpx 0 20rpx 280rpx;
+    position: relative;
+    min-height: 150rpx;
+}
+.item-list .album{
+    width: 260rpx;
+    height: 150rpx;
+    position: absolute;
+    left: 0;
+    top: 20rpx;
+}
+.item-list .title{
+    font-weight: bold;
+    margin-bottom: 10rpx;
+}
+.item-list .summary{
+    font-size: 24rpx;
+    color: #666;
+    margin-bottom: 10rpx;
+    line-height: 1.6;
+    overflow : hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+.item-list .txt{
+    color: #999;
+    font-size: 24rpx;
+}
+.item-list .txt .icon{
+    display: inline-block;
+    vertical-align: middle;
+    width: 24rpx;
+    height: 24rpx;
+    margin-right: 10rpx;
+}

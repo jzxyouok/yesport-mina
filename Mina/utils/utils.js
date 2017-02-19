@@ -114,7 +114,26 @@ function timeFormat(time){
   }
 
   return timeStr;
-}
+};
+
+function reqLikeSt(keyname, vid, callback){
+  if(wx.getStorageSync(keyname)){
+    var likelist = wx.getStorageSync(keyname);
+
+    if('liked' === likeStatus(vid, likelist)){
+      callback();
+    }
+
+  }
+};
+
+function likeStatus(vid, array){
+  for(var i = 0;i < array.length;i++){
+    if(array[i]['vid'] === vid){
+      return 'liked';
+    }
+  }
+};
 
 module.exports = {
   setStorage: setStorage,
@@ -122,5 +141,7 @@ module.exports = {
   getCate: getCate,
   returnVid: returnVid,
   isEmail: isEmail,
-  timeFormat: timeFormat
+  timeFormat: timeFormat,
+  likeStatus: likeStatus,
+  reqLikeSt: reqLikeSt
 }

@@ -23,13 +23,6 @@ Page({
   },
   onLoad:function(options){
 
-    // if(!options.vid){
-    //   wx.showToast({
-    //     title: '请求数据错误~',
-    //     icon: 'loading'
-    //   });
-    //   return;
-    // }
       var vid = options.vid || '2016001001';//默认vid用做调试数据接口
       var catID = utils.getCate(vid);
       var that = this;
@@ -85,13 +78,24 @@ Page({
             loadst: fail
           })
         }
-      })
+      });
+
+      //检查有没有收藏过
+      utils.reqLikeSt("likelist", vid, function(){
+        that.setData({
+          iconlike: 'cur'
+        });
+      });
+      
   },
   getdetail: function(e){
-    var vid = e.currentTarget.id;
-    var listAlbum = this.data.listAlbum;
-    this.setData({
-      vid: vid
+    var vid = e.currentTarget.id,
+        listAlbum = this.data.listAlbum,
+        that = this;
+
+    that.setData({
+      vid: vid,
+      iconlike: 'd'
     });
 
     for(var i = 0; i < listAlbum.length;i++){
@@ -104,8 +108,16 @@ Page({
           curPro: listAlbum[i].production
         })
       }
-    }
+    };
 
+    //检查有没有收藏过
+    utils.reqLikeSt("likelist", vid, function(){
+      that.setData({
+        iconlike: 'cur'
+      });
+    });
+
+    //写入历史记录storage
     utils.setStorage(vid);
   },
   getAlbum: function(e){
@@ -113,44 +125,54 @@ Page({
 
     wx.redirectTo({
       url: '../detail/detail?vid=' + vid
-    })
+    });
+    
+    //写入历史记录storage
+    utils.setStorage(vid);
   },
   likeit: function(e){
-    // wx.removeStorageSync('likelist') //调试清理本地缓存
+    // wx.removeStorageSync('likelist');return; //调试清理本地缓存
     // this.data.iconlike === "d" ? this.setData({iconlike: 'cur'}) : this.setData({iconlike: 'd'});
 
-    var vid = this.data.vid;
+    if(this.data.iconlike === 'cur'){
+      wx.showToast({
+        title: '已经收藏过了',
+        icon: 'loading',
+        mask: true
+      });
+      return;
+    }
+
+    var vid = this.data.vid,
+        time = new Date().getTime(),
+        arr = [],
+        obj = {};
     if(wx.getStorageSync('likelist')){
       var likelist = wx.getStorageSync('likelist');
 
-      if(typeof(likelist) === 'string'){
-        //只有一个vid的时候是string
-        likelist = wx.getStorageSync('likelist').split(',');
-      }else{
-        //两个或以上vid的时候返回object
-        likelist = wx.getStorageSync('likelist');
-      }
-
-      function checkLike(vid){
-        for(var i = 0;i < likelist.length;i++){
-          if(likelist[i] === vid){
-            return 'liked';
-          }
-        }
-      };
-
-      if('liked' !== checkLike(vid)){
-        likelist.push(vid);
+      if('liked' !== utils.likeStatus(vid, likelist)){
+        obj.vid = vid;
+        obj.time = time;
+        likelist.push(obj);
         wx.setStorageSync('likelist', likelist);
       }
 
-
     }else{
-      wx.setStorageSync('likelist', vid);
+      obj.vid = vid;
+      obj.time = time;
+      arr.push(obj)
+      wx.setStorageSync('likelist', arr);
     }
     this.setData({iconlike: 'cur'});
     wx.showToast({
       title: '收藏成功',
     });
+  },
+  mlike: function(e){
+    var vid = e.currentTarget.id;
+    var that = this;
+    that.setData({
+      like: !that.data.like
+    })
   }
 })

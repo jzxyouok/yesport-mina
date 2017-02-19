@@ -9,7 +9,7 @@
 
 <block wx:for="{{outlist}}">
 
-  <swiper-item class="section" id="{{item.cate}}" data-banner="{{item.banner}}" bindtap="reqdetail">
+  <swiper-item class="section" id="2016{{item.cate}}001" data-banner="{{item.banner}}" bindtap="reqdetail">
 
       <view class="detail-summary">
           <image src="{{item.albumimg}}" class="ab-avatar"></image>
