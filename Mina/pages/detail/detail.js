@@ -2,6 +2,7 @@ const utils = require('../../utils/utils');
 
 Page({
   data: {
+    autoplay: 'false',
     vid: '',
     scrollTop: 0,
     curvideo: '',
@@ -24,7 +25,7 @@ Page({
   onLoad:function(options){
 
       var vid = options.vid || '2016001001';//默认vid用做调试数据接口
-      var catID = utils.getCate(vid);
+      var cateID = utils.getCate(vid);
       var that = this;
 
       wx.request({
@@ -35,12 +36,13 @@ Page({
         },
         method: 'GET', 
         success: function(res){
-          var curdata = res.data[catID];
-          var newDataArr = [];
 
+          var curdata = res.data[cateID];
+          var newDataArr = [];
           for(var d in res.data){
             newDataArr.push(res.data[d]);
           }
+
           //数组打乱随机
           newDataArr.sort(function(){
             return 0.5 - Math.random();
@@ -86,7 +88,28 @@ Page({
           iconlike: 'cur'
         });
       });
+
+      wx.getNetworkType({
+        success: function(res) {
+          // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
+          var networkType = res.networkType
+
+          if(networkType === 'wifi'){
+            //如果检测到WIFI网络环境自动播放，并写入storage计算播放过
+            that.setData({
+              autoplay: 'true'
+            });
+
+            //记录到hisStorage观看记录
+            utils.setStorage(vid);
+
+          }
+        }
+      });
       
+  },
+  onShow: function(){
+    var that = this, vid = this.data.vid;
   },
   getdetail: function(e){
     var vid = e.currentTarget.id,
@@ -117,8 +140,23 @@ Page({
       });
     });
 
-    //写入历史记录storage
-    utils.setStorage(vid);
+    wx.getNetworkType({
+      success: function(res) {
+        // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
+        var networkType = res.networkType
+
+        if(networkType === 'wifi'){
+          //如果检测到WIFI网络环境自动播放，并写入storage计算播放过
+          that.setData({
+            autoplay: 'true'
+          });
+
+          //记录到hisStorage观看记录
+          utils.setStorage(vid);
+
+        }
+      }
+    });
   },
   getAlbum: function(e){
     var vid = e.currentTarget.id;
@@ -127,8 +165,6 @@ Page({
       url: '../detail/detail?vid=' + vid
     });
 
-    //写入历史记录storage
-    utils.setStorage(vid);
   },
   likeit: function(e){
     // wx.removeStorageSync('likelist');return; //调试清理本地缓存
@@ -174,5 +210,10 @@ Page({
     that.setData({
       like: !that.data.like
     })
+  },
+  bindplay: function(e){
+    var vid = this.data.vid;
+    //记录到hisStorage观看记录，点击播放触发
+    utils.setStorage(vid);
   }
 })

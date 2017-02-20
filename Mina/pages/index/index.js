@@ -54,8 +54,6 @@ Page({
     wx.navigateTo({
       url: '../detail/detail?vid=' + vid
     });
-
-    utils.setStorage(vid);
   },
   setbanner: function(e){
     //每滚动一次都会触发

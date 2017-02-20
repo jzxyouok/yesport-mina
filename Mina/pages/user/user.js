@@ -122,8 +122,5 @@ Page({
     wx.navigateTo({
       url: '../detail/detail?vid=' + vid
     });
-    
-    //写入历史记录storage
-    utils.setStorage(vid);
   }
 })

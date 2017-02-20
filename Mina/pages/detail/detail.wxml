@@ -1,5 +1,5 @@
 <view class="contain-player">
-    <video src="{{curvideo}}" controls></video>
+    <video src="{{curvideo}}" controls bindplay="bindplay" autoplay="true"></video>
 </view>
 
 <scroll-view scroll-y="true" scroll-top="{{scrollTop}}" class="content">
@@ -17,6 +17,7 @@
         <view class="item" bindtap="getdetail" id="{{item.vid}}">
             <image src="{{item.imgurl}}"></image>
             <!--<view class="like {{like == 0 ? 'selected' : 'selecte'}}" catchtap="mlike" id="{{item.vid}}"><image src="../../static/icon-heart.png"></image></view>-->
+            <view class="mask">{{item.duration}}</view>
             <view class="tit">{{item.title}}</view>
         </view>
         </block>
@@ -29,6 +30,7 @@
         <block wx:for="{{ramDataArr}}">
         <view class="item" bindtap="getAlbum" id="{{item[0].vid}}">
             <image src="{{item[0].imgurl}}"></image>
+            <view class="mask">{{item[0].duration}}</view>
             <view class="tit">{{item[0].title}}</view>
         </view>
         </block>

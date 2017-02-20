@@ -48,7 +48,7 @@
   font-size: 24rpx;
   padding-left: 20rpx;
   color: #fff;
-  background: -webkit-linear-gradient(top, transparent, #000);
+  background: -webkit-linear-gradient(top, transparent, #333);
   box-sizing: border-box;
 }
 .mod-listvideo .time image,

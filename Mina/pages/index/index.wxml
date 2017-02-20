@@ -12,7 +12,7 @@
   <swiper-item class="section" id="2016{{item.cate}}001" data-banner="{{item.banner}}" bindtap="reqdetail">
 
       <view class="detail-summary">
-          <image src="{{item.albumimg}}" class="ab-avatar"></image>
+          <view class="ab-avatar"><image src="{{item.albumimg}}"></image><view class="mask">{{item.counts}}个视频</view></view>
           <view class="sum-title">{{item.title}}</view>
           <view class="sum-title-sub">{{item.subtitle}}</view>
           <view class="obtxt">出品方：<text id="">{{item.production}}</text></view>

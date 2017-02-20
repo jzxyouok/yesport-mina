@@ -64,6 +64,23 @@ page {
   background: #fff url(http://yechtv-upload.stor.sinaapp.com/reload-m.gif) center center no-repeat;
   background-size: 40rpx 40rpx;
 }
+.ab-avatar image{
+  width: 100%;
+  height: 100%;
+}
+.ab-avatar .mask{
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 40rpx;
+  line-height: 40rpx;
+  font-size: 24rpx;
+  padding-left: 20rpx;
+  color: #ddd;
+  background: -webkit-linear-gradient(top, transparent, #333);
+  box-sizing: border-box;
+}
 
 .detail-summary {
   /*width: 686rpx;
