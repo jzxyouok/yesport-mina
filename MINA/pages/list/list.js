@@ -6,16 +6,12 @@ Page({
     dataArr: ''
   },
   onLoad:function(options){
-    var vid = options.vid || '2016001001',
+    var vid = options.vid || '2016002001',
         cateID = utils.getCate(vid), that = this;
 
-    wx.request({
-      url: 'https://dev.yechtv.com/api/',
-      data: {
-        type: 'detail',
-        time: new Date().getTime()
-      },
-      method: 'GET',
+    //先从storage拿到api数据，设置数据
+    wx.getStorage({
+      key: 'reqApiData',
       success: function(res){
         var data = res.data[cateID];
         that.setData({
@@ -29,7 +25,8 @@ Page({
           icon: 'loading'
         })
       }
-    })
+    });
+
   },
   onPullDownRefresh: function(){
     wx.stopPullDownRefresh()

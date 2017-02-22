@@ -50,6 +50,9 @@ page{
   margin-bottom: 10rpx;
   color: #666;
 }
+.content .summary .txt{
+  color: #999;
+}
 .content .subs{
   color: #999;
 }

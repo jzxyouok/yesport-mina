@@ -5,7 +5,7 @@
 </view>
 
 <view class="user-contain">
-    <view class="sub-title">观看历史<text class="more">更多</text></view>
+    <view class="sub-title">观看历史</view>
     <view class="list-placeh" wx:if="{{dload == 'loading'}}"><image src="../../static/reload-m.gif"></image></view>
     <view class="list-placeh" wx:elif="{{dload == 'noresult'}}">没有观看记录 :(</view>
     <scroll-view scroll-x="true" class="mod-listvideo" wx:else>
@@ -19,7 +19,7 @@
         </block>
     </scroll-view>
 
-    <view class="sub-title">我的收藏<text class="more">更多</text></view>
+    <view class="sub-title">我的收藏</view>
     <view class="list-placeh" wx:if="{{likeload == 'loading'}}"><image src="../../static/reload-m.gif"></image></view>
     <view class="list-placeh" wx:elif="{{likeload == 'noresult'}}">还没有收藏记录 :(</view>
     <scroll-view scroll-x="true" class="mod-listvideo" wx:else>

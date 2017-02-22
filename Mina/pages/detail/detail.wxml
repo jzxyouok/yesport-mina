@@ -6,7 +6,7 @@
     <view class="title">{{curtitle}}<view class="like" bindtap="likeit" id="{{vid}}"><image src="../../static/icon-heart-{{iconlike}}.png"></image></view></view>
     <view class="list-placeh" wx:if="{{loadst == 'loading'}}"><image src="../../static/reload-m.gif"></image></view>
     <view class="list-placeh" wx:elif="{{loadst == 'fail'}}">加载错误请返回再试 :(</view>
-    <view class="summary" wx:else>{{cursummary}}</view>
+    <view class="summary" wx:else><text class="txt">简介：</text>{{cursummary}}</view>
     <view class="summary subs sumlast">出品方：{{curPro}}</view>
 
     <view class="sub-title">专辑列表<navigator open-type="navigate" class="more" url="../list/list?vid={{vid}}">更多</navigator></view>
@@ -23,7 +23,7 @@
         </block>
     </scroll-view>
 
-    <view class="sub-title">精彩推荐<text class="more">更多</text></view>
+    <view class="sub-title">精彩推荐</view>
     <view class="list-placeh" wx:if="{{loadst == 'loading'}}"><image src="../../static/reload-m.gif"></image></view>
     <view class="list-placeh" wx:elif="{{loadst == 'fail'}}">加载错误请返回再试 :(</view>
     <scroll-view scroll-x="true" class="mod-listvideo" wx:else>

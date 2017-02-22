@@ -1,6 +1,8 @@
 /**golbal.wxss**/
 .sub-title{
   font-size: 30rpx;
+  line-height: 30rpx;
+  height: 30rpx;
   margin-bottom: 20rpx;
   position: relative;
   color: #f28300;

@@ -78,7 +78,7 @@ Page({
           });
           this.setData({
             loadst: fail
-          })
+          });
         }
       });
 

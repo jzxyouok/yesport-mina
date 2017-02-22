@@ -3,9 +3,11 @@ const utils = require('../../utils/utils');
 Page({
   data:{
       tipsTit: "留下您的邮箱，订阅到我们最新发布的更新",
-      inputTxt : ''
+      inputTxt : '',
+      btntype: 'default',
+      loading: false,
+      disabled: false
   },
-  btntype: 'default',
   bindKeyInput: function(e){
     var pos = e.detail.cursor;
     var value = e.detail.value;
@@ -34,24 +36,47 @@ Page({
       wx.showToast({
         title: '请输入正确邮箱!',
         mask: true,
-        icon: 'loading',
-        duration: 2000
+        icon: 'loading'
       });
       
       return;
     }else{
-      /*
-        http://www.yechtv.com/plus/search.php?q=
-       */
+      var that = this;
+
+      //按钮显示loading
+      that.setData({
+        loading: true
+      });
+
       wx.request({
         url: 'https://dev.yechtv.com/api/',
         data: {
-          'type': 'addemial',
-          'data': that.data.inputTxt
+          'type': 'setemail',
+          'time': new Date().getTime(),
+          'email': that.data.inputTxt
         },
-        method: 'POST',
+        method: 'GET',
         success: function(res){
-          console.log(res.data);
+          if(res.data['status'] === '200'){
+            //按钮显示loading
+            that.setData({
+              loading: !that.data.loading,
+              btntype: 'default',
+              disabled: true
+            });
+
+            wx.showToast({
+              title: '订阅成功!',
+              mask: true,
+              icon: 'success'
+            });
+          }else{
+            wx.showToast({
+              title: '提交失败，请再试~',
+              mask: true,
+              icon: 'loading'
+            });
+          }
         },
         fail: function() {
           // fail

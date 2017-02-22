@@ -1,10 +1,10 @@
-<view class="sub-title">{{cateTitle}}</view>
 
+<view class="sub-title">{{cateTitle}}</view>
 <block wx:for="{{dataArr}}">
 <view class="item-list" id="{{item.vid}}">
-    <image src="{{item.imgurl}}" class="album" mode="aspectFill"></image>
+    <view class="album"><image src="{{item.imgurl}}" mode="aspectFill"></image><view class="mask">{{item.duration}}</view></view>
     <view class="title">{{item.title}}</view>
     <view class="summary">{{item.content}}</view>
-    <view class="txt"><image src="../../static/icon-time.png" class="icon"></image>32分钟前</view>
+    <view class="txt">出品：{{item.production}}</view>
 </view>
 </block>
