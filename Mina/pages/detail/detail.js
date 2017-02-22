@@ -2,7 +2,7 @@ const utils = require('../../utils/utils');
 
 Page({
   data: {
-    autoplay: 'false',
+    autoplay: false,
     vid: '',
     scrollTop: 0,
     curvideo: '',
@@ -97,7 +97,7 @@ Page({
           if(networkType === 'wifi'){
             //如果检测到WIFI网络环境自动播放，并写入storage计算播放过
             that.setData({
-              autoplay: 'true'
+              autoplay: !that.data.autoplay
             });
 
             //记录到hisStorage观看记录
@@ -148,7 +148,7 @@ Page({
         if(networkType === 'wifi'){
           //如果检测到WIFI网络环境自动播放，并写入storage计算播放过
           that.setData({
-            autoplay: 'true'
+            autoplay: true
           });
 
           //记录到hisStorage观看记录

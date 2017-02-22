@@ -1,5 +1,5 @@
 <view class="contain-player">
-    <video src="{{curvideo}}" controls bindplay="bindplay" autoplay="true"></video>
+    <video src="{{curvideo}}" controls bindplay="bindplay" autoplay="{{autoplay}}"></video>
 </view>
 
 <scroll-view scroll-y="true" scroll-top="{{scrollTop}}" class="content">
