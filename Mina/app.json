@@ -4,14 +4,14 @@
     "pages/user/user",
     "pages/detail/detail",
     "pages/list/list",
+    "pages/about/about",
     "pages/subscript/subscript"
   ],
   "window":{
     "backgroundTextStyle":"light",
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "夜动体育",
-    "navigationBarTextStyle":"black",
-    "enablePullDownRefresh": true
+    "navigationBarTextStyle":"black"
   },
     "tabBar": {
         "selectedColor": "#f28300",

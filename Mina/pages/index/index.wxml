@@ -1,4 +1,4 @@
-<view class="mod-loading" wx:if="{{loading}}"><image src="../../static/loading.gif"></image></view>
+<view class="mod-loading" wx:if="{{loading}}"><image src="../../static/reload-m.gif"></image></view>
 
 <view class="albumbg">
     <image src="{{bannerimg}}" mode="aspectFill"></image>
