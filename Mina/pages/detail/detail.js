@@ -207,9 +207,7 @@ Page({
   mlike: function(e){
     var vid = e.currentTarget.id;
     var that = this;
-    that.setData({
-      like: !that.data.like
-    })
+    //TODO：数据绑定的方式做模板列表渲染
   },
   bindplay: function(e){
     var vid = this.data.vid;

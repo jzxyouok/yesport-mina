@@ -90,7 +90,8 @@ page {
   padding: 280rpx 40rpx 40rpx 40rpx;
   left: 40rpx;
   right: 40rpx;
-  top: 460rpx;
+  bottom: 40rpx;
+  height: 325rpx;
   background: #fff;
   border-radius: 20rpx;
   /*transform:translateX(-50%);
