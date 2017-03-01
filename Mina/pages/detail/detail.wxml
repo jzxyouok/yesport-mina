@@ -16,7 +16,7 @@
         <block wx:for="{{listAlbum}}">
         <view class="item" bindtap="getdetail" id="{{item.vid}}">
             <image src="{{item.imgurl}}"></image>
-            <!--<view class="like" catchtap="mlike" id="{{item.vid}}"><image src="../../static/icon-heart.png"></image></view>-->
+            <view class="like" data-index="{{index}}" catchtap="listlike" id="{{item.vid}}"><image src="../../static/icon-heart{{item.like == 1 ? '-cur' : ''}}.png"></image></view>
             <view class="mask">{{item.duration}}</view>
             <view class="tit">{{item.title}}</view>
         </view>

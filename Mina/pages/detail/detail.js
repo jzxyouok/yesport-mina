@@ -38,6 +38,16 @@ Page({
         success: function(res){
 
           var curdata = res.data[cateID];
+          //写入是否有收藏的对象字段
+          var likelist = wx.getStorageSync('likelist') || [];
+          for(var k = 0;k < curdata.length;k ++){
+            if('liked' == utils.likeStatus(curdata[k].vid, likelist)){
+              curdata[k].like = true
+            }else{
+              curdata[k].like = false
+            }
+          }
+
           var newDataArr = [];
           for(var d in res.data){
             newDataArr.push(res.data[d]);
@@ -204,10 +214,28 @@ Page({
       title: '收藏成功',
     });
   },
-  mlike: function(e){
-    var vid = e.currentTarget.id;
-    var that = this;
-    //TODO：数据绑定的方式做模板列表渲染
+  listlike: function(e){
+    // var vid = e.currentTarget.id,
+    //     index = e.currentTarget.dataset['index'],
+    //     that = this,
+    //     listAlbum = this.data.listAlbum;
+
+    // if(!listAlbum[index].like){
+    //     listAlbum[index].like = true;
+    //     that.setData({
+    //       listAlbum: listAlbum
+    //     });
+
+    //     //这里接着可以写入接口，或者存入wx.getStorageSync('likelist')
+    // }else{
+    //     //点击过收藏的就不再操作
+    //     wx.showToast({
+    //       title: '已经收藏过了',
+    //       icon: 'loading',
+    //       mask: true
+    //     });
+    //     return;
+    // }    
   },
   bindplay: function(e){
     var vid = this.data.vid;
