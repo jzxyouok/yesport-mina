@@ -1,0 +1,26 @@
+{
+  "name": "yesport-mina",
+  "version": "1.0.0",
+  "description": "夜动体育小程序nodejs服务端",
+  "main": "run.js",
+  "dependencies": {
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/oikewll/yesport-mina.git"
+  },
+  "keywords": [
+    "小程序",
+    "夜动体育"
+  ],
+  "author": "goochin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/oikewll/yesport-mina/issues"
+  },
+  "homepage": "https://github.com/oikewll/yesport-mina#readme"
+}

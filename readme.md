@@ -6,8 +6,8 @@
 
 学习 && 成长。
 
-code by [Goochin]()
+code by [Goochin](https://xiaoxiaoge.com)
 
 2017/02/17
 
-![扫一扫体验小程序 v1.1.7](qrcode-1m.jpg)
+![扫一扫体验小程序 v1.1.7](qrcode-1m.jpg =240x240)
