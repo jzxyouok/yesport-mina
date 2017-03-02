@@ -25,8 +25,50 @@ app.get('/api', function(req, res) {
 	}else{
 		res.send(data);
 	}
-	
-	
+
+});
+
+/*
+	邮箱列表
+*/
+
+var datafile = './mailist.db';
+var data = null;
+
+// 从本地读取数据
+try {
+	if (fs.existsSync(datafile)) {
+		data = JSON.parse(fs.readFileSync(datafile));
+	}
+} catch (ex) {
+	console.error('read cache error', ex);
+}
+
+// 本地没有数据文件
+if (!data || !Array.isArray(data)) {
+	data = [];
+}
+
+app.get('/email', function(req, res){
+	var param = get_param(req);
+
+	if (param.email && param.type === 'setemail') {
+		var o = {
+			'email' : param.email,
+			'time' : param.time
+		}
+
+		data.push(o);
+
+		try {
+			fs.writeFileSync(datafile, JSON.stringify(data));
+
+			res.status(200).send('{"ok":"ok!"}');
+		} catch (ex) {
+			console.warn('save data error', ex);
+		}
+
+	}
 });
 
 app.get('/file', function(req, res){
@@ -54,7 +96,5 @@ app.get('/file', function(req, res){
 		});
 
 	});
-})
-
-app.listen(3002, '127.0.0.1');
+}).listen(3002, '127.0.0.1');
 
