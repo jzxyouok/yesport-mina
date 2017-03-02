@@ -12,6 +12,9 @@ app.get('/', function(req, res){
 	res.send('<img src="https://github.com/oikewll/yesport-mina/raw/master/qrcode-1m.jpg">');
 });
 
+/*
+	读本地文件返回数据
+*/
 app.get('/api', function(req, res) {
 	var type = get_param(req).type || 'index';
 	var data = JSON.parse(fs.readFileSync('./data-'+type+'.js'))
@@ -31,7 +34,6 @@ app.get('/api', function(req, res) {
 /*
 	邮箱列表
 */
-
 var datafile = './mailist.db';
 var data = null;
 
@@ -48,7 +50,6 @@ try {
 if (!data || !Array.isArray(data)) {
 	data = [];
 }
-
 app.get('/email', function(req, res){
 	var param = get_param(req);
 
@@ -68,6 +69,9 @@ app.get('/email', function(req, res){
 			console.warn('save data error', ex);
 		}
 
+	}else if(param.type && param.type === 'getemail'){
+		var df = JSON.parse(fs.readFileSync(datafile));
+		res.send(df);
 	}
 });
 
