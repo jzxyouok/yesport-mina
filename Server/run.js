@@ -4,12 +4,35 @@ var fs = require('fs')
 var express = require('express');
 var app = express();
 
+var bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 var get_param = function(req) {
 	return qs.parse(url.parse(req.url).query);
 };
 
-app.get('/', function(req, res){
-	res.send('<img src="https://github.com/oikewll/yesport-mina/raw/master/qrcode-1m.jpg">');
+//数据库配置
+var MongoClient = require('mongodb').MongoClient;
+var DB_CONN_STR = 'mongodb://localhost:27017/yechtv';
+
+app.set('port',process.env.PORT || 8001);   //设置端口
+
+//使用static中间件 制定public目录为静态资源目录,其中资源不会经过任何处理
+app.use(express.static(__dirname + '/public'));
+
+app.get('/', function (req, res) {
+
+	if(get_param(req).type && get_param(req).type === 'mailform'){
+		res.type('html').send( fs.readFileSync(__dirname + '/views/email.html') );
+	}else{
+		res.type('html').send( fs.readFileSync(__dirname + '/views/index.html') );
+	}
+});
+
+//拿到post数据
+app.post('/', function(req, res){
+	res.send(req.body)
 });
 
 /*
@@ -32,46 +55,72 @@ app.get('/api', function(req, res) {
 });
 
 /*
-	邮箱列表
+	邮箱列表，存入mongodb
 */
-var datafile = './mailist.db';
-var data = null;
-
-// 从本地读取数据
-try {
-	if (fs.existsSync(datafile)) {
-		data = JSON.parse(fs.readFileSync(datafile));
-	}
-} catch (ex) {
-	console.error('read cache error', ex);
-}
-
-// 本地没有数据文件
-if (!data || !Array.isArray(data)) {
-	data = [];
-}
 app.get('/email', function(req, res){
-	var param = get_param(req);
+	var param = get_param(req),
+		arr = [];
 
-	if (param.email && param.type === 'setemail') {
-		var o = {
+	if (param.email && param.type === 'setemail') {//写入数据库
+		var obj = {
 			'email' : param.email,
 			'time' : param.time
 		}
 
-		data.push(o);
+		arr.push(obj);
 
 		try {
-			fs.writeFileSync(datafile, JSON.stringify(data));
+			var insertData = function(db, callback) {  
+				//连接到表  
+				var collection = db.collection('mailist');
+				//插入数据
+				var data = arr;
+				collection.insert(data, function(err, result) { 
+					if(err)
+					{
+						console.log('Error:'+ err);
+						return;
+					}
+					callback(result);
+				});
+			}
 
-			res.status(200).send('{"ok":"ok!"}');
+			MongoClient.connect(DB_CONN_STR, function(err, db) {
+				console.log("连接成功！");
+				insertData(db, function(result) {
+					console.log(result);
+					db.close();
+				});
+			});
+
+			res.send('{"ok":"ok!"}');
 		} catch (ex) {
 			console.warn('save data error', ex);
 		}
 
-	}else if(param.type && param.type === 'getemail'){
-		var df = JSON.parse(fs.readFileSync(datafile));
-		res.send(df);
+	}else if(param.type && param.type === 'getemail'){//数据库提取资料
+
+		var selectData = function(db, callback) {  
+		  //连接到表  
+		  var collection = db.collection('mailist');
+		  //查询全部
+		  collection.find().toArray(function(err, result) {
+			if(err)
+			{
+			  console.log('Error:'+ err);
+			  return;
+			}     
+			callback(result);
+		  });
+		}
+
+		MongoClient.connect(DB_CONN_STR, function(err, db) {
+		  console.log("连接成功！");
+		  selectData(db, function(result) {
+			res.send(result);
+			db.close();
+		  });
+		});
 	}
 });
 
@@ -100,5 +149,9 @@ app.get('/file', function(req, res){
 		});
 
 	});
-}).listen(3002, '127.0.0.1');
+});
+
+app.listen(app.get('port'), function () {
+    console.log( '服务器启动完成，端口为： '+app.get('port') );
+});
 

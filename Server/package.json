@@ -4,6 +4,8 @@
   "description": "夜动体育小程序nodejs服务端",
   "main": "run.js",
   "dependencies": {
+    "body-parser": "^1.17.0",
+    "express-handlebars": "^3.0.0"
   },
   "devDependencies": {},
   "scripts": {
