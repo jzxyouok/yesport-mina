@@ -1,0 +1,113 @@
+{% extends '@layout.html' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block head %}
+	{% parent %}
+{% endblock %}
+
+{% block content %}
+
+	<!-- 右侧主体 开始 -->
+	<div class="site-container">
+		<div class="cover-wrap">
+
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">共有<span class="num" id="count-album">?</span>个专辑</h3>
+				</div>
+				<div class="panel-body">
+					<table class="table table-hover table-cover">
+						<thead>
+							<tr>
+								<th>No.</th>
+								<th>CID</th>
+								<th>专辑标题</th>
+								<th>专辑浮标题</th>
+								<th>视频个数</th>
+								<th>专辑状态</th>
+								<th>更新时间</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody id="list-album">
+						{% for items in albumlist %}
+							<tr>
+							<td>{{ loop.index }}</td>
+							<td><a href="/album/detail?cid={{ items.cid }}">{{ items.cid }}</a></td>
+							<td>{{ items.title }}</td>
+							<td>{{ items.subtitle }}</td>
+							<td>{{ items.counts }}</td>
+							{% if items.toindex == 'true' %}
+							<td data-value="已上架">已上架</td>
+							{% else %}
+							<td data-value="已下架">已下架</td>
+							{% endif %}
+							<td class="timestamp" data-timestamp='{{items.timstamp}}'>{{items.time}}</td>
+							<td><a class="btn btn-info" href="/album/detail?cid={{ items.cid }}">编辑</a></td>
+							</tr>
+						{% endfor %}
+						</tbody>
+					</table>
+					<div class="pages-group" style="display: none;">
+						<ul class="pagination">
+							<li class="disabled"><a href="#">«</a></li>
+							<li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+							<li><a href="#">2</a></li>
+							<li><a href="#">3</a></li>
+							<li><a href="#">4</a></li>
+							<li><a href="#">5</a></li>
+							<li><a href="#">»</a></li>
+						</ul>	
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-danger" style="display: none;">
+				<div class="panel-heading">
+					<h3 class="panel-title">未找到栏目</h3>
+				</div>
+				<div class="panel-body">
+					还没有专辑，可以<a href="./cover-add.html">新建一个专辑</a> :)
+				</div>
+			</div>	
+		</div>
+	</div>
+	<!-- 右侧主体 结束 -->
+</div>
+
+<script src="/system/js/jquery.min.js"></script>
+<script src="/system/js/bootstrap.min.js"></script>
+<script src="/system/js/jquery.uploadfile.min.js"></script>
+<script src="/system/js/utils.js"></script>
+<script>
+$(function(){
+	// $(".timestamp").each(function(i){
+	// 	var time = timeFormat( $(this).attr('data-timestamp') );
+	// 	console.log(time)
+	// 	$(this).html(time);
+	// });
+	// $.ajax({
+	// 	url: '/?type=getalbum',
+	// 	method: 'get',
+	// 	timeout: 6000,
+	// 	success: function(data){
+	// 		var data = data.reverse(),
+	// 			tpl = '';
+	// 		for (var i = 0; i < data.length; i++) {
+	// 			var status = data[i]['toindex'] === "true" ? "已上架" : "已下架";
+	// 			tpl += '<tr><td>'+Number(i+1)+'</td>'
+	// 				+'<td><a href="cover-detail.html?cid='+data[i]['_id']+'">'+data[i]['_id']+'</a></td>'
+	// 				+'<td>'+data[i]['title']+'</td>'
+	// 				+'<td>'+data[i]['subtitle']+'</td>'
+	// 				+'<td>'+data[i]['counts']+'</td>'
+	// 				+'<td data-value="'+status+'">'+status+'</td>'
+	// 				+'<td>'+timeFormat(data[i]['time'])+'</td>'
+	// 				+'<td><a class="btn btn-info" href="./cover-detail.html?cid='+data[i]['_id']+'">编辑</a></td></tr>';
+	// 		}
+	// 		$("#list-album").html(tpl);
+			
+	// 	}
+	// });
+});
+</script>
+{% endblock %}

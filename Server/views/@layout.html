@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<!--[if lte IE 8 ]> <html class="ie lte_ie8" lang="zh-CN"> <![endif]-->
+<!--[if IE 9 ]> <html class="ie ie9" lang="zh-CN"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="zh-CN"> <!--<![endif]-->
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui" />
+<title>{% block title %}{% endblock %} - 数据接口后台</title>
+
+{% block head %}
+<link rel="stylesheet" href="/system/style/main.css">
+{% endblock %}
+</head>
+
+<body>
+
+<div class="wrapper">
+	<!-- 顶部导航 开始 -->
+	<div class="site-header cf">
+		<ul class="site-breadcrumb cf">
+			<li class="item"><a href="mine.html" class="site-logo">数据接口后台管理系统</a></li>
+		</ul>
+		<div class="site-meta">
+			<div class="avatar">
+				<img src="http://placehold.it/40x40" alt="goochin" class="pic">
+			</div>
+			<a href="javascript" class="login">退出</a>
+		</div>
+	</div>
+	<!-- 顶部导航 结束 -->
+
+	<!-- 左侧导航 开始 -->
+	<div class="col_side side-nav">
+		<div class="menu_box side_list">
+			<dl class="menu">
+				<dt class="menu_title">
+					<i class="glyphicon_menu glyphicon glyphicon-film"></i>视频管理
+				</dt>
+				<dd class="menu_item ">
+					<a href="mine.html">我的视频</a>
+				</dd>
+				<dd class="menu_item ">
+					<a href="video-add.html">新建视频</a>
+				</dd>
+				<dd class="menu_item">
+					<a href="video-manage.html">视频管理</a>
+				</dd>
+			</dl>
+			<dl class="menu">
+				<dt class="menu_title">
+					<i class="glyphicon_menu glyphicon glyphicon-folder-open"></i>专辑管理
+				</dt>
+				<dd class="menu_item {% if menu == 'setalbum' %}selected{% endif %}">
+					<a href="/album/set">新建专辑</a>
+				</dd>
+				<dd class="menu_item {% if menu == 'albumlist' || menu == 'albumdetail' %}selected{% endif %}">
+					<a href="/album/list">专辑管理</a>
+				</dd>
+			</dl>
+		</div>
+	</div>
+	<!-- 左侧导航 结束 -->	
+
+	{% block content %}{% endblock %}
+</body>
+</html>

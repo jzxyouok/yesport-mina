@@ -5,6 +5,8 @@ var express = require('express');
 var app = express();
 var formidable = require('formidable');
 var path = require('path');
+var swig  = require('swig');
+var utils  = require('./utils/utils');
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
@@ -35,7 +37,7 @@ var insertData = function(db, collection, param, callback) {
 var selectData = function(db, collection, callback) {
   //连接到表  
   var collection = db.collection(collection);
-  //查询全部
+  //查询全部或者某个字段
   collection.find().toArray(function(err, result) {
 	if(err)
 	{
@@ -45,6 +47,26 @@ var selectData = function(db, collection, callback) {
 	callback(result);
   });
 };
+
+var selectDataOne = function(db, collection, obj, callback) {
+  //连接到表  
+  var collection = db.collection(collection);
+  //查询全部或者某个字段
+  collection.find(obj).toArray(function(err, result) {
+	if(err)
+	{
+	  console.log('Error:'+ err);
+	  return;
+	}
+	callback(result);
+  });
+};
+
+// This is where all the magic happens!
+app.engine('html', swig.renderFile);
+
+app.set('view engine', 'html');
+app.set('views', __dirname + '/views');
 
 app.set('port',process.env.PORT || 8001);//设置端口
 
@@ -67,8 +89,60 @@ app.get('/', function (req, res) {
 
 });
 
+//定义参数
+app.param('type', function (req, res, next, type) {
+	next();
+});
+
+app.get('/album/:type', function(req, res){
+	var type = req.params.type;
+	if (type === 'get') {
+		// MongoClient.connect(DB_CONN_STR, function(err, db) {
+		// 	selectData(db, 'album', function(result) {
+		// 		res.send(result);
+		// 		db.close();
+		// 	});
+		// });
+	}else if(type === 'set'){
+		res.render('cover-add', {
+			'title': '新建专辑',
+			'menu' : 'setalbum'
+		});
+	}else if(type === 'list'){
+		MongoClient.connect(DB_CONN_STR, function(err, db) {
+			selectData(db, 'album', function(result) {
+				for (var i = 0; i < result.length; i++) {
+					// result[i]._id = result[i]._id.toString();
+					// result[i].timstamp = result[i].time;
+					result[i].time = utils.timeFormat(result[i].time);
+				}
+
+				res.render('cover-list', {
+					'title': '专辑管理',
+					'menu' : 'albumlist',
+					'albumlist' : result.reverse()
+				});
+				db.close();
+			});
+		});
+		
+	}else if(type === 'detail'){
+		var cid = get_param(req).cid;
+
+		MongoClient.connect(DB_CONN_STR, function(err, db) {
+			selectDataOne(db, 'album', {cid: cid}, function(result) {
+				res.render('cover-detail', {
+					'title': '专辑详情',
+					'menu' : 'albumdetail'
+				});
+			});
+		});
+
+	}
+});
+
 /*
-	邮箱列表，mongod存储数据
+	mongod存储数据
 */
 app.post('/', function(req, res){
 	var param = req.body
@@ -92,6 +166,9 @@ app.post('/', function(req, res){
 			});
 		});
 	}else if(param.type && param.type === 'setalbum'){//存储专辑信息
+
+		//这里定义多一个CID作为查询主键入库
+		param.cid = utils.randomString(16);
 
 		MongoClient.connect(DB_CONN_STR, function(err, db) {
 			insertData(db, 'album', param, function(result) {
@@ -153,25 +230,6 @@ app.post('/upload', function(req, res, next){
         }
     });
 })
-
-/*
-	读本地文件返回数据
-*/
-app.get('/api', function(req, res) {
-	var type = get_param(req).type || 'index';
-	var data = JSON.parse(fs.readFileSync('./data-'+type+'.js'))
-
-	res.type('json'); 
-
-	//详情的时候只拉取cid字段
-	if (get_param(req).cid && get_param(req).type === 'detail'){
-		var cid = get_param(req).cid;
-		res.send(data[cid]);
-	}else{
-		res.send(data);
-	}
-
-});
 
 app.get('/file', function(req, res){
 

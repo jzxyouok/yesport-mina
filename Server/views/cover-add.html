@@ -1,0 +1,163 @@
+{% extends '@layout.html' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block head %}
+	{% parent %}
+	<link rel="stylesheet" href="/system/style/uploadfile.css">
+{% endblock %}
+
+
+{% block content %}
+	<!-- 右侧主体 开始 -->
+	<div class="site-container">
+		<div class="cover-wrap">
+			<div class="cover-add">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">新建专辑</h3>
+					</div>
+					<div class="panel-body">
+						<div class="form form-horizontal form-cover-add">
+							<div class="form-group">
+								<label class="control-label">CID：</label>
+								<input type="text" class="form-control" value="自动生成" disabled="">
+							</div>
+
+							<div class="form-group">
+								<label class="control-label">幻灯片大图：</label>
+								<div id="upbanner" class="fn-upload"><input type="file"></div>
+							</div>
+
+							<div class="form-group">
+								<label class="control-label">专辑封面：</label>
+								<div id="upalbum" class="fn-upload"><input type="file"></div>
+							</div>
+
+							<div class="form-groups-3">
+								<div class="form-group">
+									<label class="control-label">专辑名：</label>
+									<input type="text" class="form-control" placeholder="" id="aname">
+								</div>
+								<div class="form-group">
+									<label class="control-label">专辑子标题：</label>
+									<input type="text" class="form-control" placeholder="" id="subtit">
+								</div>
+								<div class="form-group">
+									<label class="control-label">视频个数：</label>
+								<input type="text" class="form-control" value="自动计算" disabled="">
+								</div>
+							</div>
+
+							<div class="form-groups-3">
+								<div class="form-group">
+									<label class="control-label">出品方：</label>
+									<input type="text" class="form-control" placeholder="" id="production">
+								</div>
+								<div class="form-group">
+									<label class="control-label">赞助商：</label>
+									<input type="text" class="form-control" placeholder="" id="sponsor">
+								</div>
+								<div class="form-group">
+									<label class="control-label">推荐到首页：</label>
+									<input type="checkbox" id="toindex" >
+								</div>
+							</div>
+							
+							<div class="btn-line">
+								<a href="javascript:;" class="btn btn-info" id="btn-creatAlbum">创建</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 右侧主体 结束 -->
+</div>
+	<script src="/system/js/jquery.min.js"></script>
+	<script src="/system/js/bootstrap.min.js"></script>
+	<script src="/system/js/jquery.uploadfile.min.js"></script>
+	<script>
+		$(function(){
+			var BANNERIMG = '',
+				ALBUMIMG = '';
+			$("#upbanner").uploadFile({
+				url:"/upload",
+				fileName:"tmpFile",
+				multiple:true,
+				showPreview:true,
+				showProgress:false,
+				onSuccess: function(files,data,xhr,pd){
+			        if(data&&data.code===0){
+			            BANNERIMG = data.fileUrl;
+			            console.log(BANNERIMG);
+			        }
+			    }
+		    });
+
+			$("#upalbum").uploadFile({
+				url:"/upload",
+				fileName:"tmpFile",
+				multiple:true,
+				showPreview:true,
+				showProgress:false,
+				onSuccess: function(files,data,xhr,pd){
+			        if(data&&data.code===0){
+			            ALBUMIMG = data.fileUrl;
+			            console.log(ALBUMIMG);
+			        }
+			    }
+		    });
+
+			$('#btn-creatAlbum').click(function(){
+				var that = $(this);
+				if (that.attr('disabled') === 'disabled')return;
+				if (BANNERIMG === '') {
+					alert('请上传幻灯片大图~');
+					return;
+				}else if(ALBUMIMG === ''){
+					alert('请上传专辑封面图~');
+					return;
+				}else if($('#aname').val() === ''){
+					alert('请填写专辑名~');
+					return;
+				}else if($('#subtit').val() === ''){
+					alert('请填写专辑子标题~');
+					return;
+				}else if($('#production').val() === ''){
+					alert('请填写出品方~');
+					return;
+				}else if($('#sponsor').val() === ''){
+					alert('请填写赞助商~');
+					return;
+				}
+
+				$.ajax({
+					url: '/',
+					method: 'post',
+					timeout: 6000,
+					before: function(){
+						that.attr('disabled', 'disabled');
+					},
+					data: {
+						'type': 'setalbum',
+						'banner': BANNERIMG,
+						'albumimg': ALBUMIMG,
+						'title': $('#aname').val(),
+						'subtitle': $('#subtit').val(),
+						'production': $('#production').val(),
+						'sponsor': $('#sponsor').val(),
+						'toindex': $("#toindex")[0].checked,
+						'time': new Date().getTime()
+					},
+					success: function(data){
+						// console.log(data);
+						alert('提交成功，跳转到专辑管理！');
+						window.location.href = '/album/list';
+					}
+				});
+			});
+		});
+	</script>
+{% endblock %}
