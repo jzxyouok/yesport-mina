@@ -4,6 +4,7 @@
 
 {% block head %}
 	{% parent %}
+	<link rel="stylesheet" href="/system/style/uploadfile.css">
 {% endblock %}
 
 {% block content %}	
@@ -11,1037 +12,174 @@
 	<!-- 右侧主体 开始 -->
 	<div class="site-container">
 		<div class="cover-wrap">
-			<div class="panel-head">
-				<h1 class="panel-title">
-					专辑: <a class="title" href="#" target="_blank">豆瓣高分系列</a>
-					<span class="desc">ID: <em class="num">ca14h5ds1</em></span>
-					<a class="btn btn-default">复制播放地址</a>
-					<a class="btn btn-default">复制大界面地址</a>
-					<a href="＃" class="btn btn-default">跳转播放</a>
-					<a href="＃" class="btn btn-link">播放指数</a>
-				</h1>
-			</div>
-			<div class="tabs-simple" role="tablist">
-				<ul class="nav nav-tabs" role="tablist">
-					<li><a href="#coverEdit" role="tab" data-toggle="tab">专辑资料维护</a></li>
-					<li><a href="#longList" role="tab" data-toggle="tab">长视频列表</a></li>
-					<li><a href="#shortList" role="tab" data-toggle="tab">碎视频列表</a></li>
-					<li><a href="#unpublishedList" role="tab" data-toggle="tab">未发布视频列表</a></li>
-					<li class="active"><a href="#recommendVideo" role="tab" data-toggle="tab">相关专辑列表</a></li>
-					<li><a href="#platform" role="tab" data-toggle="tab">多平台状态</a></li>
-					<li><a href="#transcoding" role="tab" data-toggle="tab">转码设置</a></li>
-				</ul>
-			</div>
+
 			<div class="tab-content">
-				<div class="tab-pane" id="coverEdit">
+				<div class="tab-pane active" id="coverEdit">
 					<div class="content-side content-side-pic">
 						<div class="pic_preview">
-							<p class="desc">封面 770*1080</p>
-							<div class="pic"><img src="http://placehold.it/770x1080" ></div>
+							<p class="desc">幻灯片大图 750*440</p>
+							<div class="pic"><img src="{{result.banner}}" ></div>
 							<button type="button" class="btn btn-default" data-toggle="modal" data-target="#picUploadPop">修改图片</button>	
 						</div>
 						<div class="pic_preview">
-							<p class="desc">封面 1920*1080</p>
-							<div class="pic"><img src="http://placehold.it/1920x1080" ></div>
+							<p class="desc">专辑封面 220*325</p>
+							<div class="pic"><img src="{{result.albumimg}}" ></div>
 							<button type="button" class="btn btn-default" data-toggle="modal" data-target="#picUploadPop">修改图片</button>	
 						</div>
 					</div>
 					<div class="content-main">
-						<div class="form form-detail-edit form-detail-edit-cover">
+						<div class="form form-cover-add form-detail-edit form-detail-edit-cover">
 							<div class="form-title">资料维护</div>
-							<div class="form-group">
-								<label class="control-label">分类：</label>
-								<select class="form-control form-control-inline">
-									<option value="1">电影</option>
-									<option value="2">电视剧</option>
-									<option value="3">动漫</option>
-									<option value="4">体育</option>
-									<option value="5">娱乐</option>
-									<option value="6">游戏</option>
-								</select>
-								<select class="form-control form-control-inline">
-									<option>电影</option>
-									<option>微电影</option>
-								</select>
-								<select class="form-control form-control-inline">
-									<option>正片</option>
-									<option>预告片</option>
-								</select>
-							</div>
-							<div class="form-groups-3">
-								<div class="form-group">
-									<label class="control-label">电影中文名：</label>
-									<input type="text" class="form-control" placeholder="">
-								</div>
-								<div class="form-group">
-									<label class="control-label">电影别名：</label>
-									<input type="text" class="form-control" placeholder="">
-								</div>
-								<div class="form-group">
-									<label class="control-label">电影次标题：</label>
-									<input type="text" class="form-control" placeholder="">
-								</div>
-							</div>
-
-							<div class="form-groups-3">
-								<div class="form-group">
-									<label class="control-label">电影英文名：</label>
-									<input type="text" class="form-control" placeholder="">
-								</div>
-								<div class="form-group">
-									<label class="control-label">电影系列名：</label>
-									<input type="text" class="form-control" placeholder="">
-								</div>
-								<div class="form-group">
-									<label class="control-label">电影系列数：</label>
-									<input type="text" class="form-control" placeholder="">
-								</div>
-							</div>
-
-							<div class="form-groups-3">
-								<div class="form-group">
-									<label class="control-label">电影部数：</label>
-									<select class="form-control form-control-inline">
-										<option>整部</option>
-										<option>上</option>
-										<option>中</option>
-										<option>下</option>
-									</select>
-								</div>
-								<div class="form-group">
-									<label class="control-label">电影主要类型：</label>
-									<input type="text" class="form-control" list="type" placeholder="">
-									<datalist id="type">
-										<option data-value="163509" value="军事"></option>
-										<option data-value="163510" value="原创"></option>
-										<option data-value="223665" value="拍客"></option>
-										<option data-value="163512" value="法制"></option>
-										<option data-value="163514" value="社会民生"></option>
-										<option data-value="163515" value="要闻播报"></option>
-									</datalist>
-								</div>
-								<div class="form-group">
-									<label class="control-label">电影次要类型：</label>
-									<input type="text" class="form-control" list="type" placeholder="">
-								</div>
-							</div>
 							
-							<div class="form-groups-3">
-								<div class="form-group">
-									<label class="control-label">制片地区：</label>
-									<input type="text" class="form-control" list="countries" placeholder="">
-									<datalist id="countries">
-										<option data-value="1154" value="不详"></option>
-										<option data-value="97209" value="内地" label="中国|大陆"></option>
-										<option data-value="1151" value="香港"></option>
-										<option data-value="1152" value="台湾"></option>
-										<option data-value="1418" value="韩国"></option>
-										<option data-value="1150" value="日本"></option>
-										<option data-value="1155" value="美国"></option>
-										<option data-value="1156" value="英国"></option>
-										<option data-value="97070" value="阿富汗"></option>
-										<option data-value="97064" value="阿根廷"></option>
-										<option data-value="97066" value="阿联酋"></option>
-										<option data-value="97072" value="埃及"></option>
-										<option data-value="118342" value="爱尔兰"></option>
-										<option data-value="97058" value="爱沙尼亚"></option>
-										<option data-value="97034" value="澳大利亚"></option>
-										<option data-value="97049" value="奥地利"></option>
-									</datalist>
-								</div>
-								<div class="form-group">
-									<label class="control-label">出品年份：</label>
-									<select class="form-control form-control-inline">
-										<option>未知</option>
-										<option>2018</option>
-										<option>2017</option>
-										<option>2016</option>
-										<option>2015</option>
-										<option>2014</option>
-										<option>2013</option>
-									</select>
-								</div>
-							</div>
 							<div class="form-group">
-								<label class="control-label">电影出品方：</label>
-								<div class="from-control-line">
-									<input type="text" class="form-control" list="film-source" placeholder="">
-									<a href="javascript:;" class="form-control-minus"><span class="glyphicon glyphicon-minus" title="删除本行"></span></a>
-									<a href="javascript:;" class="form-control-add"><span class="glyphicon glyphicon-plus" title="增加一行"></span></a>
-								</div>
-								<datalist id="film-source">
-									<option data-value="0" value="未设置"></option>
-									<option data-value="1" value="华纳"></option>
-									<option data-value="2" value="迪斯尼"></option>
-								</datalist>
+								<label class="control-label">CID：</label>
+								<input type="text" class="form-control" value="{{result.cid}}" disabled="">
 							</div>
 
 							<div class="form-group">
-								<label class="control-label">简介：</label>
-								<textarea class="form-control" rows="3"></textarea>
+								<label class="control-label">幻灯片大图：</label>
+								<div id="upbanner" class="fn-upload"><input type="file"></div>
 							</div>
-						</div>
 
-						<div class="form form-external form-external-cover">
-							<div class="form-title">外站关联</div>
+							<div class="form-group">
+								<label class="control-label">专辑封面：</label>
+								<div id="upalbum" class="fn-upload"><input type="file"></div>
+							</div>
+
 							<div class="form-groups-3">
 								<div class="form-group">
-									<label class="control-label">豆瓣ID：</label>
-									<input type="text" class="form-control" placeholder="">
+									<label class="control-label">专辑名：</label>
+									<input type="text" class="form-control" placeholder="" value="{{result.title}}" id="aname">
 								</div>
 								<div class="form-group">
-									<label class="control-label">时光网ID：</label>
-									<input type="text" class="form-control" placeholder="">
+									<label class="control-label">专辑子标题：</label>
+									<input type="text" class="form-control" placeholder="" value="{{result.subtitle}}" id="subtit">
 								</div>
 								<div class="form-group">
-									<label class="control-label">IMDb ID：</label>
-									<input type="text" class="form-control" placeholder="">
+									<label class="control-label">视频个数：</label>
+								<input type="text" class="form-control" value="{{result.counts}}" disabled="">
 								</div>
 							</div>
+
 							<div class="form-groups-3">
 								<div class="form-group">
-									<label class="control-label">核心卖点：</label>
-									<input type="text" class="form-control" placeholder="">
+									<label class="control-label">出品方：</label>
+									<input type="text" class="form-control" placeholder="" value="{{result.production}}" id="production">
 								</div>
 								<div class="form-group">
-									<label class="control-label">观影感受：</label>
-									<input type="text" class="form-control" placeholder="">
+									<label class="control-label">赞助商：</label>
+									<input type="text" class="form-control" placeholder="" value="{{result.sponsor}}" id="sponsor">
 								</div>
 								<div class="form-group">
-									<label class="control-label">大众评价：</label>
-									<input type="text" class="form-control" placeholder="">
-								</div>
-							</div>
-							<div class="form-groups-3">
-								<div class="form-group">
-									<label class="control-label">质量分级：</label>
-									<select class="form-control form-control-inline">
-										<option>普通</option>
-										<option>优秀</option>
-									</select>
+									<label class="control-label">推荐到首页：</label>
+									{% if result.toindex === 'true' %}
+									<input type="checkbox" id="toindex" checked="checked" >
+									{% else %}
+									<input type="checkbox" id="toindex" >
+									{% endif%}
 								</div>
 							</div>
 						</div>
 
-						<div class="form form-comments form-comments-cover">
-							<div class="form-title">评论/关注</div>
-							<div class="form-groups-3">
-								<div class="form-group">
-									<label class="control-label">是否评论：</label>
-									<select class="form-control form-control-inline">
-										<option>是</option>
-										<option>否</option>
-									</select>
-								</div>
-							</div>
-							<div class="form-groups-3">
-								<div class="form-group">
-									<label class="control-label">飞幕模块设置：</label>
-									<select class="form-control form-control-inline">
-										<option>默认</option>
-										<option>显示</option>
-										<option>隐藏</option>
-									</select>
-								</div>
-								<div class="form-group">
-									<label class="control-label">飞幕状态设置：</label>
-									<select class="form-control form-control-inline">
-										<option>默认</option>
-										<option>开启</option>
-										<option>屏蔽</option>
-									</select>
-								</div>
-							</div>
-							<div class="form-groups-3">
-								<div class="form-group">
-									<label class="control-label">关注后提醒：</label>
-									<select class="form-control form-control-inline">
-										<option>是</option>
-										<option>否</option>
-									</select>
-								</div>
-								<div class="form-group">
-									<label class="control-label">转免费通知：</label>
-									<select class="form-control form-control-inline">
-										<option>是</option>
-										<option>否</option>
-									</select>
-								</div>
-								
-							</div>
-							<div class="form-groups-3">
-								<div class="form-group">
-									<label class="control-label">实际关注专辑ID：</label>
-									<input type="text" class="form-control" placeholder="">
-								</div>
-								<div class="form-group">
-									<label class="control-label">关注提示文案：</label>
-									<input type="text" class="form-control" placeholder="">
-								</div>
-							</div>
-						</div>
-						
-						<div class="form form-copyright form-copyright-cover">
-							<div class="form-title">版权状态/广告位</div>
-							<div class="form-groups-3">
-								<div class="form-group">
-									<label class="control-label">版权状态：</label>
-									<input type="text" class="form-control" placeholder="请输入或选择版权状态" list="copyright-status">
-									<datalist id="copyright-status">
-										<option data-value="0" value="无版权"></option>
-										<option data-value="2" value="高兴影视"></option>
-										<option data-value="3" value="网尚文化"></option>
-										<option data-value="4" value="优度宽带"></option>
-										<option data-value="5" value="腾讯视频"></option>
-										<option data-value="6" value="欢乐传媒"></option>
-										<option data-value="7" value="中录国际"></option>
-										<option data-value="8" value="pps"></option>
-										<option data-value="9" value="九州梦网"></option>
-									</datalist>
-								</div>
-								<div class="form-group">
-									<label class="control-label">上线时间：</label>
-									<input type="date" class="form-control form-control-datatime">
-								</div>
-								<div class="form-group">
-									<label class="control-label">下线时间：</label>
-									<input type="date" class="form-control form-control-datatime">
-								</div>
-							</div>
+						<div class="list-search list-search-cover">
 
 							<div class="form-group">
-								<label class="control-label">出品：</label>
-								<select class="form-control form-control-inline">
-									<option>无</option>
-									<option>华纳</option>
-								</select>
-							</div>
-
-							<div class="form-group">
-								<label class="control-label">当前广告位：</label>
-								<button type="button" class="btn btn-success">电影</button>
-								<button type="button" class="btn btn-default">还原</button>
-								<a href="javascript:;" class="btn btn-link" data-target="form-ads-advanced">特殊广告位设置</a>
-							</div>
-							<div class="form-ads-advanced none">
-								<div class="form-groups">
-									<div class="form-group">
-										<label class="control-label">广告位1：</label>
-										<input type="text" class="form-control">
-									</div>
-									<div class="form-group">
-										<label class="control-label">生效时间1：</label>
-										<input type="datetime-local" class="form-control form-control-datatime">
-									</div>
-									<div class="form-group">
-										<label class="control-label">失效时间1：</label>
-										<input type="datetime-local" class="form-control form-control-datatime">
-									</div>	
-								</div>
-								<div class="form-groups">
-									<div class="form-group">
-										<label class="control-label">广告位2：</label>
-										<input type="text" class="form-control">
-									</div>
-									<div class="form-group">
-										<label class="control-label">生效时间2：</label>
-										<input type="datetime-local" class="form-control form-control-datatime">
-									</div>
-									<div class="form-group">
-										<label class="control-label">失效时间2：</label>
-										<input type="datetime-local" class="form-control form-control-datatime">
-									</div>	
-								</div>
-								<div class="form-groups">
-									<div class="form-group">
-										<label class="control-label">广告位3：</label>
-										<input type="text" class="form-control">
-									</div>
-									<div class="form-group">
-										<label class="control-label">生效时间3：</label>
-										<input type="datetime-local" class="form-control form-control-datatime">
-									</div>
-									<div class="form-group">
-										<label class="control-label">失效时间3：</label>
-										<input type="datetime-local" class="form-control form-control-datatime">
-									</div>	
-								</div>
-								<div class="form-groups">
-									<div class="form-group">
-										<label class="control-label">广告位4：</label>
-										<input type="text" class="form-control">
-									</div>
-									<div class="form-group">
-										<label class="control-label">生效时间4：</label>
-										<input type="datetime-local" class="form-control form-control-datatime">
-									</div>
-									<div class="form-group">
-										<label class="control-label">失效时间4：</label>
-										<input type="datetime-local" class="form-control form-control-datatime">
-									</div>	
-								</div>
-								<div class="form-groups">
-									<div class="form-group">
-										<label class="control-label">广告位5：</label>
-										<input type="text" class="form-control">
-									</div>
-									<div class="form-group">
-										<label class="control-label">生效时间5：</label>
-										<input type="datetime-local" class="form-control form-control-datatime">
-									</div>
-									<div class="form-group">
-										<label class="control-label">失效时间5：</label>
-										<input type="datetime-local" class="form-control form-control-datatime">
-									</div>	
-								</div>
+								<label class="control-label">输入标题/专辑ID进行查询：</label>
+								<input type="text" class="form-control" placeholder="">
+								<button type="button" class="btn btn-info">查询</button>
 							</div>
 						</div>
 
-						<div class="form form-detail-status">
-							<div class="form-title">专辑状态</div>
-							<div class="form-group">
-								<label class="control-label">专辑状态：</label>
-								<select class="form-control form-control-inline">
-									<option>未审核</option>
-									<option>上架</option>
-									<option>下架</option>
-								</select>
-								<div class="operator-recoard">
-									<span class="control-label">最后一次操作人：</span>
-									<span class="operator">mikema</span>
-								</div>
-								<div class="operator-recoard">
-									<span class="control-label">当前操作人：</span>
-									<span class="operator">blankyu</span>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label">视频状态：</label>
-								<select class="form-control form-control-inline">
-									<option>未审核</option>
-									<option>上架</option>
-									<option>下架</option>
-								</select>
-								<div class="operator-recoard">
-									<span class="control-label">最后一次操作人：</span>
-									<span class="operator">mikema</span>
-								</div>
-								<div class="operator-recoard">
-									<span class="control-label">当前操作人：</span>
-									<span class="operator">blankyu</span>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label">修改纪录：</label>
-								<textarea class="form-control" rows="3"></textarea>
-							</div>
-							<div class="btn-line fix-bottom">
+						<table class="table table-hover table-cover-detail">
+							<thead>
+								<tr>
+									<th><input type="checkbox" /></th>
+									<th>No</th>
+									<th>CID</th>
+									<th>标题</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><input type="checkbox" /></td>
+									<td>1</td>
+									<td><a href="">ikkzx68c5cx7qetCOPY</a></td>
+									<td>哈利波特</td>
+									<td>
+										<a class="btn btn-info" href="javascript:;">修改</a>
+										<a class="btn btn-danger" href="javacript:;">移除</a>
+									</td>
+								</tr>
+								<tr>
+									<td><input type="checkbox" /></td>
+									<td>1</td>
+									<td><a href="">ikkzx68c5cx7qetCOPY</a></td>
+									<td>哈利波特</td>
+									<td>
+										<a class="btn btn-info" href="javascript:;">修改</a>
+										<a class="btn btn-danger" href="javacript:;">移除</a>
+									</td>
+								</tr>
+								<tr>
+									<td><input type="checkbox" /></td>
+									<td>1</td>
+									<td><a href="">ikkzx68c5cx7qetCOPY</a></td>
+									<td>哈利波特</td>
+									<td>
+										<a class="btn btn-info" href="javascript:;">修改</a>
+										<a class="btn btn-danger" href="javacript:;">移除</a>
+									</td>
+								</tr>
+								<tr>
+									<td><input type="checkbox" /></td>
+									<td>1</td>
+									<td><a href="">ikkzx68c5cx7qetCOPY</a></td>
+									<td>哈利波特</td>
+									<td>
+										<a class="btn btn-info" href="javascript:;">修改</a>
+										<a class="btn btn-danger" href="javacript:;">移除</a>
+									</td>
+								</tr>
+								<tr>
+									<td><input type="checkbox" /></td>
+									<td>1</td>
+									<td><a href="">ikkzx68c5cx7qetCOPY</a></td>
+									<td>哈利波特</td>
+									<td>
+										<a class="btn btn-info" href="javascript:;">修改</a>
+										<a class="btn btn-danger" href="javacript:;">移除</a>
+									</td>
+								</tr>
+								<tr>
+									<td><input type="checkbox" /></td>
+									<td>1</td>
+									<td><a href="">ikkzx68c5cx7qetCOPY</a></td>
+									<td>哈利波特</td>
+									<td>
+										<a class="btn btn-info" href="javascript:;">修改</a>
+										<a class="btn btn-danger" href="javacript:;">移除</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<div class="pages-group">
+							<ul class="pagination">
+								<li class="disabled"><a href="#">«</a></li>
+								<li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+								<li><a href="#">2</a></li>
+								<li><a href="#">3</a></li>
+								<li><a href="#">4</a></li>
+								<li><a href="#">5</a></li>
+								<li><a href="#">»</a></li>
+							</ul>	
+						</div>
+
+						<div class="btn-line fix-bottom">
 								<button type="button" class="btn btn-info">确定修改</button>
 								<button type="button" class="btn btn-info">刷新页面</button>
 							</div>
-						</div>
-					</div>	
-				</div>
-				<div class="tab-pane" id="longList">
-					<div class="list-search list-search-cover">
-						<div class="form-group">
-							<a href="#" class="btn btn-default">上传视频</a>
-						</div>
-						<div class="form-group">
-							<label class="control-label">按VID搜索：</label>
-							<input type="text" class="form-control" placeholder="">
-							<button type="button" class="btn btn-info">查询</button>
-						</div>
-					</div>
-					<div class="table-checkbox-operate">
-						<button type="button" class="btn btn-text-danger">选中移除</button>
-						<button type="button" class="btn btn-text-info">选中变为继承</button>
-						<button type="button" class="btn btn-text-primary">选中变为不继承</button>
-						<button type="button" class="btn btn-text-warning">选中变为碎视频</button>
-						<button type="button" class="btn btn-text-default">选中收至专辑长视频 »</button>
-						<input type="text" class="form-control" placeholder="输入专辑ID">
-					</div>
-					<table class="table table-hover table-cover-detail">
-						<thead>
-							<tr>
-								<th><input type="checkbox" /></th>
-								<th>No</th>
-								<th>VID</th>
-								<th>视频标题</th>
-								<th>字幕</th>
-								<th>继承状态</th>
-								<th>视频状态</th>
-								<th>清晰度</th>
-								<th>便捷入口</th>
-								<th>操作</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td><input type="checkbox" /></td>
-								<td>1</td>
-								<td><a href="">ikkzx68c5cx7qetCOPY</a></td>
-								<td>哈利波特</td>
-								<td>默认</td>
-								<td data-value="未继承">未继承</td>
-								<td data-value="上架">上架</td>
-								<td>
-									<div class='text-default'>正常：默认、超清、高清、流畅、手机</div>
-									<div class='text-danger'>异常：全高清</div>
-								</td>
-								<td>
-									<a class="btn btn-text-primary" href="javacript:;">复制播放地址</a>
-									<a class="btn btn-text-warning" href="javacript:;">预览</a>
-									<a class="btn btn-text-default" href="javacript:;">中插广告</a>
-								</td>
-								<td>
-									<a class="btn btn-info" href="javascript:;">修改</a>
-									<a class="btn btn-danger" href="javacript:;">移除</a>
-									<a class="btn btn-default" href="javacript:;">切割</a>
-									<a class="btn btn-default" href="javacript:;">打点</a>
-									<a class="btn btn-default" href="javacript:;">gif截图</a>
-								</td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" /></td>
-								<td>1</td>
-								<td><a href="">ikkzx68c5cx7qetCOPY</a></td>
-								<td>哈利波特</td>
-								<td>默认</td>
-								<td data-value="未继承">未继承</td>
-								<td data-value="上架">上架</td>
-								<td>
-									<div class='text-default'>正常：默认、超清、高清、流畅、手机</div>
-									<div class='text-danger'>异常：全高清</div>
-								</td>
-								<td>
-									<a class="btn btn-text-primary" href="javacript:;">复制播放地址</a>
-									<a class="btn btn-text-warning" href="javacript:;">预览</a>
-									<a class="btn btn-text-default" href="javacript:;">中插广告</a>
-								</td>
-								<td>
-									<a class="btn btn-info" href="javascript:;">修改</a>
-									<a class="btn btn-danger" href="javacript:;">移除</a>
-									<a class="btn btn-default" href="javacript:;">切割</a>
-									<a class="btn btn-default" href="javacript:;">打点</a>
-									<a class="btn btn-default" href="javacript:;">gif截图</a>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-					<div class="table-checkbox-operate">
-						<button type="button" class="btn btn-text-danger">全部移除</button>
-						<button type="button" class="btn btn-text-info">全部变为继承</button>
-						<button type="button" class="btn btn-text-primary">全部变为不继承</button>
-						<button type="button" class="btn btn-text-warning">全部变为碎视频</button>
-						<button type="button" class="btn btn-text-default">全部收至专辑长视频 »</button>
-						<input type="text" class="form-control" placeholder="输入专辑ID">
-					</div>
-					<div class="pages-group">
-						<ul class="pagination">
-							<li class="disabled"><a href="#">«</a></li>
-							<li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
-							<li><a href="#">2</a></li>
-							<li><a href="#">3</a></li>
-							<li><a href="#">4</a></li>
-							<li><a href="#">5</a></li>
-							<li><a href="#">»</a></li>
-						</ul>	
-					</div>
-				</div>
-				<div class="tab-pane" id="shortList">
-					<div class="list-search list-search-cover">
-						<div class="form-group">
-							<a href="#" class="btn btn-default">上传视频</a>
-						</div>
-						<div class="form-group">
-							<label class="control-label">按VID搜索：</label>
-							<input type="text" class="form-control" placeholder="">
-							<button type="button" class="btn btn-info">查询</button>
-						</div>
-					</div>
-					<div class="table-checkbox-operate">
-						<button type="button" class="btn btn-text-danger">选中移除</button>
-						<button type="button" class="btn btn-text-info">选中变为继承</button>
-						<button type="button" class="btn btn-text-primary">选中变为不继承</button>
-						<button type="button" class="btn btn-text-warning">选中变为碎视频</button>
-						<button type="button" class="btn btn-text-default">选中收至专辑长视频 »</button>
-						<input type="text" class="form-control" placeholder="输入专辑ID">
-					</div>
-					<table class="table table-hover table-cover-detail">
-						<thead>
-							<tr>
-								<th><input type="checkbox" /></th>
-								<th>No</th>
-								<th>VID</th>
-								<th>视频标题</th>
-								<th>字幕</th>
-								<th>继承状态</th>
-								<th>视频状态</th>
-								<th>清晰度</th>
-								<th>便捷入口</th>
-								<th>操作</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td><input type="checkbox" /></td>
-								<td>1</td>
-								<td><a href="">ikkzx68c5cx7qetCOPY</a></td>
-								<td>哈利波特</td>
-								<td>默认</td>
-								<td data-value="未继承">未继承</td>
-								<td data-value="上架">上架</td>
-								<td>
-									<div class='text-default'>正常：默认、超清、高清、流畅、手机</div>
-									<div class='text-danger'>异常：全高清</div>
-								</td>
-								<td>
-									<a class="btn btn-text-primary" href="javacript:;">复制播放地址</a>
-									<a class="btn btn-text-warning" href="javacript:;">预览</a>
-									<a class="btn btn-text-default" href="javacript:;">中插广告</a>
-								</td>
-								<td>
-									<a class="btn btn-info" href="javascript:;">修改</a>
-									<a class="btn btn-danger" href="javacript:;">移除</a>
-									<a class="btn btn-default" href="javacript:;">切割</a>
-									<a class="btn btn-default" href="javacript:;">打点</a>
-									<a class="btn btn-default" href="javacript:;">gif截图</a>
-								</td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" /></td>
-								<td>1</td>
-								<td><a href="">ikkzx68c5cx7qetCOPY</a></td>
-								<td>哈利波特</td>
-								<td>默认</td>
-								<td data-value="未继承">未继承</td>
-								<td data-value="上架">上架</td>
-								<td>
-									<div class='text-default'>正常：默认、超清、高清、流畅、手机</div>
-									<div class='text-danger'>异常：全高清</div>
-								</td>
-								<td>
-									<a class="btn btn-text-primary" href="javacript:;">复制播放地址</a>
-									<a class="btn btn-text-warning" href="javacript:;">预览</a>
-									<a class="btn btn-text-default" href="javacript:;">中插广告</a>
-								</td>
-								<td>
-									<a class="btn btn-info" href="javascript:;">修改</a>
-									<a class="btn btn-danger" href="javacript:;">移除</a>
-									<a class="btn btn-default" href="javacript:;">切割</a>
-									<a class="btn btn-default" href="javacript:;">打点</a>
-									<a class="btn btn-default" href="javacript:;">gif截图</a>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-					<div class="table-checkbox-operate">
-						<button type="button" class="btn btn-text-danger">全部移除</button>
-						<button type="button" class="btn btn-text-info">全部变为继承</button>
-						<button type="button" class="btn btn-text-primary">全部变为不继承</button>
-						<button type="button" class="btn btn-text-warning">全部变为碎视频</button>
-						<button type="button" class="btn btn-text-default">全部收至专辑长视频 »</button>
-						<input type="text" class="form-control" placeholder="输入专辑ID">
-					</div>
-					<div class="pages-group">
-						<ul class="pagination">
-							<li class="disabled"><a href="#">«</a></li>
-							<li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
-							<li><a href="#">2</a></li>
-							<li><a href="#">3</a></li>
-							<li><a href="#">4</a></li>
-							<li><a href="#">5</a></li>
-							<li><a href="#">»</a></li>
-						</ul>	
-					</div>
-				</div>
-				<div class="tab-pane" id="unpublishedList">
-					<div class="list-search list-search-cover">
-						<div class="form-group">
-							<a href="#" class="btn btn-default">上传视频</a>
-						</div>
-						<div class="form-group">
-							<label class="control-label">按VID搜索：</label>
-							<input type="text" class="form-control" placeholder="">
-							<button type="button" class="btn btn-info">查询</button>
-						</div>
-					</div>
-					<div class="table-checkbox-operate">
-						<button type="button" class="btn btn-text-danger">选中移除</button>
-						<button type="button" class="btn btn-text-info">选中变为继承</button>
-						<button type="button" class="btn btn-text-primary">选中变为不继承</button>
-						<button type="button" class="btn btn-text-warning">选中变为碎视频</button>
-						<button type="button" class="btn btn-text-default">选中收至专辑长视频 »</button>
-						<input type="text" class="form-control" placeholder="输入专辑ID">
-					</div>
-					<table class="table table-hover table-cover-detail">
-						<thead>
-							<tr>
-								<th><input type="checkbox" /></th>
-								<th>No</th>
-								<th>VID</th>
-								<th>视频标题</th>
-								<th>字幕</th>
-								<th>继承状态</th>
-								<th>视频状态</th>
-								<th>清晰度</th>
-								<th>便捷入口</th>
-								<th>操作</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td><input type="checkbox" /></td>
-								<td>1</td>
-								<td><a href="">ikkzx68c5cx7qetCOPY</a></td>
-								<td>哈利波特</td>
-								<td>默认</td>
-								<td data-value="未继承">未继承</td>
-								<td data-value="上架">上架</td>
-								<td>
-									<div class='text-default'>正常：默认、超清、高清、流畅、手机</div>
-									<div class='text-danger'>异常：全高清</div>
-								</td>
-								<td>
-									<a class="btn btn-text-primary" href="javacript:;">复制播放地址</a>
-									<a class="btn btn-text-warning" href="javacript:;">预览</a>
-									<a class="btn btn-text-default" href="javacript:;">中插广告</a>
-								</td>
-								<td>
-									<a class="btn btn-info" href="javascript:;">修改</a>
-									<a class="btn btn-danger" href="javacript:;">移除</a>
-									<a class="btn btn-default" href="javacript:;">切割</a>
-									<a class="btn btn-default" href="javacript:;">打点</a>
-									<a class="btn btn-default" href="javacript:;">gif截图</a>
-								</td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" /></td>
-								<td>1</td>
-								<td><a href="">ikkzx68c5cx7qetCOPY</a></td>
-								<td>哈利波特</td>
-								<td>默认</td>
-								<td data-value="未继承">未继承</td>
-								<td data-value="上架">上架</td>
-								<td>
-									<div class='text-default'>正常：默认、超清、高清、流畅、手机</div>
-									<div class='text-danger'>异常：全高清</div>
-								</td>
-								<td>
-									<a class="btn btn-text-primary" href="javacript:;">复制播放地址</a>
-									<a class="btn btn-text-warning" href="javacript:;">预览</a>
-									<a class="btn btn-text-default" href="javacript:;">中插广告</a>
-								</td>
-								<td>
-									<a class="btn btn-info" href="javascript:;">修改</a>
-									<a class="btn btn-danger" href="javacript:;">移除</a>
-									<a class="btn btn-default" href="javacript:;">切割</a>
-									<a class="btn btn-default" href="javacript:;">打点</a>
-									<a class="btn btn-default" href="javacript:;">gif截图</a>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-					<div class="table-checkbox-operate">
-						<button type="button" class="btn btn-text-danger">全部移除</button>
-						<button type="button" class="btn btn-text-info">全部变为继承</button>
-						<button type="button" class="btn btn-text-primary">全部变为不继承</button>
-						<button type="button" class="btn btn-text-warning">全部变为碎视频</button>
-						<button type="button" class="btn btn-text-default">全部收至专辑长视频 »</button>
-						<input type="text" class="form-control" placeholder="输入专辑ID">
-					</div>
-					<div class="pages-group">
-						<ul class="pagination">
-							<li class="disabled"><a href="#">«</a></li>
-							<li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
-							<li><a href="#">2</a></li>
-							<li><a href="#">3</a></li>
-							<li><a href="#">4</a></li>
-							<li><a href="#">5</a></li>
-							<li><a href="#">»</a></li>
-						</ul>	
-					</div>
-				</div>
-				<div class="tab-pane active" id="recommendVideo">
-					<div class="list-search list-search-cover">
-						<ul class="mod-tablist">
-							<li class="active"><a href="javascript:;">相关推荐</a></li>
-							<li><a href="javascript:;">相关视频</a></li>
-						</ul>
 
-						<div class="form-group">
-							<label class="control-label">输入标题/专辑ID进行查询：</label>
-							<input type="text" class="form-control" placeholder="">
-							<button type="button" class="btn btn-info">查询</button>
-						</div>
-					</div>
-
-					<table class="table table-hover table-cover-detail">
-						<thead>
-							<tr>
-								<th><input type="checkbox" /></th>
-								<th>No</th>
-								<th>CID</th>
-								<th>标题</th>
-								<th>操作</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td><input type="checkbox" /></td>
-								<td>1</td>
-								<td><a href="">ikkzx68c5cx7qetCOPY</a></td>
-								<td>哈利波特</td>
-								<td>
-									<a class="btn btn-info" href="javascript:;">修改</a>
-									<a class="btn btn-danger" href="javacript:;">移除</a>
-								</td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" /></td>
-								<td>1</td>
-								<td><a href="">ikkzx68c5cx7qetCOPY</a></td>
-								<td>哈利波特</td>
-								<td>
-									<a class="btn btn-info" href="javascript:;">修改</a>
-									<a class="btn btn-danger" href="javacript:;">移除</a>
-								</td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" /></td>
-								<td>1</td>
-								<td><a href="">ikkzx68c5cx7qetCOPY</a></td>
-								<td>哈利波特</td>
-								<td>
-									<a class="btn btn-info" href="javascript:;">修改</a>
-									<a class="btn btn-danger" href="javacript:;">移除</a>
-								</td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" /></td>
-								<td>1</td>
-								<td><a href="">ikkzx68c5cx7qetCOPY</a></td>
-								<td>哈利波特</td>
-								<td>
-									<a class="btn btn-info" href="javascript:;">修改</a>
-									<a class="btn btn-danger" href="javacript:;">移除</a>
-								</td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" /></td>
-								<td>1</td>
-								<td><a href="">ikkzx68c5cx7qetCOPY</a></td>
-								<td>哈利波特</td>
-								<td>
-									<a class="btn btn-info" href="javascript:;">修改</a>
-									<a class="btn btn-danger" href="javacript:;">移除</a>
-								</td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" /></td>
-								<td>1</td>
-								<td><a href="">ikkzx68c5cx7qetCOPY</a></td>
-								<td>哈利波特</td>
-								<td>
-									<a class="btn btn-info" href="javascript:;">修改</a>
-									<a class="btn btn-danger" href="javacript:;">移除</a>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-					<div class="pages-group">
-						<ul class="pagination">
-							<li class="disabled"><a href="#">«</a></li>
-							<li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
-							<li><a href="#">2</a></li>
-							<li><a href="#">3</a></li>
-							<li><a href="#">4</a></li>
-							<li><a href="#">5</a></li>
-							<li><a href="#">»</a></li>
-						</ul>	
-					</div>
-				</div>
-
-				<div class="tab-pane" id="platform">
-					<table class="table table-hover table-column-platform">
-						<thead>
-							<tr>
-								<th></th>
-								<th>Web站</th>
-								<th>PC客户端</th>
-								<th>iPhone</th>
-								<th>aPhone</th>
-								<th>Pad</th>
-								<th>TV</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<th>平台状态</th>
-								<td>
-									<label class="radio-inline" title="可播放">
-										<input type="radio" name="" value=""> <span class="glyphicon glyphicon-play-circle"></span>
-									</label>
-									<label class="radio-inline" title="可下载">
-										<input type="radio" name="" value=""> <span class="glyphicon glyphicon-download-alt"></span>
-									</label>
-								</td>
-								<td>
-									<label class="radio-inline" title="可播放">
-										<input type="radio" name="" value=""> <span class="glyphicon glyphicon-play-circle"></span>
-									</label>
-									<label class="radio-inline" title="可下载">
-										<input type="radio" name="" value=""> <span class="glyphicon glyphicon-download-alt"></span>
-									</label>
-								</td>
-								<td>
-									<label class="radio-inline" title="可播放">
-										<input type="radio" name="" value=""> <span class="glyphicon glyphicon-play-circle"></span>
-									</label>
-									<label class="radio-inline" title="可下载">
-										<input type="radio" name="" value=""> <span class="glyphicon glyphicon-download-alt"></span>
-									</label>
-								</td>
-								<td>
-									<label class="radio-inline" title="可播放">
-										<input type="radio" name="" value=""> <span class="glyphicon glyphicon-play-circle"></span>
-									</label>
-									<label class="radio-inline" title="可下载">
-										<input type="radio" name="" value=""> <span class="glyphicon glyphicon-download-alt"></span>
-									</label>
-								</td>
-								<td>
-									<label class="radio-inline" title="可播放">
-										<input type="radio" name="" value=""> <span class="glyphicon glyphicon-play-circle"></span>
-									</label>
-									<label class="radio-inline" title="可下载">
-										<input type="radio" name="" value=""> <span class="glyphicon glyphicon-download-alt"></span>
-									</label>
-								</td>
-								<td>
-									<label class="radio-inline" title="可播放">
-										<input type="radio" name="" value=""> <span class="glyphicon glyphicon-play-circle"></span>
-									</label>
-									<label class="radio-inline" title="可下载">
-										<input type="radio" name="" value=""> <span class="glyphicon glyphicon-download-alt"></span>
-									</label>
-								</td>
-							</tr>
-							<tr>
-								<th>文件状态</th>
-								<td data-value="存在">存在</td>
-								<td data-value="存在">存在</td>
-								<td data-value="存在">存在</td>
-								<td data-value="存在">存在</td>
-								<td data-value="已删除">已删除</td>
-								<td data-value="已删除">已删除</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-
-				<div class="tab-pane" id="transcoding">
-					<div class="form form-transcoding form-transcoding-cover">
-						<div class="form-groups-3">
-							<div class="form-group">
-								<label class="control-label">自动审核高码备份：</label>
-								<select class="form-control form-control-inline">
-									<option>是</option>
-									<option>否</option>
-								</select>
-							</div>
-							<div class="form-group">
-								<label class="control-label">自动审核外网格式：</label>
-								<select class="form-control form-control-inline">
-									<option>是</option>
-									<option>否</option>
-								</select>
-							</div>
-							<div class="form-group">
-								<label class="control-label">转码方式：</label>
-								<select class="form-control form-control-inline">
-									<option>自动转码</option>
-									<option>手动转码</option>
-								</select>
-							</div>
-						</div>
-
-						<div class="form-groups-3">
-							<div class="form-group">
-								<label class="control-label">入库方式：</label>
-								<select class="form-control form-control-inline">
-									<option>自动进入专辑</option>
-									<option>手动进入专辑</option>
-								</select>
-							</div>
-							<div class="form-group">
-								<label class="control-label">发布方式：</label>
-								<select class="form-control form-control-inline">
-									<option>自动发布</option>
-									<option>手动发布</option>
-								</select>
-							</div>
-							<div class="form-group">
-								<label class="control-label">DRM类别：</label>
-								<select class="form-control form-control-inline">
-									<option>免费</option>
-									<option>收费</option>
-								</select>
-							</div>
-						</div>
-
-						<div class="form-groups-3">
-							<div class="form-group">
-								<label class="control-label">水印设置：</label>
-								<select class="form-control form-control-inline">
-									<option>不加水印</option>
-									<option>加水印</option>
-								</select>
-							</div>
-							<div class="form-group">
-								<label class="control-label">字幕类别：</label>
-								<select class="form-control form-control-inline">
-									<option>无内嵌字幕</option>
-									<option>有</option>
-								</select>
-							</div>
-							<div class="form-group">
-								<label class="control-label">软字幕：</label>
-								<select class="form-control form-control-inline">
-									<option>无</option>
-									<option>有</option>
-								</select>
-							</div>
-						</div>
-						
-						<div class="form-groups-3">
-							<div class="form-group">
-								<label class="control-label">是否锐化：</label>
-								<select class="form-control form-control-inline">
-									<option>是</option>
-									<option>否</option>
-								</select>
-							</div>
-							<div class="form-group">
-								<label class="control-label">是否对比度优化：</label>
-								<select class="form-control form-control-inline">
-									<option>是</option>
-									<option>否</option>
-								</select>
-							</div>
-							<div class="form-group">
-								<label class="control-label">是否对码率增强：</label>
-								<select class="form-control form-control-inline">
-									<option>是</option>
-									<option>否</option>
-								</select>
-							</div>
-						</div>
-
-						<div class="btn-line">
-							<a href="cover-detail.html" class="btn btn-info">确认修改</a>
-						</div>
 					</div>
 				</div>
 				
@@ -1064,7 +202,7 @@
 										<span class="btn btn-default btn-file">选择文件 <input type="file" accept="image/png, image/jpeg"></span>
 									</div>
 									<div class="alert alert-warning" role="alert">
-										提示：竖图尺寸 770*1080，横图尺寸 1920*1080，文件 &lt; 1M，支持 jpg 和 png 两种格式。
+										提示：幻灯片尺寸 750*440，竖图海报尺寸 220*325，文件 &lt; 1M，支持 jpg 和 png 两种格式。
 									</div>
 								</div>
 							</div>
@@ -1085,20 +223,38 @@
 
 <script src="/system/js/jquery.min.js"></script>
 <script src="/system/js/bootstrap.min.js"></script>
+<script src="/system/js/jquery.uploadfile.min.js"></script>
 <script>
-// 增加一行
-$('.form-group').delegate('.form-control-add', 'click', function(){
-	var parent = $(this).parent();
-	parent.after(parent.clone());
-})
-// 减去一行
-$('.form-group').delegate('.form-control-minus', 'click', function(){
-	var parent = $(this).parent();
-	parent.remove();
-})
-// 高级广告设置
-$('.btn-link').click(function(){
-	$('.'+$(this).attr('data-target')).toggleClass('none');
-})
+	$(function(){
+		var BANNERIMG = '',
+			ALBUMIMG = '';
+		$("#upbanner").uploadFile({
+			url:"/upload",
+			fileName:"tmpFile",
+			multiple:true,
+			showPreview:true,
+			showProgress:false,
+			onSuccess: function(files,data,xhr,pd){
+		        if(data&&data.code===0){
+		            BANNERIMG = data.fileUrl;
+		            console.log(BANNERIMG);
+		        }
+		    }
+	    });
+
+		$("#upalbum").uploadFile({
+			url:"/upload",
+			fileName:"tmpFile",
+			multiple:true,
+			showPreview:true,
+			showProgress:false,
+			onSuccess: function(files,data,xhr,pd){
+		        if(data&&data.code===0){
+		            ALBUMIMG = data.fileUrl;
+		            console.log(ALBUMIMG);
+		        }
+		    }
+	    });
+	});
 </script>
 {% endblock %}

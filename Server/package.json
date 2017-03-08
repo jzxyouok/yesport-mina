@@ -8,6 +8,7 @@
     "express-handlebars": "^3.0.0",
     "formidable": "^1.1.1",
     "path": "^0.12.7",
+    "qiniu": "^6.1.13",
     "swig": "^1.4.2"
   },
   "devDependencies": {},

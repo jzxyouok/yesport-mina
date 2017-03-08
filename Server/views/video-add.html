@@ -1,0 +1,125 @@
+{% extends '@layout.html' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block head %}
+	{% parent %}
+	<link rel="stylesheet" href="/system/style/uploadfile.css">
+{% endblock %}
+
+{% block content %}	
+
+	<!-- 右侧主体 开始 -->
+	<div class="site-container">
+		<div class="video-wrap">
+			<div class="video-main">
+				<div class="tab-content">
+					<div class="tab-pane active" id="videoUpload">
+						<div class="form form-upload-video">
+
+							<div class="form-group">
+								<label class="control-label">VID：</label>
+								<input type="text" class="form-control" value="自动生成" disabled="">
+							</div>
+
+							<div class="form-group">
+								<label class="control-label">标题：</label>
+								<input type="text" class="form-control" placeholder="" id="vname">
+							</div>
+
+							<div class="form-group">
+								<label class="control-label">副标题：</label>
+								<input type="text" class="form-control" placeholder="" id="subtit">
+							</div>
+
+							<div class="form-group">
+								<label class="control-label">所属专辑：</label>
+								{% autoescape false %}
+								{{albumoption}}
+								{% endautoescape %}
+							</div>
+
+							<div class="form-group">
+								<label class="control-label">出品方：</label>
+								<input type="text" class="form-control" value="——" disabled="" id="production">
+							</div>
+
+							<div class="form-group">
+								<label class="control-label">赞助商：</label>
+								<input type="text" class="form-control" value="——" disabled="" id="sponsor">
+							</div>
+
+							<div class="form-group-upload">
+								<label class="control-label">上传视频：</label>
+								<div class="form-control-file">
+									<input type="file" accept="video/*" class="form-control-input" multiple id="upvideo">
+									<p class="form-hint">支持上传mp4、mpg、wmv、flv</p>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="control-label">视频时长：</label>
+								<input type="text" class="form-control" placeholder="">
+							</div>
+
+							<div class="form-group-upload">
+								<label class="control-label">视频截图：750*440　</label>
+								<div class="form-control-file">
+									<input type="file" class="form-control-input">
+									<p class="form-hint">支持上传mp4、mpg、wmv、flv</p>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="control-label">视频标签：</label>
+								<input type="text" class="form-control" value="" placeholder="多个标签请用英文逗号分隔">
+							</div>
+
+							<div class="form-group">
+								<label class="control-label">视频介绍：</label>
+								<textarea class="form-control" rows="3"></textarea>
+							</div>
+
+							<div class="btn-line">
+								<a href="javascript:;" class="btn btn-info" id="btn-upvideo">确认上传</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		
+	</div>
+	<!-- 右侧主体 结束 -->
+</div>
+
+<script src="/system/js/jquery.min.js"></script>
+<script src="/system/js/bootstrap.min.js"></script>
+<script src="/system/js/jquery.uploadfile.min.js"></script>
+<script>
+$(function(){
+	$("#upvideo").change(function(){
+		$.post('/upqiniu', function(data){
+			console.log(data);
+		})
+	});
+
+	$("#coverlist").change(function(){
+		var cid = $(this).val();
+		$.ajax({
+			url: '/album/get',
+			data: {
+				cid: cid
+			},
+			timeout: 6000,
+			success: function(data){
+				if (data.length === 0) return;
+				$("#sponsor").val(data[0]['sponsor']);
+				$("#production").val(data[0]['production']);
+			}
+		});
+	})
+});
+</script>
+{% endblock %}

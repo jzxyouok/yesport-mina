@@ -37,14 +37,11 @@
 				<dt class="menu_title">
 					<i class="glyphicon_menu glyphicon glyphicon-film"></i>视频管理
 				</dt>
-				<dd class="menu_item ">
-					<a href="mine.html">我的视频</a>
+				<dd class="menu_item {% if menu == 'addvideo' %}selected{% endif %}">
+					<a href="/video/add">新建视频</a>
 				</dd>
-				<dd class="menu_item ">
-					<a href="video-add.html">新建视频</a>
-				</dd>
-				<dd class="menu_item">
-					<a href="video-manage.html">视频管理</a>
+				<dd class="menu_item {% if menu == 'videolist' %}selected{% endif %}">
+					<a href="/video/list">视频管理</a>
 				</dd>
 			</dl>
 			<dl class="menu">

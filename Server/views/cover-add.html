@@ -25,43 +25,43 @@
 							</div>
 
 							<div class="form-group">
-								<label class="control-label">幻灯片大图：</label>
+								<label class="control-label">专辑名：</label>
+								<input type="text" class="form-control" placeholder="" id="aname">
+							</div>
+
+							<div class="form-group">
+								<label class="control-label">专辑子标题：</label>
+								<input type="text" class="form-control" placeholder="" id="subtit">
+							</div>
+
+							<div class="form-group">
+								<label class="control-label">幻灯片大图：750*440　</label>
 								<div id="upbanner" class="fn-upload"><input type="file"></div>
 							</div>
 
 							<div class="form-group">
-								<label class="control-label">专辑封面：</label>
+								<label class="control-label">专辑封面：220*325　</label>
 								<div id="upalbum" class="fn-upload"><input type="file"></div>
 							</div>
 
-							<div class="form-groups-3">
-								<div class="form-group">
-									<label class="control-label">专辑名：</label>
-									<input type="text" class="form-control" placeholder="" id="aname">
-								</div>
-								<div class="form-group">
-									<label class="control-label">专辑子标题：</label>
-									<input type="text" class="form-control" placeholder="" id="subtit">
-								</div>
-								<div class="form-group">
-									<label class="control-label">视频个数：</label>
-								<input type="text" class="form-control" value="自动计算" disabled="">
-								</div>
+							<div class="form-group">
+								<label class="control-label">出品方：</label>
+								<input type="text" class="form-control" placeholder="" id="production">
+							</div>
+							
+							<div class="form-group">
+								<label class="control-label">赞助商：</label>
+								<input type="text" class="form-control" placeholder="" id="sponsor">
 							</div>
 
-							<div class="form-groups-3">
-								<div class="form-group">
-									<label class="control-label">出品方：</label>
-									<input type="text" class="form-control" placeholder="" id="production">
-								</div>
-								<div class="form-group">
-									<label class="control-label">赞助商：</label>
-									<input type="text" class="form-control" placeholder="" id="sponsor">
-								</div>
-								<div class="form-group">
-									<label class="control-label">推荐到首页：</label>
-									<input type="checkbox" id="toindex" >
-								</div>
+							<div class="form-group">
+								<label class="control-label">视频个数：</label>
+							<input type="text" class="form-control" value="自动计算" disabled="">
+							</div>
+
+							<div class="form-group">
+								<label class="control-label">推荐到首页：</label>
+								<input type="checkbox" id="toindex" >
 							</div>
 							
 							<div class="btn-line">
@@ -149,6 +149,7 @@
 						'production': $('#production').val(),
 						'sponsor': $('#sponsor').val(),
 						'toindex': $("#toindex")[0].checked,
+						'counts': 0,
 						'time': new Date().getTime()
 					},
 					success: function(data){

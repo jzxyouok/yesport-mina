@@ -1,6 +1,6 @@
 var url = require('url');
 var qs = require('querystring');
-var fs = require('fs')
+var fs = require('fs');
 var express = require('express');
 var app = express();
 var formidable = require('formidable');
@@ -11,6 +11,12 @@ var utils  = require('./utils/utils');
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+//七牛存储API
+var KEY  = require('./utils/KEY');
+var qiniu = require('qiniu');
+qiniu.conf.ACCESS_KEY = KEY.AK;
+qiniu.conf.SECRET_KEY = KEY.SK;
 
 var get_param = function(req) {
 	return qs.parse(url.parse(req.url).query);
@@ -72,20 +78,11 @@ app.set('port',process.env.PORT || 8001);//设置端口
 
 //使用static中间件 public目录为静态资源目录
 app.use(express.static(__dirname + '/public'));
+app.use('/upload', express.static(__dirname + '/upload'));
 
 app.get('/', function (req, res) {
 
-	var type = get_param(req).type;
-	if (type && type === 'getalbum') {
-		MongoClient.connect(DB_CONN_STR, function(err, db) {
-			selectData(db, 'album', function(result) {
-				res.send(result);
-				db.close();
-			});
-		});
-	}else{
-		res.type('html').send( fs.readFileSync(__dirname + '/views/index.html') );
-	}
+	res.type('html').send( fs.readFileSync(__dirname + '/views/index.html') );
 
 });
 
@@ -94,15 +91,51 @@ app.param('type', function (req, res, next, type) {
 	next();
 });
 
+app.get('/video/:type', function(req, res){
+	var type = req.params.type;
+	if(type === 'add'){
+		MongoClient.connect(DB_CONN_STR, function(err, db) {
+			selectData(db, 'album', function(result) {
+				var albumoption = '<select class="form-control" id="coverlist"><option selected>请选择专辑</option>';
+				for (var i = 0; i < result.length; i++) {
+					albumoption += '<option value="'+result[i].cid+'">'+result[i].title+'</option>';
+				}
+				albumoption += '</select>';
+
+				res.render('video-add', {
+					'title': '新建视频',
+					'menu' : 'addvideo',
+					'albumoption' : albumoption
+				});
+
+				db.close();
+			});
+		});
+		
+	}
+});
+
 app.get('/album/:type', function(req, res){
 	var type = req.params.type;
 	if (type === 'get') {
-		// MongoClient.connect(DB_CONN_STR, function(err, db) {
-		// 	selectData(db, 'album', function(result) {
-		// 		res.send(result);
-		// 		db.close();
-		// 	});
-		// });
+		var cid = get_param(req).cid;
+
+		if (cid) { //如果有专辑CID就拉取单个
+			MongoClient.connect(DB_CONN_STR, function(err, db) {
+				selectDataOne(db, 'album', {cid: cid}, function(result) {
+					res.send(result);
+					db.close();
+				});
+			});
+		}else{ //默认返回全部专辑信息
+			MongoClient.connect(DB_CONN_STR, function(err, db) {
+				selectData(db, 'album', function(result) {
+					res.send(result);
+					db.close();
+				});
+			});
+		}
+		
 	}else if(type === 'set'){
 		res.render('cover-add', {
 			'title': '新建专辑',
@@ -112,15 +145,14 @@ app.get('/album/:type', function(req, res){
 		MongoClient.connect(DB_CONN_STR, function(err, db) {
 			selectData(db, 'album', function(result) {
 				for (var i = 0; i < result.length; i++) {
-					// result[i]._id = result[i]._id.toString();
-					// result[i].timstamp = result[i].time;
 					result[i].time = utils.timeFormat(result[i].time);
 				}
 
 				res.render('cover-list', {
 					'title': '专辑管理',
 					'menu' : 'albumlist',
-					'albumlist' : result.reverse()
+					'albumlist' : result.reverse(),
+					'albumcount' : result.length
 				});
 				db.close();
 			});
@@ -131,10 +163,13 @@ app.get('/album/:type', function(req, res){
 
 		MongoClient.connect(DB_CONN_STR, function(err, db) {
 			selectDataOne(db, 'album', {cid: cid}, function(result) {
+				// res.send(result[0].banner)
 				res.render('cover-detail', {
 					'title': '专辑详情',
-					'menu' : 'albumdetail'
+					'menu' : 'albumdetail',
+					'result' : result[0]
 				});
+				db.close();
 			});
 		});
 
@@ -184,10 +219,14 @@ app.post('/', function(req, res){
 	}
 });
 
+app.post('/upqiniu', function(req, res){
+	
+});
+
 app.post('/upload', function(req, res, next){
 	var form = new formidable.IncomingForm();
     form.uploadDir = path.join(__dirname, 'tmp');   //文件保存的临时目录为当前项目下的tmp文件夹
-    form.maxFieldsSize = 1 * 1024 * 1024;  //用户头像大小限制为最大1M  
+    form.maxFieldsSize = 1 * 1024 * 1024;  //大小限制为最大1M  
     form.keepExtensions = true;        //使用文件的原扩展名
     form.parse(req, function (err, fields, file) {
         var filePath = '';
