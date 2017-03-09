@@ -48,7 +48,7 @@
 								<label class="control-label">出品方：</label>
 								<input type="text" class="form-control" placeholder="" id="production">
 							</div>
-							
+
 							<div class="form-group">
 								<label class="control-label">赞助商：</label>
 								<input type="text" class="form-control" placeholder="" id="sponsor">
@@ -80,8 +80,8 @@
 	<script src="/system/js/jquery.uploadfile.min.js"></script>
 	<script>
 		$(function(){
-			var BANNERIMG = '',
-				ALBUMIMG = '';
+			var BANNERIMG = 'http://placehold.it/750x440',
+				ALBUMIMG = 'http://placehold.it/220x325';
 			$("#upbanner").uploadFile({
 				url:"/upload",
 				fileName:"tmpFile",

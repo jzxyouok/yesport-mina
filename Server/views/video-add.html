@@ -59,11 +59,11 @@
 
 							<div class="form-group">
 								<label class="control-label">视频时长：</label>
-								<input type="text" class="form-control" placeholder="">
+								<input type="text" class="form-control" placeholder="" id="vtime">
 							</div>
 
 							<div class="form-group-upload">
-								<label class="control-label">视频截图：750*440　</label>
+								<label class="control-label">视频截图：260*150　</label>
 								<div class="form-control-file">
 									<input type="file" class="form-control-input">
 									<p class="form-hint">支持上传mp4、mpg、wmv、flv</p>
@@ -72,12 +72,12 @@
 
 							<div class="form-group">
 								<label class="control-label">视频标签：</label>
-								<input type="text" class="form-control" value="" placeholder="多个标签请用英文逗号分隔">
+								<input type="text" class="form-control" value="" placeholder="多个标签请用英文逗号分隔" id="vtags">
 							</div>
 
 							<div class="form-group">
 								<label class="control-label">视频介绍：</label>
-								<textarea class="form-control" rows="3"></textarea>
+								<textarea class="form-control" rows="3" id="vsum"></textarea>
 							</div>
 
 							<div class="btn-line">
@@ -99,27 +99,85 @@
 <script src="/system/js/jquery.uploadfile.min.js"></script>
 <script>
 $(function(){
+	var VIDEO = '',
+		VIMGURL = 'http://placehold.it/260x150';
 	$("#upvideo").change(function(){
 		$.post('/upqiniu', function(data){
 			console.log(data);
-		})
+		});
 	});
 
 	$("#coverlist").change(function(){
 		var cid = $(this).val();
-		$.ajax({
-			url: '/album/get',
-			data: {
-				cid: cid
-			},
-			timeout: 6000,
-			success: function(data){
-				if (data.length === 0) return;
-				$("#sponsor").val(data[0]['sponsor']);
-				$("#production").val(data[0]['production']);
+		console.log($(this).find("option:selected").text())
+		// $.ajax({
+		// 	url: '/album/get',
+		// 	data: {
+		// 		cid: cid
+		// 	},
+		// 	timeout: 6000,
+		// 	success: function(data){
+		// 		if (data.length === 0) return;
+		// 		$("#sponsor").val(data[0]['sponsor']);
+		// 		$("#production").val(data[0]['production']);
+		// 	}
+		// });
+	});
+
+	$('#btn-upvideo').click(function(){
+			var that = $(this);
+			if (that.attr('disabled') === 'disabled')return;
+
+			if($('#vname').val() === ''){
+				alert('请填写视频标题~');
+				return;
+			}else if($('#subtit').val() === ''){
+				alert('请填写专辑子标题~');
+				return;
+			}else if($('#coverlist').val() === '-1'){
+				alert('请选择专辑~');
+				return;
+			}else if($('#vtime').val() === ''){
+				alert('视频时间不能为空~');
+				return;
+			}else if($('#vtags').val() === ''){
+				alert('视频标签不能为空~');
+				return;
+			}else if($('#vsum').val() === ''){
+				alert('视频信息不能为空~');
+				return;
 			}
+
+			var vtagArr = $('#vtags').val().split(',');
+
+			$.ajax({
+				url: '/',
+				method: 'post',
+				timeout: 6000,
+				before: function(){
+					that.attr('disabled', 'disabled');
+				},
+				data: {
+					'type': 'addvideo',
+					'title': $('#vname').val(),
+					'subtitle': $('#subtit').val(),
+					'production': $('#production').val(),
+					'sponsor': $('#sponsor').val(),
+					'cid': $('#coverlist').val(),
+					'cname': $('#coverlist').find("option:selected").text(),
+					'tags': vtagArr,
+					'source': VIDEO,
+					'imgurl': VIMGURL,
+					'content': $("#vsum").val(),
+					'time': new Date().getTime()
+				},
+				success: function(data){
+					// console.log(data);
+					alert('提交成功，跳转到专辑管理！');
+					window.location.href = '/video/list';
+				}
+			});
 		});
-	})
 });
 </script>
 {% endblock %}

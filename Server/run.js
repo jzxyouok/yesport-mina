@@ -96,7 +96,7 @@ app.get('/video/:type', function(req, res){
 	if(type === 'add'){
 		MongoClient.connect(DB_CONN_STR, function(err, db) {
 			selectData(db, 'album', function(result) {
-				var albumoption = '<select class="form-control" id="coverlist"><option selected>请选择专辑</option>';
+				var albumoption = '<select class="form-control" id="coverlist"><option selected value="-1">请选择专辑</option>';
 				for (var i = 0; i < result.length; i++) {
 					albumoption += '<option value="'+result[i].cid+'">'+result[i].title+'</option>';
 				}
@@ -112,6 +112,38 @@ app.get('/video/:type', function(req, res){
 			});
 		});
 		
+	}else if(type === 'list'){
+		MongoClient.connect(DB_CONN_STR, function(err, db) {
+			selectData(db, 'video', function(result) {
+				for (var i = 0; i < result.length; i++) {
+					result[i].time = utils.timeFormat(result[i].time);
+				}
+
+				res.render('video-manage', {
+					'title': '视频管理',
+					'menu' : 'videolist',
+					'videolist' : result.reverse(),
+					'videocount' : result.length
+				});
+				db.close();
+			});
+		});
+		
+	}else if(type === 'detail'){
+		var vid = get_param(req).vid;
+
+		MongoClient.connect(DB_CONN_STR, function(err, db) {
+			selectDataOne(db, 'video', {vid: vid}, function(result) {
+				// res.send(result[0]);
+				res.render('video-detail', {
+					'title': '视频详情',
+					'menu' : 'videolist',
+					'result' : result[0]
+				});
+				db.close();
+			});
+		});
+
 	}
 });
 
@@ -216,6 +248,22 @@ app.post('/', function(req, res){
 				db.close();
 			});
 		});
+	}else if(param.type && param.type === 'addvideo'){//存储视频信息
+
+		//这里定义多一个VID作为查询主键入库
+		param.vid = utils.randomString(16);
+
+		MongoClient.connect(DB_CONN_STR, function(err, db) {
+			insertData(db, 'video', param, function(result) {
+				//写入数据表成功
+				var _res = {
+					status: 'ok',
+					vid: result.ops[0].vid
+				}
+				res.send(_res);
+				db.close();
+			});
+		});
 	}
 });
 
@@ -268,7 +316,7 @@ app.post('/upload', function(req, res, next){
             });
         }
     });
-})
+});
 
 app.get('/file', function(req, res){
 

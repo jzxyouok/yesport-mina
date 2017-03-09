@@ -1,120 +1,17 @@
-<!DOCTYPE html>
-<!--[if lte IE 8 ]> <html class="ie lte_ie8" lang="zh-CN"> <![endif]-->
-<!--[if IE 9 ]> <html class="ie ie9" lang="zh-CN"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <html lang="zh-CN"> <!--<![endif]-->
-<head>
-<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui" />
-<title>视频管理-媒资库-腾讯视频</title>
-<link rel="stylesheet" href="../style/main.css">
-</head>
-<body>
-<div class="wrapper">
-	<!-- 顶部导航 开始 -->
-	<div class="site-header cf">
-		<ul class="site-breadcrumb cf">
-			<li class="item"><a href="mine.html" class="site-logo">腾讯视频后台管理系统</a></li>
-			<li class="item"><a href="mine.html">媒资库</a></li>
-		</ul>
-		<div class="site-meta">
-			<div class="avatar">
-				<img src="http://tapd.oa.com/users/avatar/blankyu/avatar.jpg" alt="blankyu" class="pic">
-			</div>
-			<a href="#" class="login">退出</a>
-		</div>
-	</div>
-	<!-- 顶部导航 结束 -->
+{% extends '@layout.html' %}
 
-	<!-- 左侧导航 开始 -->
-	<div class="col_side side-nav">
-		<div class="menu_box side_list">
-			<dl class="menu">
-				<dt class="menu_title">
-					<i class="glyphicon_menu glyphicon glyphicon-film"></i>视频管理
-				</dt>
-				<dd class="menu_item">
-					<a href="mine.html">我的视频</a>
-				</dd>
-				<dd class="menu_item">
-					<a href="video-add.html">新建视频</a>
-				</dd>
-				<dd class="menu_item selected">
-					<a href="video-manage.html">视频管理</a>
-				</dd>
-			</dl>
-			<dl class="menu">
-				<dt class="menu_title">
-					<i class="glyphicon_menu glyphicon glyphicon-folder-open"></i>专辑管理
-				</dt>
-				<dd class="menu_item">
-					<a href="cover-add.html">新建专辑</a>
-				</dd>
-				<dd class="menu_item">
-					<a href="cover.html">专辑管理</a>
-				</dd>
-			</dl>
-			<dl class="menu">
-				<dt class="menu_title">
-					<i class="glyphicon_menu glyphicon glyphicon-list"></i>栏目管理
-				</dt>
-				<dd class="menu_item">
-					<a href="column-add.html">新建栏目</a>
-				</dd>
-				<dd class="menu_item">
-					<a href="column.html">栏目管理</a>
-				</dd>
-			</dl>
-			<dl class="menu">
-				<dt class="menu_title">
-					<i class="glyphicon_menu glyphicon glyphicon-list-alt"></i>看单管理
-				</dt>
-				<dd class="menu_item">
-					<a href="playlist-add.html">新建看单</a>
-				</dd>
-				<dd class="menu_item">
-					<a href="playlist.html">看单管理</a>
-				</dd>
-			</dl>
-			<dl class="menu">
-				<dt class="menu_title">
-					<i class="glyphicon_menu glyphicon glyphicon-th-large"></i>其他
-				</dt>
-				<dd class="menu_item">
-					<a href="name-database.html">人名库</a>
-				</dd>
-				<dd class="menu_item">
-					<a href="std.html">标准化后台</a>
-				</dd>
-			</dl>
-			<dl class="menu">
-				<dt class="menu_title">
-					<i class="glyphicon_menu glyphicon glyphicon-check"></i>二审视频
-				</dt>
-				<dd class="menu_item">
-					<a href="video-list.html">待审核视频</a>
-				</dd>
-				<dd class="menu_item">
-					<a href="video-list.html">已审核视频</a>
-				</dd>
-				<dd class="menu_item">
-					<a href="video-list.html">已采用视频</a>
-				</dd>
-				<dd class="menu_item">
-					<a href="video-list.html">未采用视频</a>
-				</dd>
-				<dd class="menu_item">
-					<a href="video-list.html">不通过视频</a>
-				</dd>
-			</dl>
-		</div>
-	</div>
-	<!-- 左侧导航 结束 -->	
+{% block title %}{{title}}{% endblock %}
+
+{% block head %}
+	{% parent %}
+{% endblock %}
+
+{% block content %}	
 
 	<!-- 右侧主体 开始 -->
 	<div class="site-container">
-		<div class="video-wrap video-wrap-fix">
-			<div class="panel panel-default panel-filter">
+		<div class="video-wrap">
+			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h3 class="panel-title">视频管理</h3>
 				</div>
@@ -126,124 +23,19 @@
 								<input type="text" class="form-control" placeholder="请输入看单ID">
 							</div>
 							<div class="form-group">
+								<label class="control-label">专辑：</label>
+								<select class="form-control">
+									<option selected="">请选择专辑</option>
+									<option value="1">电影</option>
+								</select>
+							</div>
+							<div class="form-group">
 								<label class="control-label">标题：</label>
 								<input type="text" class="form-control" placeholder="">
 							</div>
 							<div class="form-group">
-								<label class="control-label">分类：</label>
-								<select class="form-control">
-									<option value="－1">请选择</option>
-									<optgroup label="常用">
-										<option value="1">电影</option>
-										<option value="2">电视剧</option>
-										<option value="10">综艺</option>
-										<option value="5">娱乐</option>
-										<option value="3">动漫</option>
-										<option value="6">游戏</option>
-										<option value="47">付费</option>
-										<option value="8">热点</option>
-										<option value="4">体育</option>
-										<option value="105">拍客</option>
-										<option value="9">纪录片</option>
-										<option value="46">微电影</option>
-										<option value="32">其他</option>
-									</optgroup>
-									<optgroup label="新闻">
-										<option value="23">新闻</option>
-										<option value="12">两会</option>
-										<option value="24">财经</option>
-										<option value="18">世博</option>
-									</optgroup>
-									<optgroup label="体育">
-										<option value="15">英超</option>
-										<option value="17">意甲</option>
-										<option value="21">世界杯</option>
-										<option value="97">亚运会</option>
-										<option value="33">NBAVIP</option>
-										<option value="34">NBAliveu</option>
-										<option value="35">NBArealtime</option>
-										<option value="102">2012欧洲杯</option>
-										<option value="101">2012伦敦奥运会</option>
-									</optgroup>
-									<optgroup label="综艺">
-										<option value="19">快男</option>
-										<option value="99">快女</option>
-										<option value="11">春晚</option>
-										<option value="13">花儿朵朵</option>
-									</optgroup>
-									<optgroup label="MV">
-										<option value="22">MV</option>
-										<option value="38">MV2</option>
-										<option value="200">mv1</option>
-									</optgroup>
-									<optgroup label="教育">
-										<option value="27">教育</option>
-										<option value="37">微讲堂</option>
-										<option value="100">在线学习</option>
-										<option value="106">腾讯大讲堂</option>
-									</optgroup>
-									<optgroup label="其他">
-										<option value="0">未知</option>
-										<option value="25">时尚</option>
-										<option value="26">旅游</option>
-										<option value="28">科技</option>
-										<option value="29">汽车</option>
-										<option value="30">房产</option>
-										<option value="31">生活</option>
-										<option value="60">母婴</option>
-										<option value="39">收费</option>
-										<option value="40">广告</option>
-										<option value="41">自拍</option>
-										<option value="42">猎奇</option>
-										<option value="43">搞笑</option>
-										<option value="103">原创</option>
-										<option value="104">热享</option>
-										<option value="7">播客</option>
-										<option value="45">儒释道</option>
-										<option value="98">高清体验专区</option>
-										<option value="44">面包测试</option>
-										<option value="48">storm测试</option>
-									</optgroup>
-								</select>
+								<button type="button" class="btn btn-info">搜索</button>
 							</div>
-							<div class="form-group">
-								<label class="control-label">状态：</label>
-								<select class="form-control">
-									<option value="0">全部</option>
-									<option value="1">显示</option>
-									<option value="2">隐藏</option>
-								</select>
-							</div>
-						</div>
-						<div class="form-groups-4">
-							<div class="form-group">
-								<label class="control-label">是否付费：</label>
-								<select class="form-control">
-									<option>免费</option>
-									<option>付费</option>
-								</select>
-							</div>
-							<div class="form-group">
-								<label class="control-label">版权状态：</label>
-								<select class="form-control">
-									<option>免费</option>
-									<option>付费</option>
-								</select>
-							</div>
-							<div class="form-group">
-								<label class="control-label">来源：</label>
-								<select class="form-control">
-									<option>免费</option>
-									<option>付费</option>
-								</select>
-							</div>
-							<div class="form-group">
-								<label class="control-label">发布人：</label>
-								<input type="text" class="form-control" placeholder="">
-							</div>
-						</div>
-						<div class="btn-line">
-							<button type="button" class="btn btn-info">搜索</button>
 						</div>
 					</div>
 					
@@ -251,88 +43,45 @@
 			</div>
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<h3 class="panel-title">共查到<span class="num">1999</span>个视频</h3>
+					<h3 class="panel-title">共查到<span class="num">{{videocount}}</span>个视频</h3>
 				</div>
 				<div class="panel-body">
 					<div class="table-checkbox-operate">
-						<button type="button" class="btn btn-text-default">批量收至专辑长视频 »</button>
+						<button type="button" class="btn btn-text-default">批量收至专辑 »</button>
 						<input type="text" class="form-control" placeholder="输入专辑ID">
-						<button type="button" class="btn btn-text-default">« 批量收至专辑碎视频</button>
 					</div>
 					<table class="table table-hover table-column">
 						<thead>
 							<tr>
 								<th class="text-center"><input type="checkbox"></th>
 								<th>No.</th>
-								<th>ID</th>
+								<th>VID</th>
+								<th>所属专辑</th>
 								<th>标题</th>
-								<th>状态</th>
+								<th>时长</th>
 								<th>上传时间</th>
-								<th>预览</th>
 								<th>操作</th>
 							</tr>
 						</thead>
 						<tbody>
+							{% for items in videolist %}
 							<tr>
 								<td class="text-center"><input type="checkbox"></td>
-								<td>1</td>
+								<td>{{loop.index}}</td>
 								<td>
 									<span class="icon-copy" title="拷贝"></span>
-									<a href="video-detail.html">06zn91</a>
+									<a href="/video/detail?vid={{items.vid}}">{{items.vid}}</a>
 								</td>
+								<td><a href="/album/detail?cid={{items.cid}}">《{{items.cname}}》</a></td>
+								<td><a href="/video/detail?vid={{items.vid}}">{{items.title}}</a></td>
+								<td>{{items.duration}}</td>
+								<td>{{items.time}}</td>
 								<td>
-									<span class="icon-edit" title="编辑"></span>
-									豆瓣高分系列
-								</td>
-								<td data-value="审核通过">审核通过</td>
-								<td>2014-08-19 10:14:53</td>
-								<td>
-									<a class="btn btn-text-info" href="javacript:;">内网预览</a>
-									<a class="btn btn-text-default" href="javacript:;">外网预览</a>
-								</td>
-								<td>
-									<a class="btn btn-info" href="video-detail.html">编辑</a>
-									<a class="btn btn-danger" href="javacript:;">删除</a>
+									<a class="btn btn-info" href="/video/detail?vid={{items.vid}}">编辑</a>
+									<a class="btn btn-danger" href="/video/detail?ac=delete&vid={{items.vid}}">删除</a>
 								</td>
 							</tr>
-							<tr>
-								<td class="text-center"><input type="checkbox"></td>
-								<td>2</td>
-								<td>
-									<span class="icon-text icon-text-copy" title="拷贝">拷</span>
-									<a href="video-detail.html">06zn91</a>
-								</td>
-								<td>
-									<span class="icon-text icon-text-edit" title="编辑">编</span>
-									豆瓣高分系列
-								</td>
-								<td data-value="审核未通过">审核未通过</td>
-								<td>2014-08-19 10:14:53</td>
-								<td>
-									<a class="btn btn-text-info" href="javacript:;">内网预览</a>
-									<a class="btn btn-text-default" href="javacript:;">外网预览</a>
-								</td>
-								<td>
-									<a class="btn btn-info" href="video-detail.html">编辑</a>
-									<a class="btn btn-danger" href="javacript:;">删除</a>
-								</td>
-							</tr>
-							<tr>
-								<td class="text-center"><input type="checkbox"></td>
-								<td>3</td>
-								<td><a href="video-detail.html">06zn91</a></td>
-								<td>豆瓣高分系列</td>
-								<td data-value="审核未通过">审核未通过</td>
-								<td>2014-08-19 10:14:53</td>
-								<td>
-									<a class="btn btn-text-info" href="javacript:;">内网预览</a>
-									<a class="btn btn-text-default" href="javacript:;">外网预览</a>
-								</td>
-								<td>
-									<a class="btn btn-info" href="video-detail.html">编辑</a>
-									<a class="btn btn-danger" href="javacript:;">删除</a>
-								</td>
-							</tr>
+							{%endfor%}
 						</tbody>
 					</table>
 					<div class="pages-group">
@@ -361,7 +110,11 @@
 	<!-- 右侧主体 结束 -->
 </div>
 
-
-
-</body>
-</html>
+<script src="/system/js/jquery.min.js"></script>
+<script src="/system/js/bootstrap.min.js"></script>¥
+<script>
+$(function(){
+	
+});
+</script>
+{% endblock %}

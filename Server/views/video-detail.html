@@ -1,171 +1,35 @@
-<!DOCTYPE html>
-<!--[if lte IE 8 ]> <html class="ie lte_ie8" lang="zh-CN"> <![endif]-->
-<!--[if IE 9 ]> <html class="ie ie9" lang="zh-CN"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <html lang="zh-CN"> <!--<![endif]-->
-<head>
-<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui" />
-<title>专辑管理-媒资库-腾讯视频</title>
-<link rel="stylesheet" href="../style/main.css">
-</head>
-<body>
-<div class="wrapper">
-	<!-- 顶部导航 开始 -->
-	<div class="site-header cf">
-		<ul class="site-breadcrumb cf">
-			<li class="item"><a href="mine.html" class="site-logo">腾讯视频后台管理系统</a></li>
-			<li class="item"><a href="mine.html">媒资库</a></li>
-		</ul>
-		<div class="site-meta">
-			<div class="avatar">
-				<img src="http://tapd.oa.com/users/avatar/blankyu/avatar.jpg" alt="blankyu" class="pic">
-			</div>
-			<a href="#" class="login">退出</a>
-		</div>
-	</div>
-	<!-- 顶部导航 结束 -->
+{% extends '@layout.html' %}
 
-	<!-- 左侧导航 开始 -->
-	<div class="col_side side-nav">
-		<div class="menu_box side_list">
-			<dl class="menu">
-				<dt class="menu_title">
-					<i class="glyphicon_menu glyphicon glyphicon-film"></i>视频管理
-				</dt>
-				<dd class="menu_item ">
-					<a href="mine.html">我的视频</a>
-				</dd>
-				<dd class="menu_item ">
-					<a href="video-add.html">新建视频</a>
-				</dd>
-				<dd class="menu_item selected">
-					<a href="video-manage.html">视频管理</a>
-				</dd>
-			</dl>
-			<dl class="menu">
-				<dt class="menu_title">
-					<i class="glyphicon_menu glyphicon glyphicon-folder-open"></i>专辑管理
-				</dt>
-				<dd class="menu_item">
-					<a href="cover-add.html">新建专辑</a>
-				</dd>
-				<dd class="menu_item">
-					<a href="cover.html">专辑管理</a>
-				</dd>
-			</dl>
-			<dl class="menu">
-				<dt class="menu_title">
-					<i class="glyphicon_menu glyphicon glyphicon-list"></i>栏目管理
-				</dt>
-				<dd class="menu_item ">
-					<a href="column-add.html">新建栏目</a>
-				</dd>
-				<dd class="menu_item">
-					<a href="column.html">栏目管理</a>
-				</dd>
-			</dl>
-			<dl class="menu">
-				<dt class="menu_title">
-					<i class="glyphicon_menu glyphicon glyphicon-list-alt"></i>看单管理
-				</dt>
-				<dd class="menu_item">
-					<a href="playlist-add.html">新建看单</a>
-				</dd>
-				<dd class="menu_item">
-					<a href="playlist.html">看单管理</a>
-				</dd>
-			</dl>
-			<dl class="menu">
-				<dt class="menu_title">
-					<i class="glyphicon_menu glyphicon glyphicon-th-large"></i>其他
-				</dt>
-				<dd class="menu_item">
-					<a href="name-database.html">人名库</a>
-				</dd>
-				<dd class="menu_item ">
-					<a href="std.html">标准化后台</a>
-				</dd>
-			</dl>
-			<dl class="menu">
-				<dt class="menu_title">
-					<i class="glyphicon_menu glyphicon glyphicon-check"></i>二审视频
-				</dt>
-				<dd class="menu_item">
-					<a href="video-list.html">待审核视频</a>
-				</dd>
-				<dd class="menu_item">
-					<a href="video-list.html">已审核视频</a>
-				</dd>
-				<dd class="menu_item">
-					<a href="video-list.html">已采用视频</a>
-				</dd>
-				<dd class="menu_item">
-					<a href="video-list.html">未采用视频</a>
-				</dd>
-				<dd class="menu_item">
-					<a href="video-list.html">不通过视频</a>
-				</dd>
-			</dl>
-		</div>
-	</div>
-	<!-- 左侧导航 结束 -->	
+{% block title %}{{title}}{% endblock %}
+
+{% block head %}
+	{% parent %}
+{% endblock %}
+
+{% block content %}	
 
 	<!-- 右侧主体 开始 -->
 	<div class="site-container">
 		<div class="cover-wrap">
-			<div class="panel-head">
-				<h1 class="panel-title">
-					视频: <a class="title" href="#" target="_blank">豆瓣高分系列</a>
-					<span class="desc">ID: <em class="num">ca14h5ds1</em></span>
-					<a class="btn btn-default">复制播放地址</a>
-					<a class="btn btn-default">复制大界面地址</a>
-					<a href="＃" class="btn btn-default">跳转播放</a>
-					<a href="＃" class="btn btn-link">播放指数</a>
-				</h1>
-			</div>
-			<div class="tabs-simple" role="tablist">
-				<ul class="nav nav-tabs" role="tablist">
-					<li class="active"><a href="#videoEdit" role="tab" data-toggle="tab">资料维护</a></li>
-					<li><a href="#coverList" role="tab" data-toggle="tab">视频所属专辑</a></li>
-					<li><a href="#recommendList" role="tab" data-toggle="tab">视频推荐列表</a></li>
-					<li><a href="#platform" role="tab" data-toggle="tab">多平台状态</a></li>
-					<li><a href="#transcoding" role="tab" data-toggle="tab">转码设置</a></li>
-					<!-- <li><a href="#dataIndex" role="tab" data-toggle="tab">数据指数</a></li> -->
-				</ul>
-			</div>
+
 			<div class="tab-content">
 				<div class="tab-pane active" id="videoEdit">
 					<div class="content-side content-side-pic">
 						<div class="pic_preview">
-							<p class="desc">封面 640*360</p>
-							<div class="pic"><img src="http://placehold.it/640x360" ></div>
+							<p class="desc">封面 260*150</p>
+							<div class="pic"><img src="{{result.imgurl}}" ></div>
 							<button type="button" class="btn btn-default" data-toggle="modal" data-target="#picUploadPop">修改图片</button>	
 						</div>
 					</div>
 					<div class="content-main">
 						<div class="form form-detail-edit form-detail-edit-video">
 							<div class="form-title">资料维护</div>
-							<div class="form-group">
-								<label class="control-label">分类：</label>
-								<select class="form-control form-control-inline">
-									<option value="1">电影</option>
-									<option value="2">电视剧</option>
-									<option value="3">动漫</option>
-									<option value="4">体育</option>
-									<option value="5">娱乐</option>
-									<option value="6">游戏</option>
-								</select>
-								<select class="form-control form-control-inline">
-									<option>电影</option>
-									<option>微电影</option>
-								</select>
-								<select class="form-control form-control-inline">
-									<option>正片</option>
-									<option>预告片</option>
-								</select>
-							</div>
 							<div class="form-groups-3">
+								<div class="form-group">
+									<label class="control-label">VID：</label>
+									<input type="text" class="form-control" value="{{result.vid}}" disabled="">
+								</div>
+							
 								<div class="form-group">
 									<label class="control-label">标题：</label>
 									<input type="text" class="form-control" placeholder="">
@@ -197,215 +61,12 @@
 								</datalist>
 							</div>
 
-							
-							
-
 							<div class="form-group">
 								<label class="control-label">简介：</label>
 								<textarea class="form-control" rows="3"></textarea>
 							</div>
 						</div>
 
-						<div class="form form-comments form-comments-video">
-							<div class="form-title">评论/关注</div>
-							<div class="form-groups-3">
-								<div class="form-group">
-									<label class="control-label">是否评论：</label>
-									<select class="form-control form-control-inline">
-										<option>是</option>
-										<option>否</option>
-									</select>
-								</div>
-							</div>
-							<div class="form-groups-3">
-								<div class="form-group">
-									<label class="control-label">飞幕模块设置：</label>
-									<select class="form-control form-control-inline">
-										<option>默认</option>
-										<option>显示</option>
-										<option>隐藏</option>
-									</select>
-								</div>
-								<div class="form-group">
-									<label class="control-label">飞幕状态设置：</label>
-									<select class="form-control form-control-inline">
-										<option>默认</option>
-										<option>开启</option>
-										<option>屏蔽</option>
-									</select>
-								</div>
-							</div>
-						</div>
-						
-						<div class="form form-copyright form-copyright-video">
-							<div class="form-title">版权状态/广告位</div>
-							<div class="form-groups-3">
-								<div class="form-group">
-									<label class="control-label">版权状态：</label>
-									<input type="text" class="form-control" placeholder="" list="copyright-status">
-									<datalist id="copyright-status">
-										<option data-value="0" value="无版权"></option>
-										<option data-value="2" value="高兴影视"></option>
-										<option data-value="3" value="网尚文化"></option>
-										<option data-value="4" value="优度宽带"></option>
-										<option data-value="5" value="腾讯视频"></option>
-										<option data-value="6" value="欢乐传媒"></option>
-										<option data-value="7" value="中录国际"></option>
-										<option data-value="8" value="pps"></option>
-										<option data-value="9" value="九州梦网"></option>
-									</datalist>
-								</div>
-								<div class="form-group">
-									<label class="control-label">视频来源：</label>
-									<input type="text" class="form-control" placeholder="" list="copyright-source">
-									<datalist id="copyright-source">
-										<option data-value="0" value="未设置"></option>
-										<option data-value="21" value="湖南经视"></option>
-										<option data-value="20" value="湖南卫视"></option>
-									</datalist>
-								</div>
-								<div class="form-group">
-									<label class="control-label">水印：</label>
-									<select class="form-control form-control-inline">
-										<option>是</option>
-										<option>否</option>
-									</select>
-								</div>	
-							</div>
-							<div class="form-groups-3">
-								<div class="form-group">
-									<label class="control-label">出品：</label>
-									<select class="form-control form-control-inline">
-										<option>无</option>
-										<option>华纳</option>
-									</select>
-								</div>
-							</div>
-							
-
-							<div class="form-group">
-								<label class="control-label">当前广告位：</label>
-								<button type="button" class="btn btn-success">电影</button>
-								<button type="button" class="btn btn-default">还原</button>
-								<a href="javascript:;" class="btn btn-link" data-target="form-ads-advanced">特殊广告位设置</a>
-							</div>
-							<div class="form-ads-advanced none">
-								<div class="form-groups">
-									<div class="form-group">
-										<label class="control-label">广告位1：</label>
-										<input type="text" class="form-control">
-									</div>
-									<div class="form-group">
-										<label class="control-label">生效时间1：</label>
-										<input type="datetime-local" class="form-control form-control-datatime">
-									</div>
-									<div class="form-group">
-										<label class="control-label">失效时间1：</label>
-										<input type="datetime-local" class="form-control form-control-datatime">
-									</div>	
-								</div>
-								<div class="form-groups">
-									<div class="form-group">
-										<label class="control-label">广告位2：</label>
-										<input type="text" class="form-control">
-									</div>
-									<div class="form-group">
-										<label class="control-label">生效时间2：</label>
-										<input type="datetime-local" class="form-control form-control-datatime">
-									</div>
-									<div class="form-group">
-										<label class="control-label">失效时间2：</label>
-										<input type="datetime-local" class="form-control form-control-datatime">
-									</div>	
-								</div>
-								<div class="form-groups">
-									<div class="form-group">
-										<label class="control-label">广告位3：</label>
-										<input type="text" class="form-control">
-									</div>
-									<div class="form-group">
-										<label class="control-label">生效时间3：</label>
-										<input type="datetime-local" class="form-control form-control-datatime">
-									</div>
-									<div class="form-group">
-										<label class="control-label">失效时间3：</label>
-										<input type="datetime-local" class="form-control form-control-datatime">
-									</div>	
-								</div>
-								<div class="form-groups">
-									<div class="form-group">
-										<label class="control-label">广告位4：</label>
-										<input type="text" class="form-control">
-									</div>
-									<div class="form-group">
-										<label class="control-label">生效时间4：</label>
-										<input type="datetime-local" class="form-control form-control-datatime">
-									</div>
-									<div class="form-group">
-										<label class="control-label">失效时间4：</label>
-										<input type="datetime-local" class="form-control form-control-datatime">
-									</div>	
-								</div>
-								<div class="form-groups">
-									<div class="form-group">
-										<label class="control-label">广告位5：</label>
-										<input type="text" class="form-control">
-									</div>
-									<div class="form-group">
-										<label class="control-label">生效时间5：</label>
-										<input type="datetime-local" class="form-control form-control-datatime">
-									</div>
-									<div class="form-group">
-										<label class="control-label">失效时间5：</label>
-										<input type="datetime-local" class="form-control form-control-datatime">
-									</div>	
-								</div>
-							</div>
-						</div>
-
-						<div class="form form-detail-status form-detail-status-video">
-							<div class="form-title">视频状态</div>
-							<div class="form-group">
-								<label class="control-label">视频状态：</label>
-								<select class="form-control form-control-inline">
-									<option>未审核</option>
-									<option>上架</option>
-									<option>下架</option>
-								</select>
-								<div class="operator-recoard">
-									<span class="control-label">最后一次操作人：</span>
-									<span class="operator">mikema</span>
-								</div>
-								<div class="operator-recoard">
-									<span class="control-label">当前操作人：</span>
-									<span class="operator">blankyu</span>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label">资料状态：</label>
-								<select class="form-control form-control-inline">
-									<option>未审核</option>
-									<option>上架</option>
-									<option>下架</option>
-								</select>
-								<div class="operator-recoard">
-									<span class="control-label">最后一次操作人：</span>
-									<span class="operator">mikema</span>
-								</div>
-								<div class="operator-recoard">
-									<span class="control-label">当前操作人：</span>
-									<span class="operator">blankyu</span>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label">修改纪录：</label>
-								<textarea class="form-control" rows="3"></textarea>
-							</div>
-							<div class="btn-line">
-								<button type="button" class="btn btn-info">确定修改</button>
-								<button type="button" class="btn btn-default">立即刷新页面</button>
-							</div>
-						</div>
 					</div>	
 				</div>
 				<div class="tab-pane" id="coverList">
@@ -888,23 +549,11 @@
 	<!-- 右侧主体 结束 -->
 </div>
 
-<script src="../js/jquery.min.js"></script>
-<script src="../js/bootstrap.min.js"></script>
+<script src="/system/js/jquery.min.js"></script>
+<script src="/system/js/bootstrap.min.js"></script>¥
 <script>
-// 增加一行
-$('.form-group').delegate('.form-control-add', 'click', function(){
-	var parent = $(this).parent();
-	parent.after(parent.clone());
-})
-// 减去一行
-$('.form-group').delegate('.form-control-minus', 'click', function(){
-	var parent = $(this).parent();
-	parent.remove();
-})
-// 高级广告设置
-$('.btn-link').click(function(){
-	$('.'+$(this).attr('data-target')).toggleClass('none');
-})
+$(function(){
+	
+});
 </script>
-</body>
-</html>
+{% endblock %}
