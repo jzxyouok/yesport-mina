@@ -50,7 +50,7 @@
 						<button type="button" class="btn btn-text-default">批量收至专辑 »</button>
 						<input type="text" class="form-control" placeholder="输入专辑ID">
 					</div>
-					<table class="table table-hover table-column">
+					<table class="table table-hover table-column" id="list-video">
 						<thead>
 							<tr>
 								<th class="text-center"><input type="checkbox"></th>
@@ -58,7 +58,7 @@
 								<th>VID</th>
 								<th>所属专辑</th>
 								<th>标题</th>
-								<th>时长</th>
+								<th>播放时长</th>
 								<th>上传时间</th>
 								<th>操作</th>
 							</tr>
@@ -75,7 +75,7 @@
 								<td><a href="/album/detail?cid={{items.cid}}">《{{items.cname}}》</a></td>
 								<td><a href="/video/detail?vid={{items.vid}}">{{items.title}}</a></td>
 								<td>{{items.duration}}</td>
-								<td>{{items.time}}</td>
+								<td class="time">{{items.time}}</td>
 								<td>
 									<a class="btn btn-info" href="/video/detail?vid={{items.vid}}">编辑</a>
 									<a class="btn btn-danger" href="/video/detail?ac=delete&vid={{items.vid}}">删除</a>
@@ -86,13 +86,9 @@
 					</table>
 					<div class="pages-group">
 						<ul class="pagination">
-							<li class="disabled"><a href="#">«</a></li>
-							<li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
-							<li><a href="#">2</a></li>
-							<li><a href="#">3</a></li>
-							<li><a href="#">4</a></li>
-							<li><a href="#">5</a></li>
-							<li><a href="#">»</a></li>
+							{% autoescape false %}
+							{{pages}}
+							{% endautoescape %}
 						</ul>	
 					</div>
 				</div>
@@ -111,10 +107,13 @@
 </div>
 
 <script src="/system/js/jquery.min.js"></script>
-<script src="/system/js/bootstrap.min.js"></script>¥
+<script src="/system/js/bootstrap.min.js"></script>
+<!-- <script src="/system/js/utils.js"></script> -->
 <script>
 $(function(){
-	
+	// $("#list-video .time").each(function(i, items){
+	// 	console.log(timeFormat($(this).text()))
+	// });
 });
 </script>
 {% endblock %}

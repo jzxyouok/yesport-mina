@@ -113,20 +113,46 @@ app.get('/video/:type', function(req, res){
 		});
 		
 	}else if(type === 'list'){
+		var page = get_param(req).page || 1;  //默认第一页
+		var rows = 10; //每次拉取10条
+
 		MongoClient.connect(DB_CONN_STR, function(err, db) {
-			selectData(db, 'video', function(result) {
+
+			//查询全部或者某个字段
+			db.collection('video').find({}, {limit:rows, skip:(page - 1) * rows}).sort({ time : -1 }).toArray(function(err, result) {
+
+				if(err){
+					console.log('Error:'+ err);
+					return;
+				}
 				for (var i = 0; i < result.length; i++) {
-					result[i].time = utils.timeFormat(result[i].time);
+					result[i].time = utils.timeFormat(result[i].time * 1000);
 				}
 
-				res.render('video-manage', {
-					'title': '视频管理',
-					'menu' : 'videolist',
-					'videolist' : result.reverse(),
-					'videocount' : result.length
+				db.collection('video').find().toArray(function(err, _result) {
+
+					// var pages = '<li><a href="?page=prev">«</a></li>';
+					var pages = '';
+					var pagesize = Math.ceil(_result.length / rows); //总条数除以拉取总数，得到分页数
+
+					for (var i = 0; i < pagesize; i++) {
+						pages += '<li><a href="?page='+Number(i+1)+'">'+Number(i+1)+'</a></li>';
+					}
+					// pages += '<li><a href="?page=next">»</a></li>';
+
+					res.render('video-manage', {
+						'title': '视频管理',
+						'menu' : 'videolist',
+						'videolist' : result,
+						'videocount' : _result.length,
+						'pages' : pages
+					});
+
+					db.close();
 				});
-				db.close();
+
 			});
+
 		});
 		
 	}else if(type === 'detail'){
@@ -134,13 +160,23 @@ app.get('/video/:type', function(req, res){
 
 		MongoClient.connect(DB_CONN_STR, function(err, db) {
 			selectDataOne(db, 'video', {vid: vid}, function(result) {
-				// res.send(result[0]);
-				res.render('video-detail', {
-					'title': '视频详情',
-					'menu' : 'videolist',
-					'result' : result[0]
+
+				selectData(db, 'album', function(_result) {
+					var catelist = [];
+					for (var i = 0; i < _result.length; i++) {
+						catelist.push('<option value="'+_result[i].cid+'">'+_result[i].title+'</option>');
+					}
+
+					result[0].catelist = catelist.join(',');
+
+					res.render('video-detail', {
+						'title': '视频详情',
+						'menu' : 'videolist',
+						'result' : result[0]
+					});
+
+					db.close();
 				});
-				db.close();
 			});
 		});
 
@@ -177,7 +213,7 @@ app.get('/album/:type', function(req, res){
 		MongoClient.connect(DB_CONN_STR, function(err, db) {
 			selectData(db, 'album', function(result) {
 				for (var i = 0; i < result.length; i++) {
-					result[i].time = utils.timeFormat(result[i].time);
+					result[i].time = utils.timeFormat(result[i].time * 1000);
 				}
 
 				res.render('cover-list', {
@@ -196,12 +232,15 @@ app.get('/album/:type', function(req, res){
 		MongoClient.connect(DB_CONN_STR, function(err, db) {
 			selectDataOne(db, 'album', {cid: cid}, function(result) {
 				// res.send(result[0].banner)
-				res.render('cover-detail', {
-					'title': '专辑详情',
-					'menu' : 'albumdetail',
-					'result' : result[0]
+				selectDataOne(db, 'video', {cid: cid}, function(_result) {
+					res.render('cover-detail', {
+						'title': '专辑详情',
+						'menu' : 'albumdetail',
+						'result' : result[0],
+						'videolist' : _result
+					});
+					db.close();
 				});
-				db.close();
 			});
 		});
 
@@ -232,10 +271,12 @@ app.post('/', function(req, res){
 				db.close();
 			});
 		});
+
 	}else if(param.type && param.type === 'setalbum'){//存储专辑信息
 
 		//这里定义多一个CID作为查询主键入库
 		param.cid = utils.randomString(16);
+		param.time = Date.now();
 
 		MongoClient.connect(DB_CONN_STR, function(err, db) {
 			insertData(db, 'album', param, function(result) {
@@ -252,6 +293,7 @@ app.post('/', function(req, res){
 
 		//这里定义多一个VID作为查询主键入库
 		param.vid = utils.randomString(16);
+		param.time = Date.now();
 
 		MongoClient.connect(DB_CONN_STR, function(err, db) {
 			insertData(db, 'video', param, function(result) {
