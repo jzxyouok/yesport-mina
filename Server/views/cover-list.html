@@ -74,11 +74,12 @@
 	</div>
 	<!-- 右侧主体 结束 -->
 </div>
+{% endblock %}
 
-<script src="/system/js/jquery.min.js"></script>
-<script src="/system/js/bootstrap.min.js"></script>
-<script src="/system/js/jquery.uploadfile.min.js"></script>
-<script src="/system/js/utils.js"></script>
+{% block foot %}
+	{% parent %}
+<script src="/public/system/js/jquery.uploadfile.min.js"></script>
+<script src="/public/system/js/utils.js"></script>
 <script>
 $(function(){
 	// $(".timestamp").each(function(i){

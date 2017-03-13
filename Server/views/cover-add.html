@@ -4,7 +4,7 @@
 
 {% block head %}
 	{% parent %}
-	<link rel="stylesheet" href="/system/style/uploadfile.css">
+	<link rel="stylesheet" href="/public/system/style/uploadfile.css">
 {% endblock %}
 
 
@@ -75,9 +75,11 @@
 	</div>
 	<!-- 右侧主体 结束 -->
 </div>
-	<script src="/system/js/jquery.min.js"></script>
-	<script src="/system/js/bootstrap.min.js"></script>
-	<script src="/system/js/jquery.uploadfile.min.js"></script>
+{% endblock %}
+
+{% block foot %}
+	{% parent %}
+	<script src="/public/system/js/jquery.uploadfile.min.js"></script>
 	<script>
 		$(function(){
 			var BANNERIMG = 'http://placehold.it/750x440',

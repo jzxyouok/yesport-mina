@@ -106,14 +106,16 @@
 	<!-- 右侧主体 结束 -->
 </div>
 
-<script src="/system/js/jquery.min.js"></script>
-<script src="/system/js/bootstrap.min.js"></script>
-<!-- <script src="/system/js/utils.js"></script> -->
-<script>
-$(function(){
-	// $("#list-video .time").each(function(i, items){
-	// 	console.log(timeFormat($(this).text()))
-	// });
-});
-</script>
+{% endblock %}
+
+{% block foot %}
+	{% parent %}
+	<script src="/public/system/js/utils.js"></script>
+	<script>
+	$(function(){
+		// $("#list-video .time").each(function(i, items){
+		// 	console.log(timeFormat($(this).text()))
+		// });
+	});
+	</script>
 {% endblock %}

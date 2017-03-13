@@ -76,8 +76,10 @@ app.set('views', __dirname + '/views');
 
 app.set('port',process.env.PORT || 8001);//设置端口
 
-//使用static中间件 public目录为静态资源目录
-app.use(express.static(__dirname + '/public'));
+//使用static中间件 public目录为静态资源目录。静态资源入口交给nginx处理
+app.use('/public', express.static(__dirname + '/public'));
+
+//上传目录处理
 app.use('/upload', express.static(__dirname + '/upload'));
 
 app.get('/', function (req, res) {
