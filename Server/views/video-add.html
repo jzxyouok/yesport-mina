@@ -54,19 +54,21 @@
 								<div class="form-control-file">
 									<input type="file" accept="video/*" class="form-control-input" multiple id="upvideo">
 									<p class="form-hint">支持上传mp4、mpg、wmv、flv</p>
+									<div class="preview-cont" id="prev-video"></div>
 								</div>
 							</div>
 
 							<div class="form-group">
 								<label class="control-label">视频时长：</label>
-								<input type="text" class="form-control" placeholder="" id="vtime">
+								<input type="text" class="form-control" placeholder="" id="duration">
 							</div>
 
 							<div class="form-group-upload">
 								<label class="control-label">视频截图：260*150　</label>
 								<div class="form-control-file">
-									<input type="file" class="form-control-input">
-									<p class="form-hint">支持上传mp4、mpg、wmv、flv</p>
+									<input type="file" class="form-control-input" id="pickThumbimg">
+									<p class="form-hint">支持上传jpg/png/jpeg/gif</p>
+									<div class="preview-cont" id="prev-img"></div>
 								</div>
 							</div>
 
@@ -97,87 +99,172 @@
 
 {% block foot %}
 	{% parent %}
-<script src="/public/system/js/jquery.uploadfile.min.js"></script>
+	<script src="https://cdn.staticfile.org/plupload/2.1.8/plupload.full.min.js"></script>
+	<script src="/public/system/js/qiniu.js"></script>
 <script>
 $(function(){
-	var VIDEO = '',
-		VIMGURL = 'http://placehold.it/260x150';
-	$("#upvideo").change(function(){
-		$.post('/upqiniu', function(data){
-			console.log(data);
-		});
+
+	var Qiniu1 = new QiniuJsSDK();
+	var Qiniu2 = new QiniuJsSDK();
+
+	//视频缩略图
+	var uploadthumbimg = Qiniu1.uploader({
+	    runtimes: 'html5,flash,html4',      // 上传模式，依次退化
+	    browse_button: 'pickThumbimg',         // 上传选择的点选按钮，必需
+	    uptoken_url: '/uptoken',         // Ajax请求uptoken的Url，强烈建议设置（服务端提供）
+	    get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的uptoken
+	    unique_names: false,              // 默认false，key为文件名。若开启该选项，JS-SDK会为每个文件自动生成key（文件名）
+	    save_key: false,                  // 默认false。若在服务端生成uptoken的上传策略中指定了sava_key，则开启，SDK在前端将不对key进行任何处理
+	    domain: 'http://omsd78olk.bkt.clouddn.com',     // bucket域名，下载资源时用到，必需
+	    flash_swf_url: 'https://cdn.staticfile.org/plupload/2.1.8/Moxie.swf',  //引入flash，相对路径
+	    max_retries: 3,                     // 上传失败最大重试次数
+	    dragdrop: false,                     // 开启可拖曳上传
+	    chunk_size: '4mb',                  // 分块上传时，每块的体积
+	    auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传
+
+	    init: {
+	        'BeforeUpload': function(up, file) {
+	               // 每个文件上传前，处理相关的事情
+	        },
+	        'UploadProgress': function(up, file) {
+	               $("#prev-img").show().html('上传中请稍候...');
+	        },
+	        'FileUploaded': function(up, file, info) {
+
+	               var domain = up.getOption('domain');
+	               var res = JSON.parse(info);
+	               var sourceLink = domain +"/"+ res.key; //获取上传成功后的文件的Url
+	               // console.log(sourceLink);
+	               $("#prev-img").attr("data-img", sourceLink);
+	               $("#prev-img").show().html('<img src="'+sourceLink+'?imageView2/1/w/260/h/150" />');
+	        },
+	        'Error': function(up, err, errTip) {
+	               alert(errTip);
+	        },
+	        'UploadComplete': function() {
+	               //队列文件处理完毕后，处理相关的事情
+	        }
+	    },
+
+	    filters : {
+		    max_file_size : '5mb',
+		    prevent_duplicates: true,
+		    // Specify what files to browse for
+		    mime_types: [
+		        {title : "Image files", extensions : "jpg,gif,png,jpeg"} // 限定jpg,gif,png后缀上传
+		    ]
+		}
 	});
+
+	//上传视频
+	var uploadVideo = Qiniu2.uploader({
+	    runtimes: 'html5,flash,html4',      // 上传模式，依次退化
+	    browse_button: 'upvideo',         // 上传选择的点选按钮，必需
+	    uptoken_url: '/uptoken',         // Ajax请求uptoken的Url，强烈建议设置（服务端提供）
+	    get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的uptoken
+	    unique_names: true,              // 默认false，key为文件名。若开启该选项，JS-SDK会为每个文件自动生成key（文件名）
+	    save_key: true,                  // 默认false。若在服务端生成uptoken的上传策略中指定了sava_key，则开启，SDK在前端将不对key进行任何处理
+	    domain: 'http://omsd78olk.bkt.clouddn.com',     // bucket域名，下载资源时用到，必需
+	    max_file_size: '100mb',             // 最大文件体积限制
+	    flash_swf_url: 'https://cdn.staticfile.org/plupload/2.1.8/Moxie.swf',  //引入flash，相对路径
+	    max_retries: 3,                     // 上传失败最大重试次数
+	    dragdrop: false,                     // 开启可拖曳上传
+	    chunk_size: '4mb',                  // 分块上传时，每块的体积
+	    auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传
+
+	    init: {
+	        'BeforeUpload': function(up, file) {
+	               // 每个文件上传前，处理相关的事情
+	        },
+	        'UploadProgress': function(up, file) {
+	               $("#prev-video").show().html('上传中请稍候...');
+	        },
+	        'FileUploaded': function(up, file, info) {
+
+	               var domain = up.getOption('domain');
+	               var res = JSON.parse(info);
+	               var sourceLink = domain +"/"+ res.key; //获取上传成功后的文件的Url
+
+	               $("#prev-video").attr("data-video", sourceLink);
+	               $("#prev-video").show().html('<video src="'+sourceLink+'" ></video>');
+	        },
+	        'Error': function(up, err, errTip) {
+	               alert(errTip);
+	        },
+	        'UploadComplete': function() {
+	               //队列文件处理完毕后，处理相关的事情
+	        }
+	    },
+	    filters : {
+		    max_file_size : '100mb',
+		    prevent_duplicates: true,
+		    // Specify what files to browse for
+		    mime_types: [
+		        {title : "Video files", extensions : "flv,mpg,mpeg,avi,wmv,mov,asf,rm,rmvb,mkv,m4v,mp4"}
+		    ]
+		}
+	});
+
 
 	$("#coverlist").change(function(){
 		var cid = $(this).val();
 		console.log($(this).find("option:selected").text())
-		// $.ajax({
-		// 	url: '/album/get',
-		// 	data: {
-		// 		cid: cid
-		// 	},
-		// 	timeout: 6000,
-		// 	success: function(data){
-		// 		if (data.length === 0) return;
-		// 		$("#sponsor").val(data[0]['sponsor']);
-		// 		$("#production").val(data[0]['production']);
-		// 	}
-		// });
 	});
 
 	$('#btn-upvideo').click(function(){
-			var that = $(this);
-			if (that.attr('disabled') === 'disabled')return;
+		var that = $(this);
+		if (that.attr('disabled') === 'disabled')return;
 
-			if($('#vname').val() === ''){
-				alert('请填写视频标题~');
-				return;
-			}else if($('#subtit').val() === ''){
-				alert('请填写专辑子标题~');
-				return;
-			}else if($('#coverlist').val() === '-1'){
-				alert('请选择专辑~');
-				return;
-			}else if($('#vtime').val() === ''){
-				alert('视频时间不能为空~');
-				return;
-			}else if($('#vtags').val() === ''){
-				alert('视频标签不能为空~');
-				return;
-			}else if($('#vsum').val() === ''){
-				alert('视频信息不能为空~');
-				return;
+		if($('#vname').val() === ''){
+			alert('请填写视频标题~');
+			return;
+		}else if($('#subtit').val() === ''){
+			alert('请填写专辑子标题~');
+			return;
+		}else if($('#coverlist').val() === '-1'){
+			alert('请选择专辑~');
+			return;
+		}else if($('#duration').val() === ''){
+			alert('视频时长不能为空~');
+			return;
+		}else if($('#vtags').val() === ''){
+			alert('视频标签不能为空~');
+			return;
+		}else if($('#vsum').val() === ''){
+			alert('视频信息不能为空~');
+			return;
+		}
+
+		var vtagArr = $('#vtags').val().split(',');
+
+		$.ajax({
+			url: '/',
+			method: 'post',
+			timeout: 6000,
+			before: function(){
+				that.attr('disabled', 'disabled');
+			},
+			data: {
+				'type': 'addvideo',
+				'title': $('#vname').val(),
+				'subtitle': $('#subtit').val(),
+				'production': $('#production').val(),
+				'sponsor': $('#sponsor').val(),
+				'cid': $('#coverlist').val(),
+				'cname': $('#coverlist').find("option:selected").text(),
+				'tags': vtagArr,
+				'source': $("#prev-video").attr("data-video"),
+				'imgurl': $("#prev-img").attr("data-img"),
+				'duration': $("#duration").val(),
+				'content': $("#vsum").val()
+			},
+			success: function(data){
+				// console.log(data);
+				alert('提交成功，跳转到专辑管理！');
+				window.location.href = '/video/list';
 			}
-
-			var vtagArr = $('#vtags').val().split(',');
-
-			$.ajax({
-				url: '/',
-				method: 'post',
-				timeout: 6000,
-				before: function(){
-					that.attr('disabled', 'disabled');
-				},
-				data: {
-					'type': 'addvideo',
-					'title': $('#vname').val(),
-					'subtitle': $('#subtit').val(),
-					'production': $('#production').val(),
-					'sponsor': $('#sponsor').val(),
-					'cid': $('#coverlist').val(),
-					'cname': $('#coverlist').find("option:selected").text(),
-					'tags': vtagArr,
-					'source': VIDEO,
-					'imgurl': VIMGURL,
-					'content': $("#vsum").val()
-				},
-				success: function(data){
-					// console.log(data);
-					alert('提交成功，跳转到专辑管理！');
-					window.location.href = '/video/list';
-				}
-			});
 		});
+	});
 });
 </script>
 {% endblock %}

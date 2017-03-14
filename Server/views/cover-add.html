@@ -4,7 +4,6 @@
 
 {% block head %}
 	{% parent %}
-	<link rel="stylesheet" href="/public/system/style/uploadfile.css">
 {% endblock %}
 
 
@@ -36,12 +35,18 @@
 
 							<div class="form-group">
 								<label class="control-label">幻灯片大图：750*440　</label>
-								<div id="upbanner" class="fn-upload"><input type="file"></div>
+								<div class="fn-upload">
+									<input type="file" class="form-control-input" id="upbanner">
+									<div class="preview-cont" id="prev-banner"></div>
+								</div>
 							</div>
 
 							<div class="form-group">
 								<label class="control-label">专辑封面：220*325　</label>
-								<div id="upalbum" class="fn-upload"><input type="file"></div>
+								<div class="fn-upload">
+									<input type="file"  class="form-control-input" id="upalbum">
+									<div class="preview-cont" id="prev-poster" style="left: 150%;"></div>
+								</div>
 							</div>
 
 							<div class="form-group">
@@ -52,11 +57,6 @@
 							<div class="form-group">
 								<label class="control-label">赞助商：</label>
 								<input type="text" class="form-control" placeholder="" id="sponsor">
-							</div>
-
-							<div class="form-group">
-								<label class="control-label">视频个数：</label>
-							<input type="text" class="form-control" value="自动计算" disabled="">
 							</div>
 
 							<div class="form-group">
@@ -79,42 +79,120 @@
 
 {% block foot %}
 	{% parent %}
-	<script src="/public/system/js/jquery.uploadfile.min.js"></script>
+	<script src="https://cdn.staticfile.org/plupload/2.1.8/plupload.full.min.js"></script>
+	<script src="/public/system/js/qiniu.js"></script>
 	<script>
 		$(function(){
-			var BANNERIMG = 'http://placehold.it/750x440',
-				ALBUMIMG = 'http://placehold.it/220x325';
-			$("#upbanner").uploadFile({
-				url:"/upload",
-				fileName:"tmpFile",
-				multiple:true,
-				showPreview:true,
-				showProgress:false,
-				onSuccess: function(files,data,xhr,pd){
-			        if(data&&data.code===0){
-			            BANNERIMG = data.fileUrl;
-			            console.log(BANNERIMG);
-			        }
-			    }
-		    });
+			var Qiniu1 = new QiniuJsSDK();
+			var Qiniu2 = new QiniuJsSDK();
 
-			$("#upalbum").uploadFile({
-				url:"/upload",
-				fileName:"tmpFile",
-				multiple:true,
-				showPreview:true,
-				showProgress:false,
-				onSuccess: function(files,data,xhr,pd){
-			        if(data&&data.code===0){
-			            ALBUMIMG = data.fileUrl;
-			            console.log(ALBUMIMG);
+			//灯片大图：750*440
+			var uploadthumbimg = Qiniu1.uploader({
+			    runtimes: 'html5,flash,html4',
+			    browse_button: 'upbanner',
+			    uptoken_url: '/uptoken',
+			    get_new_uptoken: false,
+			    unique_names: false,
+			    save_key: false,
+			    domain: 'http://omsd78olk.bkt.clouddn.com',
+			    max_file_size: '100mb',
+			    flash_swf_url: 'https://cdn.staticfile.org/plupload/2.1.8/Moxie.swf',
+			    max_retries: 3,
+			    dragdrop: false,
+			    chunk_size: '4mb',
+			    auto_start: true,
+
+			    init: {
+			        'BeforeUpload': function(up, file) {
+			               // 每个文件上传前，处理相关的事情
+			        },
+			        'UploadProgress': function(up, file) {
+			               $("#prev-banner").show().html('上传中请稍候...');
+			        },
+			        'FileUploaded': function(up, file, info) {
+
+			               var domain = up.getOption('domain');
+			               var res = JSON.parse(info);
+			               var sourceLink = domain +"/"+ res.key; //获取上传成功后的文件的Url
+			               // console.log(sourceLink);
+			               $("#prev-banner").attr("data-img", sourceLink);
+			               $("#prev-banner").show().html('<img src="'+sourceLink+'?imageView2/1/w/750/h/440" />');
+			        },
+			        'Error': function(up, err, errTip) {
+			               alert(errTip);
+			        },
+			        'UploadComplete': function() {
+			               //队列文件处理完毕后，处理相关的事情
 			        }
-			    }
-		    });
+			    },
+
+			    filters : {
+				    max_file_size : '5mb',
+				    prevent_duplicates: true,
+				    // Specify what files to browse for
+				    mime_types: [
+				        {title : "Image files", extensions : "jpg,gif,png,jpeg"} // 限定jpg,gif,png后缀上传
+				    ]
+				}
+			});
+
+			//海报封面：220*325
+			var uploadthumbimg = Qiniu2.uploader({
+			    runtimes: 'html5,flash,html4',
+			    browse_button: 'upalbum',
+			    uptoken_url: '/uptoken',
+			    get_new_uptoken: false,
+			    unique_names: false,
+			    save_key: false,
+			    domain: 'http://omsd78olk.bkt.clouddn.com',
+			    max_file_size: '100mb',
+			    flash_swf_url: 'https://cdn.staticfile.org/plupload/2.1.8/Moxie.swf',
+			    max_retries: 3,
+			    dragdrop: false,
+			    chunk_size: '4mb',
+			    auto_start: true,
+
+			    init: {
+			        'BeforeUpload': function(up, file) {
+			               // 每个文件上传前，处理相关的事情
+			        },
+			        'UploadProgress': function(up, file) {
+			               $("#prev-poster").show().html('上传中请稍候...');
+			        },
+			        'FileUploaded': function(up, file, info) {
+
+			               var domain = up.getOption('domain');
+			               var res = JSON.parse(info);
+			               var sourceLink = domain +"/"+ res.key; //获取上传成功后的文件的Url
+			               // console.log(sourceLink);
+			               $("#prev-poster").attr("data-img", sourceLink);
+			               $("#prev-poster").show().html('<img src="'+sourceLink+'?imageView2/1/w/220/h/325" />');
+			        },
+			        'Error': function(up, err, errTip) {
+			               alert(errTip);
+			        },
+			        'UploadComplete': function() {
+			               //队列文件处理完毕后，处理相关的事情
+			        }
+			    },
+
+			    filters : {
+				    max_file_size : '5mb',
+				    prevent_duplicates: true,
+				    // Specify what files to browse for
+				    mime_types: [
+				        {title : "Image files", extensions : "jpg,gif,png,jpeg"} // 限定jpg,gif,png后缀上传
+				    ]
+				}
+			});
 
 			$('#btn-creatAlbum').click(function(){
-				var that = $(this);
+				var that = $(this),
+					BANNERIMG = $("#prev-banner").attr("data-img"),
+					ALBUMIMG = $("#prev-poster").attr("data-img");
+
 				if (that.attr('disabled') === 'disabled')return;
+				
 				if (BANNERIMG === '') {
 					alert('请上传幻灯片大图~');
 					return;

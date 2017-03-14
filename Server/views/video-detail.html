@@ -18,14 +18,14 @@
 
 						<div class="pic_preview">
 							<p class="desc">封面 260*150</p>
-							<div class="pic"><img src="{{result.imgurl}}" ></div>
-							<button type="button" class="btn btn-default" data-toggle="modal" data-target="#picUploadPop">修改图片</button>	
+							<div class="pic" id="upimg-cont"><img src="{{result.imgurl}}" ></div>
+							<button type="button" class="btn btn-default" id="upimg">修改图片</button>	
 						</div>
 
 						<div class="pic_preview">
 							<p class="desc">视频预览</p>
-							<div class="pic"><video src="{{result.source}}" ></video></div>
-							<button type="button" class="btn btn-default" data-toggle="modal" data-target="#picUploadPop">修改地址</button>	
+							<div class="pic" id="upvideo-cont"><video src="{{result.source}}" ></video></div>
+							<button type="button" class="btn btn-default" id="upvideo">修改地址</button>	
 						</div>
 
 					</div>
@@ -36,49 +36,57 @@
 
 							<div class="form-group">
 								<label class="control-label">VID：</label>
-								<input type="text" class="form-control" value="{{result.vid}}" disabled="">
+								<input type="text" class="form-control" value="{{result.vid}}" disabled="" id="vid">
 							</div>
 						
 							<div class="form-group">
 								<label class="control-label">标题：</label>
-								<input type="text" class="form-control" value="{{result.title}}" placeholder="">
+								<input type="text" class="form-control" value="{{result.title}}" placeholder="" id="vname">
 							</div>
 							<div class="form-group">
 								<label class="control-label">次标题：</label>
-								<input type="text" class="form-control" value="{{result.subtitle}}" placeholder="">
+								<input type="text" class="form-control" value="{{result.subtitle}}" placeholder="" id="subtit">
 							</div>
 							<div class="form-group">
 								<label class="control-label">栏目：</label>
-								<select class="form-control">
 								{% autoescape false %}
 								{{result.catelist}}
 								{% endautoescape %}
-								</select>
 							</div>
 
 							<div class="form-group">
 								<label class="control-label">标签：</label>
-								<input type="text" class="form-control" value="{{result.tags}}" placeholder="">
+								<input type="text" class="form-control" value="{{result.tags}}" placeholder="" id="vtags">
 							</div>
 
 							<div class="form-group">
 								<label class="control-label">视频地址：</label>
-								<input type="text" class="form-control" value="{{result.source}}" placeholder="">
+								<input type="text" class="form-control" value="{{result.source}}" placeholder="" id="source">
+							</div>
+
+							<div class="form-group">
+								<label class="control-label">缩略图：</label>
+								<input type="text" class="form-control" value="{{result.imgurl}}" placeholder="" id="imgurl">
+							</div>
+
+							<div class="form-group">
+								<label class="control-label">视频时长：</label>
+								<input type="text" class="form-control" value="{{result.duration}}" placeholder="" id="duration">
 							</div>
 
 							<div class="form-group">
 								<label class="control-label">赞助商：</label>
-								<input type="text" class="form-control" value="{{result.sponsor}}" placeholder="">
+								<input type="text" class="form-control" value="{{result.sponsor}}" placeholder="" id="sponsor">
 							</div>
 
 							<div class="form-group">
 								<label class="control-label">出品方：</label>
-								<input type="text" class="form-control" value="{{result.production}}" placeholder="">
+								<input type="text" class="form-control" value="{{result.production}}" placeholder="" id="production">
 							</div>
 
 							<div class="form-group">
 								<label class="control-label">简介：</label>
-								<textarea class="form-control" rows="3">{{result.content}}</textarea>
+								<textarea class="form-control" rows="3" id="vsum">{{result.content}}</textarea>
 							</div>
 						</div>
 
@@ -86,40 +94,9 @@
 				</div>
 
 				<div class="btn-line fix-bottom">
-					<button type="button" class="btn btn-info">确定修改</button>
-					<button type="button" class="btn btn-info">刷新页面</button>
+					<button type="button" class="btn btn-info" id="updateVideo">确定修改</button>
+					<button type="button" class="btn btn-info" id="refresh">刷新页面</button>
 				</div>
-				
-				<!-- 图片上传浮层 开始 -->
-				<div class="modal fade modal-form modal-pic-upload" id="picUploadPop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-								<h4 class="modal-title" id="myModalLabel">修改图片</h4>
-							</div>
-							<div class="modal-body">
-								<div class="form">
-									<div class="form-group">
-										<label class="control-label">标题：</label>
-										<input type="text" class="form-control" value="豆瓣高分系列" disabled>
-									</div>
-									<div class="form-group">
-										<label class="control-label">上传图片：</label>
-										<span class="btn btn-default btn-file">选择文件 <input type="file" accept="image/png, image/jpeg"></span>
-									</div>
-									<div class="alert alert-warning" role="alert">
-										提示：竖图尺寸 770*1080，横图尺寸 1920*1080，文件 &lt; 1M，支持 jpg 和 png 两种格式。
-									</div>
-								</div>
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-info" data-dismiss="modal">上传</button>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- 图片上传浮层 结束 -->
 				
 			</div>
 		</div>
@@ -130,4 +107,173 @@
 
 {% block foot %}
 	{% parent %}
+	<script src="https://cdn.staticfile.org/plupload/2.1.8/plupload.full.min.js"></script>
+	<script src="/public/system/js/qiniu.js"></script>
+	<script>
+		$(function(){
+			var Qiniu1 = new QiniuJsSDK();
+			var Qiniu2 = new QiniuJsSDK();
+
+			//视频缩略图
+			var uploadthumbimg = Qiniu1.uploader({
+			    runtimes: 'html5,flash,html4',
+			    browse_button: 'upimg',
+			    uptoken_url: '/uptoken',
+			    get_new_uptoken: false,
+			    unique_names: false,
+			    save_key: false,
+			    domain: 'http://omsd78olk.bkt.clouddn.com',
+			    flash_swf_url: 'https://cdn.staticfile.org/plupload/2.1.8/Moxie.swf',
+			    max_retries: 3,
+			    dragdrop: false,
+			    chunk_size: '4mb',
+			    auto_start: true,
+
+			    init: {
+			        'BeforeUpload': function(up, file) {
+			               $("#upimg-cont").html('上传中请稍候...');
+			        },
+			        'UploadProgress': function(up, file) {
+			               $("#upimg-cont").html('上传中请稍候...');
+			        },
+			        'FileUploaded': function(up, file, info) {
+
+			               var domain = up.getOption('domain');
+			               var res = JSON.parse(info);
+			               var sourceLink = domain +"/"+ res.key; //获取上传成功后的文件的Url
+			               // console.log(sourceLink);
+			               // $("#upimg-cont").attr("data-img", sourceLink);
+			               $("#imgurl").val(sourceLink);
+			               $("#upimg-cont").html('<img src="'+sourceLink+'?imageView2/1/w/260/h/150" />');
+			        },
+			        'Error': function(up, err, errTip) {
+			               alert(errTip);
+			        },
+			        'UploadComplete': function() {
+			               //队列文件处理完毕后，处理相关的事情
+			        }
+			    },
+
+			    filters : {
+				    max_file_size : '5mb',
+				    prevent_duplicates: true,
+				    // Specify what files to browse for
+				    mime_types: [
+				        {title : "Image files", extensions : "jpg,gif,png,jpeg"} // 限定jpg,gif,png后缀上传
+				    ]
+				}
+			});
+
+			//上传视频
+			var uploadVideo = Qiniu2.uploader({
+			    runtimes: 'html5,flash,html4',
+			    browse_button: 'upvideo',
+			    uptoken_url: '/uptoken',
+			    get_new_uptoken: false,
+			    unique_names: true,
+			    save_key: true,
+			    domain: 'http://omsd78olk.bkt.clouddn.com',
+			    flash_swf_url: 'https://cdn.staticfile.org/plupload/2.1.8/Moxie.swf',
+			    max_retries: 3,
+			    dragdrop: false,
+			    chunk_size: '4mb',
+			    auto_start: true,
+
+			    init: {
+			        'BeforeUpload': function(up, file) {
+			               $("#upvideo-cont").html('上传中请稍候...');
+			        },
+			        'UploadProgress': function(up, file) {
+			               $("#upvideo-cont").html('上传中请稍候...');
+			        },
+			        'FileUploaded': function(up, file, info) {
+
+			               var domain = up.getOption('domain');
+			               var res = JSON.parse(info);
+			               var sourceLink = domain +"/"+ res.key; //获取上传成功后的文件的Url
+
+			               // $("#upvideo-cont").attr("data-video", sourceLink);
+			               $("#source").val(sourceLink);
+			               $("#upvideo-cont").html('<video src="'+sourceLink+'" ></video>');
+			        },
+			        'Error': function(up, err, errTip) {
+			               alert(errTip);
+			        },
+			        'UploadComplete': function() {
+			               //队列文件处理完毕后，处理相关的事情
+			        }
+			    },
+			    filters : {
+				    max_file_size : '100mb',
+				    prevent_duplicates: true,
+				    // Specify what files to browse for
+				    mime_types: [
+				        {title : "Video files", extensions : "flv,mpg,mpeg,avi,wmv,mov,asf,rm,rmvb,mkv,m4v,mp4"}
+				    ]
+				}
+			});
+
+			//上传数据POST
+			$("#updateVideo").on("click", function(){
+				var that = $(this)
+
+				if (that.attr('disabled') === 'disabled')return;
+
+				if($('#vname').val() === ''){
+					alert('请填写视频标题~');
+					return;
+				}else if($('#subtit').val() === ''){
+					alert('请填写专辑子标题~');
+					return;
+				}else if($('#coverlist').val() === '-1'){
+					alert('请选择专辑~');
+					return;
+				}else if($('#duration').val() === ''){
+					alert('视频时长不能为空~');
+					return;
+				}else if($('#vtags').val() === ''){
+					alert('视频标签不能为空~');
+					return;
+				}else if($('#vsum').val() === ''){
+					alert('视频信息不能为空~');
+					return;
+				}
+
+				var vtagArr = $('#vtags').val().split(',');
+
+				$.ajax({
+					url: '/',
+					method: 'post',
+					timeout: 6000,
+					before: function(){
+						that.attr('disabled', 'disabled');
+					},
+					data: {
+						'type': 'updateVideo',
+						'vid': $('#vid').val(),
+						'title': $('#vname').val(),
+						'subtitle': $('#subtit').val(),
+						'production': $('#production').val(),
+						'sponsor': $('#sponsor').val(),
+						'cid': $('#coverlist').val(),
+						'cname': $('#coverlist').find("option:selected").text(),
+						'tags': vtagArr,
+						'source': $("#source").val(),
+						'imgurl': $("#imgurl").val(),
+						'duration': $("#duration").val(),
+						'content': $("#vsum").val()
+					},
+					success: function(data){
+						alert('修改成功~');
+						window.location.href = '/video/list';
+						// window.location.reload();
+					}
+				});
+			});
+
+			$("#refresh").on("click", function(){
+				window.location.reload();
+			});
+		});
+	</script>
 {% endblock %}

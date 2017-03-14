@@ -3,9 +3,9 @@ var qs = require('querystring');
 var fs = require('fs');
 var express = require('express');
 var app = express();
-var formidable = require('formidable');
 var path = require('path');
 var swig  = require('swig');
+var moment = require('moment');
 var utils  = require('./utils/utils');
 
 var bodyParser = require('body-parser');
@@ -44,7 +44,7 @@ var selectData = function(db, collection, callback) {
   //连接到表  
   var collection = db.collection(collection);
   //查询全部或者某个字段
-  collection.find().toArray(function(err, result) {
+  collection.find().sort({ time : -1 }).toArray(function(err, result) {
 	if(err)
 	{
 	  console.log('Error:'+ err);
@@ -55,17 +55,16 @@ var selectData = function(db, collection, callback) {
 };
 
 var selectDataOne = function(db, collection, obj, callback) {
-  //连接到表  
-  var collection = db.collection(collection);
-  //查询全部或者某个字段
-  collection.find(obj).toArray(function(err, result) {
-	if(err)
-	{
-	  console.log('Error:'+ err);
-	  return;
-	}
-	callback(result);
-  });
+	//连接到表  
+	var collection = db.collection(collection);
+	//查询全部或者某个字段
+	collection.find(obj).toArray(function(err, result) {
+		if(err){
+			console.log('Error:'+ err);
+			return;
+		}
+		callback(result);
+	});
 };
 
 // This is where all the magic happens!
@@ -128,7 +127,7 @@ app.get('/video/:type', function(req, res){
 					return;
 				}
 				for (var i = 0; i < result.length; i++) {
-					result[i].time = utils.timeFormat(result[i].time * 1000);
+					result[i]._time = moment(new Date(result[i].time)).format('YYYY-MM-DD HH:mm:ss');
 				}
 
 				db.collection('video').find().toArray(function(err, _result) {
@@ -164,12 +163,17 @@ app.get('/video/:type', function(req, res){
 			selectDataOne(db, 'video', {vid: vid}, function(result) {
 
 				selectData(db, 'album', function(_result) {
-					var catelist = [];
+					var albumoption = '<select class="form-control" id="coverlist">';
 					for (var i = 0; i < _result.length; i++) {
-						catelist.push('<option value="'+_result[i].cid+'">'+_result[i].title+'</option>');
+						if (result[0].cid === _result[i].cid) {
+							albumoption +='<option selected value="'+_result[i].cid+'">'+_result[i].title+'</option>';
+						}else{
+							albumoption +='<option value="'+_result[i].cid+'">'+_result[i].title+'</option>';
+						}
 					}
+					albumoption += '</select>';
 
-					result[0].catelist = catelist.join(',');
+					result[0].catelist = albumoption;
 
 					res.render('video-detail', {
 						'title': '视频详情',
@@ -215,13 +219,13 @@ app.get('/album/:type', function(req, res){
 		MongoClient.connect(DB_CONN_STR, function(err, db) {
 			selectData(db, 'album', function(result) {
 				for (var i = 0; i < result.length; i++) {
-					result[i].time = utils.timeFormat(result[i].time * 1000);
+					result[i]._time = moment(new Date(result[i].time)).format('YYYY-MM-DD HH:mm:ss');
 				}
 
 				res.render('cover-list', {
 					'title': '专辑管理',
 					'menu' : 'albumlist',
-					'albumlist' : result.reverse(),
+					'albumlist' : result,
 					'albumcount' : result.length
 				});
 				db.close();
@@ -308,58 +312,60 @@ app.post('/', function(req, res){
 				db.close();
 			});
 		});
+	}else if(param.type && param.type === 'updateVideo'){//更新视频信息
+
+		//定义一个更新时间
+		param.time = Date.now();
+
+		MongoClient.connect(DB_CONN_STR, function(err, db) {
+			//连接到表  
+			var collection = db.collection('video');
+			//修改某个字段
+			collection.update({vid: param.vid}, param);
+
+			//写入数据表成功
+			var _res = {
+				status: 'ok',
+				type: 'updateVideo'
+			}
+			res.send(_res);
+			db.close();
+		});
+	}else if(param.type && param.type === 'updateAlbum'){//更新视频信息
+
+		//定义一个更新时间
+		param.time = Date.now();
+
+		MongoClient.connect(DB_CONN_STR, function(err, db) {
+			//连接到表  
+			var collection = db.collection('album');
+			//修改某个字段
+			collection.update({cid: param.cid}, param);
+
+			//写入数据表成功
+			var _res = {
+				status: 'ok',
+				type: 'updateAlbum'
+			}
+			res.send(_res);
+			db.close();
+		});
 	}
 });
 
-app.post('/upqiniu', function(req, res){
-	
-});
-
-app.post('/upload', function(req, res, next){
-	var form = new formidable.IncomingForm();
-    form.uploadDir = path.join(__dirname, 'tmp');   //文件保存的临时目录为当前项目下的tmp文件夹
-    form.maxFieldsSize = 1 * 1024 * 1024;  //大小限制为最大1M  
-    form.keepExtensions = true;        //使用文件的原扩展名
-    form.parse(req, function (err, fields, file) {
-        var filePath = '';
-        //如果提交文件的form中将上传文件的input名设置为tmpFile，就从tmpFile中取上传文件。否则取for in循环第一个上传的文件。
-        if(file.tmpFile){
-            filePath = file.tmpFile.path;
-        } else {
-            for(var key in file){
-                if( file[key].path && filePath==='' ){
-                    filePath = file[key].path;
-                    break;
-                }
-            }
-        }
-        //文件移动的目录文件夹，不存在时创建目标文件夹
-        var targetDir = path.join(__dirname, 'upload');
-        if (!fs.existsSync(targetDir)) {
-            fs.mkdir(targetDir);
-        }
-        var fileExt = filePath.substring(filePath.lastIndexOf('.'));
-        //判断文件类型是否允许上传
-        if (('.jpg.jpeg.png.gif').indexOf(fileExt.toLowerCase()) === -1) {
-            var err = new Error('此文件类型不允许上传');
-            res.json({code:-1, message:'此文件类型不允许上传'});
-        } else {
-            //以当前时间戳对上传文件进行重命名
-            var fileName = new Date().getTime() + fileExt;
-            var targetFile = path.join(targetDir, fileName);
-            //移动文件
-            fs.rename(filePath, targetFile, function (err) {
-                if (err) {
-                    console.info(err);
-                    res.json({code:-1, message:'操作失败'});
-                } else {
-                    //上传成功，返回文件的相对路径
-                    var fileUrl = '/upload/' + fileName;
-                    res.json({code:0, fileUrl:fileUrl});
-                }
-            });
-        }
-    });
+app.get('/uptoken', function(req, res){
+	var myUptoken = new qiniu.rs.PutPolicy(KEY.buket);
+    var token = myUptoken.token();
+    // moment.locale('en');
+    // var currentKey = moment(new Date()).format('YYYY-MM-DD-HH:mm:ss');
+    res.header("Cache-Control", "max-age=0, private, must-revalidate");
+    res.header("Pragma", "no-cache");
+    res.header("Expires", 0);
+    if (token) {
+        res.json({
+            uptoken: token
+        });
+    }
 });
 
 app.get('/file', function(req, res){

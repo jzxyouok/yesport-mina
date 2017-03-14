@@ -75,7 +75,7 @@
 								<td><a href="/album/detail?cid={{items.cid}}">《{{items.cname}}》</a></td>
 								<td><a href="/video/detail?vid={{items.vid}}">{{items.title}}</a></td>
 								<td>{{items.duration}}</td>
-								<td class="time">{{items.time}}</td>
+								<td class="time" data-timestamp='{{items.time}}'>{{items._time}}</td>
 								<td>
 									<a class="btn btn-info" href="/video/detail?vid={{items.vid}}">编辑</a>
 									<a class="btn btn-danger" href="/video/detail?ac=delete&vid={{items.vid}}">删除</a>

@@ -7,7 +7,7 @@
     "body-parser": "^1.17.0",
     "express": "^4.15.2",
     "express-handlebars": "^3.0.0",
-    "formidable": "^1.1.1",
+    "moment": "^2.17.1",
     "path": "^0.12.7",
     "qiniu": "^6.1.13",
     "swig": "^1.4.2"

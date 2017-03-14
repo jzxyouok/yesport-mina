@@ -4,7 +4,6 @@
 
 {% block head %}
 	{% parent %}
-	<link rel="stylesheet" href="/public/system/style/uploadfile.css">
 {% endblock %}
 
 {% block content %}	
@@ -17,13 +16,13 @@
 					<div class="content-side content-side-pic">
 						<div class="pic_preview">
 							<p class="desc">幻灯片大图 750*440</p>
-							<div class="pic"><img src="{{result.banner}}" ></div>
-							<button type="button" class="btn btn-default" data-toggle="modal" data-target="#picUploadPop">修改图片</button>	
+							<div class="pic" id="upbanner-cont"><img src="{{result.banner}}" ></div>
+							<button type="button" class="btn btn-default" id="btn-upbanner">修改图片</button>	
 						</div>
 						<div class="pic_preview">
 							<p class="desc">专辑封面 220*325</p>
-							<div class="pic"><img src="{{result.albumimg}}" ></div>
-							<button type="button" class="btn btn-default" data-toggle="modal" data-target="#picUploadPop">修改图片</button>	
+							<div class="pic" id="upalbum-cont"><img src="{{result.albumimg}}" ></div>
+							<button type="button" class="btn btn-default" id="btn-upalbum">修改图片</button>	
 						</div>
 					</div>
 					<div class="content-main">
@@ -32,17 +31,17 @@
 							
 							<div class="form-group">
 								<label class="control-label">CID：</label>
-								<input type="text" class="form-control" value="{{result.cid}}" disabled="">
+								<input type="text" class="form-control" value="{{result.cid}}" disabled="" id="cid">
 							</div>
 
 							<div class="form-group">
 								<label class="control-label">幻灯片大图：</label>
-								<div id="upbanner" class="fn-upload"><input type="file"></div>
+								<input type="text" class="form-control" value="{{result.banner}}" id="upbanner">
 							</div>
 
 							<div class="form-group">
 								<label class="control-label">专辑封面：</label>
-								<div id="upalbum" class="fn-upload"><input type="file"></div>
+								<input type="text" class="form-control" value="{{result.albumimg}}" id="upalbum">
 							</div>
 
 							<div class="form-groups-3">
@@ -56,7 +55,7 @@
 								</div>
 								<div class="form-group">
 									<label class="control-label">视频个数：</label>
-								<input type="text" class="form-control" value="{{result.counts}}" disabled="">
+								<input type="text" class="form-control" value="{{result.counts}}" disabled="" id="counts">
 								</div>
 							</div>
 
@@ -121,44 +120,12 @@
 						</div>
 
 						<div class="btn-line fix-bottom">
-							<button type="button" class="btn btn-info">确定修改</button>
-							<button type="button" class="btn btn-info">刷新页面</button>
+							<button type="button" class="btn btn-info" id="updateAlbum">确定修改</button>
+							<button type="button" class="btn btn-info" id="refresh">刷新页面</button>
 						</div>
 
 					</div>
 				</div>
-				
-				<!-- 图片上传浮层 开始 -->
-				<div class="modal fade modal-form modal-pic-upload" id="picUploadPop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-								<h4 class="modal-title" id="myModalLabel">修改图片</h4>
-							</div>
-							<div class="modal-body">
-								<div class="form">
-									<div class="form-group">
-										<label class="control-label">标题：</label>
-										<input type="text" class="form-control" value="豆瓣高分系列" disabled>
-									</div>
-									<div class="form-group">
-										<label class="control-label">上传图片：</label>
-										<span class="btn btn-default btn-file">选择文件 <input type="file" accept="image/png, image/jpeg"></span>
-									</div>
-									<div class="alert alert-warning" role="alert">
-										提示：幻灯片尺寸 750*440，竖图海报尺寸 220*325，文件 &lt; 1M，支持 jpg 和 png 两种格式。
-									</div>
-								</div>
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-info" data-dismiss="modal">上传</button>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- 图片上传浮层 结束 -->
-				
 				
 			</div>
 		</div>
@@ -169,38 +136,173 @@
 
 {% block foot %}
 	{% parent %}
-	<script src="/public/system/js/jquery.uploadfile.min.js"></script>
+	<script src="https://cdn.staticfile.org/plupload/2.1.8/plupload.full.min.js"></script>
+	<script src="/public/system/js/qiniu.js"></script>
 	<script>
 		$(function(){
-			var BANNERIMG = '',
-				ALBUMIMG = '';
-			$("#upbanner").uploadFile({
-				url:"/upload",
-				fileName:"tmpFile",
-				multiple:true,
-				showPreview:true,
-				showProgress:false,
-				onSuccess: function(files,data,xhr,pd){
-			        if(data&&data.code===0){
-			            BANNERIMG = data.fileUrl;
-			            console.log(BANNERIMG);
-			        }
-			    }
-		    });
+			
+			var Qiniu1 = new QiniuJsSDK();
+			var Qiniu2 = new QiniuJsSDK();
 
-			$("#upalbum").uploadFile({
-				url:"/upload",
-				fileName:"tmpFile",
-				multiple:true,
-				showPreview:true,
-				showProgress:false,
-				onSuccess: function(files,data,xhr,pd){
-			        if(data&&data.code===0){
-			            ALBUMIMG = data.fileUrl;
-			            console.log(ALBUMIMG);
+			//灯片大图：750*440
+			var uploadthumbimg = Qiniu1.uploader({
+			    runtimes: 'html5,flash,html4',
+			    browse_button: 'btn-upbanner',
+			    uptoken_url: '/uptoken',
+			    get_new_uptoken: false,
+			    unique_names: false,
+			    save_key: false,
+			    domain: 'http://omsd78olk.bkt.clouddn.com',
+			    max_file_size: '100mb',
+			    flash_swf_url: 'https://cdn.staticfile.org/plupload/2.1.8/Moxie.swf',
+			    max_retries: 3,
+			    dragdrop: false,
+			    chunk_size: '4mb',
+			    auto_start: true,
+
+			    init: {
+			        'BeforeUpload': function(up, file) {
+			               $("#upbanner-cont").html('上传中请稍候...');
+			        },
+			        'UploadProgress': function(up, file) {
+			               $("#upbanner-cont").html('上传中请稍候...');
+			        },
+			        'FileUploaded': function(up, file, info) {
+
+			               var domain = up.getOption('domain');
+			               var res = JSON.parse(info);
+			               var sourceLink = domain +"/"+ res.key; //获取上传成功后的文件的Url
+			               // console.log(sourceLink);
+			               // $("#upbanner-cont").attr("data-img", sourceLink);
+			               $("#upbanner").val(sourceLink);
+			               $("#upbanner-cont").html('<img src="'+sourceLink+'?imageView2/1/w/750/h/440" />');
+			        },
+			        'Error': function(up, err, errTip) {
+			               alert(errTip);
+			        },
+			        'UploadComplete': function() {
+			               //队列文件处理完毕后，处理相关的事情
 			        }
-			    }
-		    });
+			    },
+
+			    filters : {
+				    max_file_size : '5mb',
+				    prevent_duplicates: true,
+				    // Specify what files to browse for
+				    mime_types: [
+				        {title : "Image files", extensions : "jpg,gif,png,jpeg"} // 限定jpg,gif,png后缀上传
+				    ]
+				}
+			});
+
+			//海报封面：220*325
+			var uploadthumbimg = Qiniu2.uploader({
+			    runtimes: 'html5,flash,html4',
+			    browse_button: 'btn-upalbum',
+			    uptoken_url: '/uptoken',
+			    get_new_uptoken: false,
+			    unique_names: false,
+			    save_key: false,
+			    domain: 'http://omsd78olk.bkt.clouddn.com',
+			    max_file_size: '100mb',
+			    flash_swf_url: 'https://cdn.staticfile.org/plupload/2.1.8/Moxie.swf',
+			    max_retries: 3,
+			    dragdrop: false,
+			    chunk_size: '4mb',
+			    auto_start: true,
+
+			    init: {
+			        'BeforeUpload': function(up, file) {
+			               $("#upalbum-cont").html('上传中请稍候...');
+			        },
+			        'UploadProgress': function(up, file) {
+			               $("#upalbum-cont").html('上传中请稍候...');
+			        },
+			        'FileUploaded': function(up, file, info) {
+
+			               var domain = up.getOption('domain');
+			               var res = JSON.parse(info);
+			               var sourceLink = domain +"/"+ res.key; //获取上传成功后的文件的Url
+			               // console.log(sourceLink);
+			               // $("#upalbum-cont").attr("data-img", sourceLink);
+			               $("#upalbum").val(sourceLink);
+			               $("#upalbum-cont").html('<img src="'+sourceLink+'?imageView2/1/w/220/h/325" />');
+			        },
+			        'Error': function(up, err, errTip) {
+			               alert(errTip);
+			        },
+			        'UploadComplete': function() {
+			               //队列文件处理完毕后，处理相关的事情
+			        }
+			    },
+
+			    filters : {
+				    max_file_size : '5mb',
+				    prevent_duplicates: true,
+				    // Specify what files to browse for
+				    mime_types: [
+				        {title : "Image files", extensions : "jpg,gif,png,jpeg"} // 限定jpg,gif,png后缀上传
+				    ]
+				}
+			});
+
+			$('#updateAlbum').click(function(){
+				var that = $(this),
+					BANNERIMG = $("#upbanner").val(),
+					ALBUMIMG = $("#upalbum").val();
+
+				if (that.attr('disabled') === 'disabled')return;
+
+				if (BANNERIMG === '') {
+					alert('请上传幻灯片大图~');
+					return;
+				}else if(ALBUMIMG === ''){
+					alert('请上传专辑封面图~');
+					return;
+				}else if($('#aname').val() === ''){
+					alert('请填写专辑名~');
+					return;
+				}else if($('#subtit').val() === ''){
+					alert('请填写专辑子标题~');
+					return;
+				}else if($('#production').val() === ''){
+					alert('请填写出品方~');
+					return;
+				}else if($('#sponsor').val() === ''){
+					alert('请填写赞助商~');
+					return;
+				}
+
+				$.ajax({
+					url: '/',
+					method: 'post',
+					timeout: 6000,
+					before: function(){
+						that.attr('disabled', 'disabled');
+					},
+					data: {
+						'type': 'updateAlbum',
+						'cid': $("#cid").val(),
+						'banner': BANNERIMG,
+						'albumimg': ALBUMIMG,
+						'title': $('#aname').val(),
+						'subtitle': $('#subtit').val(),
+						'production': $('#production').val(),
+						'sponsor': $('#sponsor').val(),
+						'toindex': $("#toindex")[0].checked,
+						'counts': $("#counts").val()
+					},
+					success: function(data){
+						// console.log(data);
+						alert('提交成功，跳转到专辑管理！');
+						window.location.href = '/album/list';
+					}
+				});
+			});
+
+			$("#refresh").on("click", function(){
+				window.location.reload();
+			});
 		});
 	</script>
 {% endblock %}
