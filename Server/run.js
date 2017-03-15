@@ -368,6 +368,29 @@ app.get('/uptoken', function(req, res){
     }
 });
 
+// 持久化数据处理，对已有key的文件做处理，可以对视频转码、截图(有坑)
+/*
+	cmd参数：
+	视频在7秒的时候截图——'vframe/jpg/offset/7/w/260/h/150'
+*/
+app.get('/pfop', function(req, respon){
+	var param = get_param(req),
+		cmd = param.cmd,
+		key = param.key;
+
+	var opts = {};
+
+	qiniu.fop.pfop(KEY.buket, key, cmd, opts, function(err, ret, res) {
+		if (res.statusCode == 200) {
+			respon.send(res);
+
+	    } else {
+			respon.send(err);
+	    }
+	});
+
+});
+
 app.get('/file', function(req, res){
 
 	fs.readdir('./', function(err,files){

@@ -63,6 +63,11 @@
 								<input type="text" class="form-control" placeholder="" id="duration">
 							</div>
 
+							<div class="form-group">
+								<label class="control-label">视频体积：</label>
+								<input type="text" class="form-control" placeholder="" id="vsize">
+							</div>
+
 							<div class="form-group-upload">
 								<label class="control-label">视频截图：260*150　</label>
 								<div class="form-control-file">
@@ -100,12 +105,107 @@
 {% block foot %}
 	{% parent %}
 	<script src="https://cdn.staticfile.org/plupload/2.1.8/plupload.full.min.js"></script>
-	<script src="/public/system/js/qiniu.js"></script>
+	<script src="/public/system/js/qiniu.min.js"></script>
 <script>
 $(function(){
+	function timer_format(s) {
+		var t = "", s = Math.ceil(s);
+		if(s > -1){
+			hour = Math.floor(s / 3600);
+			min = Math.floor(s / 60) % 60;
+			sec = s % 60;
+
+			if(min < 10){t += "0";}
+				t += min + ":";
+			if(sec < 10){t += "0";}
+				t += sec;
+		}
+		return t;
+	}
 
 	var Qiniu1 = new QiniuJsSDK();
 	var Qiniu2 = new QiniuJsSDK();
+
+	//上传视频
+	var uploadVideo = Qiniu2.uploader({
+	    runtimes: 'html5,flash,html4',      // 上传模式，依次退化
+	    browse_button: 'upvideo',         // 上传选择的点选按钮，必需
+	    uptoken_url: '/uptoken',         // Ajax请求uptoken的Url，强烈建议设置（服务端提供）
+	    get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的uptoken
+	    unique_names: true,              // 默认false，key为文件名。若开启该选项，JS-SDK会为每个文件自动生成key（文件名）
+	    save_key: true,                  // 默认false。若在服务端生成uptoken的上传策略中指定了sava_key，则开启，SDK在前端将不对key进行任何处理
+	    domain: 'http://omsd78olk.bkt.clouddn.com',     // bucket域名，下载资源时用到，必需
+	    max_file_size: '100mb',             // 最大文件体积限制
+	    flash_swf_url: 'https://cdn.staticfile.org/plupload/2.1.8/Moxie.swf',  //引入flash，相对路径
+	    max_retries: 3,                     // 上传失败最大重试次数
+	    dragdrop: false,                     // 开启可拖曳上传
+	    chunk_size: '4mb',                  // 分块上传时，每块的体积
+	    auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传
+
+	    init: {
+	        'BeforeUpload': function(up, file) {
+	               // 每个文件上传前，处理相关的事情
+	        },
+	        'UploadProgress': function(up, file) {
+	               $("#prev-video").show().html('上传中请稍候...');
+	        },
+	        'FileUploaded': function(up, file, info) {
+
+	               var domain = up.getOption('domain');
+	               var res = JSON.parse(info);
+	               var sourceLink = domain +"/"+ res.key; //获取上传成功后的文件的Url
+
+	               $("#prev-video").attr("data-video", sourceLink);
+	               $("#prev-video").show().html('<video src="'+sourceLink+'" ></video>');
+
+					$.ajax({
+						url: domain +"/"+ res.key+ '?avinfo',
+						method: 'get',
+						success: function(data){
+							var vinfo = data['format'],
+								duration = vinfo['duration'];
+
+							$("#prev-video").attr("data-vinfo", JSON.stringify(vinfo));
+							$("#duration").val(timer_format(duration));
+							$("#vsize").val( Number(Number(vinfo['size']) / 1000 / 1000).toFixed(2) + 'Kb');
+						},
+						error: function(err){
+							alert(err);
+						}
+					});
+
+	               //持久化数据处理，视频截图260*150
+					// $.ajax({
+					// 	url: '/pfop',
+					// 	method: 'get',
+					// 	data: {
+					// 		'key': res.key,
+					// 		'cmd': 'vframe/jpg/offset/7/w/260/h/150'
+					// 	},
+					// 	success: function(data){
+					// 		console.log(data);
+					// 	},
+					// 	error: function(){
+					// 		console.log(domain+'/UR3lDswRqtIdcZrOkFxqpszkjWE=/'+res.key);
+					// 	}
+					// });
+	        },
+	        'Error': function(up, err, errTip) {
+	               alert(errTip);
+	        },
+	        'UploadComplete': function() {
+	               //队列文件处理完毕后，处理相关的事情
+	        }
+	    },
+	    filters : {
+		    max_file_size : '100mb',
+		    prevent_duplicates: true,
+		    // Specify what files to browse for
+		    mime_types: [
+		        {title : "Video files", extensions : "flv,mpg,mpeg,avi,wmv,mov,asf,rm,rmvb,mkv,m4v,mp4"}
+		    ]
+		}
+	});
 
 	//视频缩略图
 	var uploadthumbimg = Qiniu1.uploader({
@@ -152,55 +252,6 @@ $(function(){
 		    // Specify what files to browse for
 		    mime_types: [
 		        {title : "Image files", extensions : "jpg,gif,png,jpeg"} // 限定jpg,gif,png后缀上传
-		    ]
-		}
-	});
-
-	//上传视频
-	var uploadVideo = Qiniu2.uploader({
-	    runtimes: 'html5,flash,html4',      // 上传模式，依次退化
-	    browse_button: 'upvideo',         // 上传选择的点选按钮，必需
-	    uptoken_url: '/uptoken',         // Ajax请求uptoken的Url，强烈建议设置（服务端提供）
-	    get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的uptoken
-	    unique_names: true,              // 默认false，key为文件名。若开启该选项，JS-SDK会为每个文件自动生成key（文件名）
-	    save_key: true,                  // 默认false。若在服务端生成uptoken的上传策略中指定了sava_key，则开启，SDK在前端将不对key进行任何处理
-	    domain: 'http://omsd78olk.bkt.clouddn.com',     // bucket域名，下载资源时用到，必需
-	    max_file_size: '100mb',             // 最大文件体积限制
-	    flash_swf_url: 'https://cdn.staticfile.org/plupload/2.1.8/Moxie.swf',  //引入flash，相对路径
-	    max_retries: 3,                     // 上传失败最大重试次数
-	    dragdrop: false,                     // 开启可拖曳上传
-	    chunk_size: '4mb',                  // 分块上传时，每块的体积
-	    auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传
-
-	    init: {
-	        'BeforeUpload': function(up, file) {
-	               // 每个文件上传前，处理相关的事情
-	        },
-	        'UploadProgress': function(up, file) {
-	               $("#prev-video").show().html('上传中请稍候...');
-	        },
-	        'FileUploaded': function(up, file, info) {
-
-	               var domain = up.getOption('domain');
-	               var res = JSON.parse(info);
-	               var sourceLink = domain +"/"+ res.key; //获取上传成功后的文件的Url
-
-	               $("#prev-video").attr("data-video", sourceLink);
-	               $("#prev-video").show().html('<video src="'+sourceLink+'" ></video>');
-	        },
-	        'Error': function(up, err, errTip) {
-	               alert(errTip);
-	        },
-	        'UploadComplete': function() {
-	               //队列文件处理完毕后，处理相关的事情
-	        }
-	    },
-	    filters : {
-		    max_file_size : '100mb',
-		    prevent_duplicates: true,
-		    // Specify what files to browse for
-		    mime_types: [
-		        {title : "Video files", extensions : "flv,mpg,mpeg,avi,wmv,mov,asf,rm,rmvb,mkv,m4v,mp4"}
 		    ]
 		}
 	});

@@ -80,7 +80,7 @@
 {% block foot %}
 	{% parent %}
 	<script src="https://cdn.staticfile.org/plupload/2.1.8/plupload.full.min.js"></script>
-	<script src="/public/system/js/qiniu.js"></script>
+	<script src="/public/system/js/qiniu.min.js"></script>
 	<script>
 		$(function(){
 			var Qiniu1 = new QiniuJsSDK();
@@ -192,7 +192,7 @@
 					ALBUMIMG = $("#prev-poster").attr("data-img");
 
 				if (that.attr('disabled') === 'disabled')return;
-				
+
 				if (BANNERIMG === '') {
 					alert('请上传幻灯片大图~');
 					return;
