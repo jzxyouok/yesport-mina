@@ -43,17 +43,17 @@ var insertData = function(db, collection, param, callback) {
 };
 
 var selectData = function(db, collection, callback) {
-  //连接到表  
-  var collection = db.collection(collection);
-  //查询全部或者某个字段
-  collection.find().sort({ time : -1 }).toArray(function(err, result) {
+	//连接到表  
+	var collection = db.collection(collection);
+	//查询全部或者某个字段
+	collection.find().sort({ time : -1 }).toArray(function(err, result) {
 	if(err)
 	{
 	  console.log('Error:'+ err);
 	  return;
 	}
 	callback(result);
-  });
+	});
 };
 
 var selectDataOne = function(db, collection, obj, callback) {
@@ -205,7 +205,11 @@ app.get('/album/:type', function(req, res){
 			});
 		}else{ //默认返回全部专辑信息
 			MongoClient.connect(DB_CONN_STR, function(err, db) {
-				selectData(db, 'album', function(result) {
+				db.collection("album").find().sort({ "order" : 1 }).toArray(function(err, result) {
+					if(err){
+					  console.log('Error:'+ err);
+					  return;
+					}
 					res.send(result);
 					db.close();
 				});
@@ -218,20 +222,40 @@ app.get('/album/:type', function(req, res){
 			'menu' : 'setalbum'
 		});
 	}else if(type === 'list'){
+
 		MongoClient.connect(DB_CONN_STR, function(err, db) {
-			selectData(db, 'album', function(result) {
-				for (var i = 0; i < result.length; i++) {
-					result[i]._time = moment(new Date(result[i].time)).format('YYYY-MM-DD HH:mm:ss');
+
+			// ?ac=uporder 更新专辑序列号操作
+			if (get_param(req).ac && get_param(req).ac === 'uporder') {
+				var order = JSON.parse(get_param(req).order);
+
+				for (var i = 0; i < order.length; i++) {
+					db.collection('album').update({cid: order[i].cid}, {$set:{'order': Number(order[i].order) }});
 				}
 
-				res.render('cover-list', {
-					'title': '专辑管理',
-					'menu' : 'albumlist',
-					'albumlist' : result,
-					'albumcount' : result.length
-				});
+				res.json({"status": 200});
 				db.close();
-			});
+
+			}else{
+				db.collection("album").find().sort({ "order" : 1 }).toArray(function(err, result) {
+					if(err){
+					  console.log('Error:'+ err);
+					  return;
+					}
+					for (var i = 0; i < result.length; i++) {
+						result[i]._time = moment(new Date(result[i].time)).format('YYYY-MM-DD HH:mm:ss');
+					}
+
+					res.render('cover-list', {
+						'title': '专辑管理',
+						'menu' : 'albumlist',
+						'albumlist' : result,
+						'albumcount' : result.length
+					});
+					db.close();
+				});
+			}
+			
 		});
 		
 	}else if(type === 'detail'){
@@ -355,10 +379,7 @@ app.post('/', function(req, res){
 		param.time = Date.now();//定义一个更新时间
 		
 		MongoClient.connect(DB_CONN_STR, function(err, db) {
-			//连接到表  
-			var collection = db.collection('video');
-			//修改某个字段
-			collection.update({vid: param.vid}, param);
+			db.collection('video').update({vid: param.vid}, param);
 
 			//写入数据表成功
 			var _res = {
@@ -373,10 +394,7 @@ app.post('/', function(req, res){
 		param.time = Date.now();//定义一个更新时间
 		
 		MongoClient.connect(DB_CONN_STR, function(err, db) {
-			//连接到表  
-			var collection = db.collection('album');
-			//修改某个字段
-			collection.update({cid: param.cid}, param);
+			db.collection('album').update({cid: param.cid}, param);
 
 			//写入数据表成功
 			var _res = {

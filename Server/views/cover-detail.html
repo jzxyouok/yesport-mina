@@ -76,6 +76,7 @@
 									<input type="checkbox" id="toindex" >
 									{% endif%}
 								</div>
+								<input type="hidden" id="order" value="{{result.order}}">
 							</div>
 						</div>
 
@@ -290,7 +291,8 @@
 						'production': $('#production').val(),
 						'sponsor': $('#sponsor').val(),
 						'toindex': $("#toindex")[0].checked,
-						'counts': $("#counts").val()
+						'counts': $("#counts").val(),
+						'order' : $("#order").val()
 					},
 					success: function(data){
 						// console.log(data);
