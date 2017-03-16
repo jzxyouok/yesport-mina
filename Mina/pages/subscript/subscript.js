@@ -1,4 +1,6 @@
 const utils = require('../../utils/utils');
+const conf = require('../../utils/conf');
+var app = getApp();
 
 Page({
   data:{
@@ -7,6 +9,48 @@ Page({
       btntype: 'default',
       loading: false,
       disabled: false
+  },
+  onLoad: function(){
+    var that = this;
+    //调用应用实例的方法获取全局数据
+    app.getUserInfo(function(userInfo){
+      // console.log(userInfo);//用户信息
+      var userInfo = userInfo || {};
+      var code = app.globalData.wxcode;//用户code
+      wx.request({
+        url: conf.apiURL+'/onLogin',
+        data: {
+          code: code
+        },
+        success: function(res){
+          if (!res['data']['errcode']) {
+            userInfo.openid = res['data']['openid'];//把openid写入userinfo对象
+            that.setData({
+              userInfo: userInfo
+            });
+          }else{
+            //错误session过期
+            console.log(res['data']['errmsg']);
+          }
+        }
+      });
+    });
+  },
+  onHide: function(){
+    //用户离开当前页面的时候存储已授权公开信息
+    var userInfo = this.data.userInfo;
+
+    wx.request({
+      url: conf.apiURL,
+      data: {
+        'type': 'adduser',
+        'data': userInfo
+      },
+      method: 'POST',
+      success: function(res){
+        console.log(res['data']);
+      }
+    })
   },
   bindKeyInput: function(e){
     var pos = e.detail.cursor;
@@ -48,21 +92,25 @@ Page({
         loading: true
       });
 
+      var userInfo = that.data.userInfo;
+
       wx.request({
-        url: 'https://dev.yechtv.com/api/',
+        url: conf.apiURL,
         data: {
           'type': 'setemail',
-          'time': new Date().getTime(),
-          'email': that.data.inputTxt
+          'email': that.data.inputTxt,
+          'openid': userInfo.openid,
+          'nickname': userInfo.nickName
         },
-        method: 'GET',
+        method: 'POST',
         success: function(res){
           if(res.data['status'] === '200'){
             //按钮显示loading
             that.setData({
               loading: !that.data.loading,
               btntype: 'default',
-              disabled: true
+              disabled: true,
+              inputTxt: ''
             });
 
             wx.showToast({

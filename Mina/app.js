@@ -7,7 +7,10 @@ App({
     }else{
       //调用登录接口
       wx.login({
-        success: function () {
+        success: function (_r) {
+          //存一个code给到其他页面获取openid
+          that.globalData.wxcode = _r.code;
+
           wx.getUserInfo({
             success: function (res) {
               that.globalData.userInfo = res.userInfo;
@@ -19,6 +22,7 @@ App({
     }
   },
   globalData:{
-    userInfo:null
+    userInfo:null,
+    wxcode:null
   }
 })

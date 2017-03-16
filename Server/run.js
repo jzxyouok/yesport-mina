@@ -1,5 +1,6 @@
 var url = require('url');
 var qs = require('querystring');
+var request = require('request');
 var fs = require('fs');
 var express = require('express');
 var app = express();
@@ -7,13 +8,14 @@ var path = require('path');
 var swig  = require('swig');
 var moment = require('moment');
 var utils  = require('./utils/utils');
+var FADE  = require('./utils/fadecode');//appid等重要信息
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //七牛存储API
-var KEY  = require('./utils/KEY');
+var KEY  = require('./utils/KEY');//七牛上传的key
 var qiniu = require('qiniu');
 qiniu.conf.ACCESS_KEY = KEY.AK;
 qiniu.conf.SECRET_KEY = KEY.SK;
@@ -24,7 +26,7 @@ var get_param = function(req) {
 
 //数据库配置
 var MongoClient = require('mongodb').MongoClient;
-var DB_CONN_STR = 'mongodb://localhost:27017/yechtv';
+var DB_CONN_STR = FADE.database;
 
 var insertData = function(db, collection, param, callback) {  
 	//连接到表  
@@ -79,7 +81,7 @@ app.set('port',process.env.PORT || 8001);//设置端口
 app.use('/public', express.static(__dirname + '/public'));
 
 //上传目录处理
-app.use('/upload', express.static(__dirname + '/upload'));
+// app.use('/upload', express.static(__dirname + '/upload'));
 
 app.get('/', function (req, res) {
 
@@ -257,15 +259,48 @@ app.get('/album/:type', function(req, res){
 	mongod存储数据
 */
 app.post('/', function(req, res){
-	var param = req.body
+	var param = req.body || {};
 
-	if (param.email && param.type === 'setemail') {//存储emailist
+	if (param.type && param.type === 'adduser') {//存储用户授权的公开信息
+
+		param = param.data ? param.data : {};// => userInfo or null
+		param.time = Date.now();//定义一个更新时间
 
 		MongoClient.connect(DB_CONN_STR, function(err, db) {
-			insertData(db, 'album', param, function(result) {
-				//写入数据表成功
-				res.send('{"status":"200"}');
-				db.close();
+			selectDataOne(db, 'user', {openid: param.openid}, function(result) {
+				if (result.length === 0) {
+					insertData(db, 'user', param, function(_res) {
+						//写入数据表成功
+						res.json({"status":"200"});
+						db.close();
+					});
+				}else{
+					//数据库里面存在相同的openid，不用做任何处理
+					res.json({"status":"201", "msg":"已有用户"});
+					db.close();
+				}
+			});
+			
+		});
+
+	}else if (param.type && param.type === 'setemail') {//存储emailist
+
+		param.time = Date.now();//定义一个更新时间
+
+		MongoClient.connect(DB_CONN_STR, function(err, db) {
+			selectDataOne(db, 'mailist', {openid: param.openid}, function(result) {
+				if (result.length === 0) {
+					insertData(db, 'mailist', param, function(_res) {
+						//写入数据表成功
+						res.json({"status":"200"});
+						db.close();
+					});
+				}else{
+					//数据库里面存在相同的openid，不用做任何处理
+					res.json({"status":"201", "msg":"已经提交过邮箱"});
+					db.close();
+				}
+
 			});
 		});
 
@@ -280,9 +315,10 @@ app.post('/', function(req, res){
 
 	}else if(param.type && param.type === 'setalbum'){//存储专辑信息
 
+		param.time = Date.now();//定义一个更新时间
+
 		//这里定义多一个CID作为查询主键入库
 		param.cid = utils.randomString(16);
-		param.time = Date.now();
 
 		MongoClient.connect(DB_CONN_STR, function(err, db) {
 			insertData(db, 'album', param, function(result) {
@@ -297,9 +333,11 @@ app.post('/', function(req, res){
 		});
 	}else if(param.type && param.type === 'addvideo'){//存储视频信息
 
+		param.time = Date.now();//定义一个更新时间
+		
 		//这里定义多一个VID作为查询主键入库
 		param.vid = utils.randomString(16);
-		param.time = Date.now();
+		param.playcount = 0; //初始值播放量
 
 		MongoClient.connect(DB_CONN_STR, function(err, db) {
 			insertData(db, 'video', param, function(result) {
@@ -314,9 +352,8 @@ app.post('/', function(req, res){
 		});
 	}else if(param.type && param.type === 'updateVideo'){//更新视频信息
 
-		//定义一个更新时间
-		param.time = Date.now();
-
+		param.time = Date.now();//定义一个更新时间
+		
 		MongoClient.connect(DB_CONN_STR, function(err, db) {
 			//连接到表  
 			var collection = db.collection('video');
@@ -333,9 +370,8 @@ app.post('/', function(req, res){
 		});
 	}else if(param.type && param.type === 'updateAlbum'){//更新视频信息
 
-		//定义一个更新时间
-		param.time = Date.now();
-
+		param.time = Date.now();//定义一个更新时间
+		
 		MongoClient.connect(DB_CONN_STR, function(err, db) {
 			//连接到表  
 			var collection = db.collection('album');
@@ -354,7 +390,7 @@ app.post('/', function(req, res){
 });
 
 app.get('/uptoken', function(req, res){
-	var myUptoken = new qiniu.rs.PutPolicy(KEY.buket);
+	var myUptoken = new qiniu.rs.PutPolicy(FADE.buket);
     var token = myUptoken.token();
     // moment.locale('en');
     // var currentKey = moment(new Date()).format('YYYY-MM-DD-HH:mm:ss');
@@ -380,7 +416,7 @@ app.get('/pfop', function(req, respon){
 
 	var opts = {};
 
-	qiniu.fop.pfop(KEY.buket, key, cmd, opts, function(err, ret, res) {
+	qiniu.fop.pfop(FADE.buket, key, cmd, opts, function(err, ret, res) {
 		if (res.statusCode == 200) {
 			respon.send(res);
 
@@ -402,7 +438,7 @@ app.get('/file', function(req, res){
 		res.send(files);
 
 		files.forEach(function(file){
-			fs.stat("/"+file,function(err,stat){
+			fs.stat("/"+file, function(err,stat){
 				if(err){
 					console.log(err);
 					return;
@@ -416,6 +452,17 @@ app.get('/file', function(req, res){
 		});
 
 	});
+});
+
+//获取用户openid
+app.get('/onLogin', function(req, res){
+	var code = get_param(req).code;
+	var url = 'https://api.weixin.qq.com/sns/jscode2session?appid='+FADE.appid+'&secret='+FADE.secret+'&js_code='+code+'&grant_type=authorization_code'
+	request(url, function (error, response, body) {
+		if (!error && response.statusCode == 200) {
+			res.send(body);
+		}
+	})
 });
 
 app.listen(app.get('port'), function () {
