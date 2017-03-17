@@ -19,22 +19,22 @@ Page({
       });
     });
   },
-  onHide: function(){
-    //用户离开当前页面的时候存储已授权公开信息
-    var userInfo = this.data.userInfo;
+  // onHide: function(){
+  //   //用户离开当前页面的时候存储已授权公开信息
+  //   var userInfo = this.data.userInfo;
 
-    wx.request({
-      url: conf.apiURL,
-      data: {
-        'type': 'adduser',
-        'data': userInfo
-      },
-      method: 'POST',
-      success: function(res){
-        console.log(res['data']);
-      }
-    })
-  },
+  //   wx.request({
+  //     url: conf.apiURL,
+  //     data: {
+  //       'type': 'adduser',
+  //       'data': userInfo
+  //     },
+  //     method: 'POST',
+  //     success: function(res){
+  //       console.log(res['data']);
+  //     }
+  //   })
+  // },
   bindKeyInput: function(e){
     var pos = e.detail.cursor;
     var value = e.detail.value;
@@ -49,7 +49,7 @@ Page({
         // wx.hideKeyboard();
         this.setData({
           btntype: 'default'
-        })
+        });
     }
 
     this.setData({

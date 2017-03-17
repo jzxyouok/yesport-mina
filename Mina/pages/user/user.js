@@ -23,37 +23,11 @@ Page({
   onShow: function(){
     var that = this;
 
-    function getLocalHis(array){
-      var storArray = array.reverse();//按时间倒序排列记录
-      var albumListData = wx.getStorageSync('albumListData') || [];
-      var arr = [];
-
-      for(var i = 0;i < storArray.length;i++){
-        var curVid = storArray[i].vid;
-        var o = {};
-
-        for(var j = 0;j < albumListData.length;j++){
-          
-          for(var k = 0;k < albumListData[j]['data'].length;k++){
-            if(albumListData[j]['data'][k].vid === curVid){
-              o.vid = albumListData[j]['data'][k].vid;
-              o.imgurl = albumListData[j]['data'][k].imgurl;
-              o.title = albumListData[j]['data'][k].title;
-              o.time = utils.timeFormat(storArray[i].time);
-              arr.push(o);
-            }
-          }
-
-        }
-      }
-      return utils.unique(arr);
-    };
-
     //找到记录历史记录的列表数组
     wx.getStorage({
       key: 'historyStor',
       success: function(res){
-        var arr = getLocalHis(res['data']);
+        var arr = utils.getLocalHis(res['data']);
         
         that.setData({
           newHisList: arr,
@@ -72,7 +46,7 @@ Page({
     wx.getStorage({
       key: 'likelist',
       success: function(res){
-        var arr = getLocalHis(res['data']);
+        var arr = utils.getLocalHis(res['data']);
 
         that.setData({
           likeList: arr,
@@ -86,22 +60,22 @@ Page({
       }
     });
   },
-  onHide: function(){
-    //用户离开当前页面的时候存储已授权公开信息
-    var userInfo = this.data.userInfo;
+  // onHide: function(){
+  //   //用户离开当前页面的时候存储已授权公开信息
+  //   var userInfo = this.data.userInfo;
 
-    wx.request({
-      url: conf.apiURL,
-      data: {
-        'type': 'adduser',
-        'data': userInfo
-      },
-      method: 'POST',
-      success: function(res){
-        console.log(res['data']);
-      }
-    })
-  },
+  //   wx.request({
+  //     url: conf.apiURL,
+  //     data: {
+  //       'type': 'adduser',
+  //       'data': userInfo
+  //     },
+  //     method: 'POST',
+  //     success: function(res){
+  //       console.log(res['data']);
+  //     }
+  //   })
+  // },
   onReady: function () {
     var that = this;
     wx.getStorageInfo({

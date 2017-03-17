@@ -1,24 +1,42 @@
+const conf = require('./conf');
+
+function getLocalHis(array){
+    var storArray = array.reverse();//按时间倒序排列记录
+    var albumListData = wx.getStorageSync('albumListData') || [];
+    var arr = [];
+
+    for(var i = 0;i < storArray.length;i++){
+      var curVid = storArray[i].vid;
+      var o = {};
+
+      for(var j = 0;j < albumListData.length;j++){
+        
+        for(var k = 0;k < albumListData[j]['data'].length;k++){
+          if(albumListData[j]['data'][k].vid === curVid){
+            o.vid = albumListData[j]['data'][k].vid;
+            o.imgurl = albumListData[j]['data'][k].imgurl;
+            o.title = albumListData[j]['data'][k].title;
+            o.time = timeFormat(storArray[i].time);
+            arr.push(o);
+          }
+        }
+
+      }
+    }
+    return unique(arr);
+  };
+
 //存储专辑信息
 function setAlbumList(cid, data){
     var time = new Date().getTime();
-    var albumDataArr = wx.getStorageSync('albumListData') ? wx.getStorageSync('albumListData') : [];
-    
-    if(detectSame(cid, albumDataArr) !== 'yes'){
-      var obj = {};
-          obj.cid = cid;
-          obj.data = data;
+    var albumDataArr = wx.getStorageSync('albumListData') ? wx.getStorageSync('albumListData') : [],
+        obj = {};
+        obj.cid = cid;
+        obj.data = data;
       albumDataArr.push(obj);
+    var _arr = uniqueCID(albumDataArr);
 
-      wx.setStorageSync('albumListData', albumDataArr);
-    }
-};
-
-function detectSame(cid, array){
-  for(var i = 0;i < array.length;i++){
-    if(array[i]['cid'] === cid){
-      return 'yes';
-    }
-  }
+      wx.setStorageSync('albumListData', _arr);
 };
 
 //更新历史观看记录
@@ -57,15 +75,16 @@ function setStorage(vid){
     });
 };
 
-//用户关闭或者离开当前页面onHide/onUnload 的时候触发，把openid和data更新到接口
-function upRemoteData(openid, cb){
+//用户关闭或者离开当前页面onHide/onUnload 的时候触发，把用户资料和本地数据更新到接口
+function upRemoteData(userInfo, cb){
     var collectArr = wx.getStorageSync('likelist') ? wx.getStorageSync('likelist') : [];
     var hisArr = wx.getStorageSync('historyStor') ? wx.getStorageSync('historyStor') : [];
 
+      //历史记录、收藏记录
       wx.request({
         url: conf.apiURL,
         data: {
-          'openid': openid,
+          'openid': userInfo.openid,
           'type': 'prossup',
           'hisArr': JSON.stringify(hisArr),
           'collectArr': JSON.stringify(collectArr)
@@ -76,6 +95,19 @@ function upRemoteData(openid, cb){
         },
         fail: function(res) {
           typeof cb == "function" && cb(res.data);
+        }
+      });
+
+      //用户信息，如果有添加过的会返回201状态值
+      wx.request({
+        url: conf.apiURL,
+        data: {
+          'type': 'adduser',
+          'data': userInfo
+        },
+        method: 'POST',
+        success: function(res){
+          console.log(res['data']);
         }
       });
 
@@ -104,6 +136,16 @@ function unique(array){
   for(var i = 0, l = array.length; i < l; i++) {
     for(var j = i + 1; j < l; j++)
       if (array[i].vid === array[j].vid) j = ++i;
+    r.push(array[i]);
+  }
+  return r;
+};
+
+function uniqueCID(array){
+  var r = [];
+  for(var i = 0, l = array.length; i < l; i++) {
+    for(var j = i + 1; j < l; j++)
+      if (array[i].cid === array[j].cid) j = ++i;
     r.push(array[i]);
   }
   return r;
@@ -173,6 +215,7 @@ function likeStatus(vid, array){
 };
 
 module.exports = {
+  getLocalHis: getLocalHis,
   setStorage: setStorage,
   formatTime: formatTime,
   isEmail: isEmail,

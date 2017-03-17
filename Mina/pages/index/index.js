@@ -1,5 +1,6 @@
 const utils = require('../../utils/utils');
 const conf = require('../../utils/conf');
+var app = getApp();
 
 Page({
   data: {
@@ -20,6 +21,8 @@ Page({
     }
   },
   onLoad: function (options) {
+    app.getUserInfo();//触发授权请求
+
     var that = this;
     wx.request({
       url: conf.apiURL+'/album/get',

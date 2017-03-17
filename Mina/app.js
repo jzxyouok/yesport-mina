@@ -1,4 +1,5 @@
 const conf = require('./utils/conf');
+const utils = require('./utils/utils');
 
 App({
   getUserInfo: function(cb){
@@ -41,7 +42,16 @@ App({
       });
     }
   },
-  globalData:{
+  globalData: {
     userInfo: null,
+  },
+  onHide: function(){
+      
+      var userInfo = this.globalData.userInfo;
+
+      utils.upRemoteData(userInfo, function(res){
+        console.log(res);
+      });
+
   }
 })
