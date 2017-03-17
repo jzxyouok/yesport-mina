@@ -115,6 +115,23 @@ app.get('/video/:type', function(req, res){
 			});
 		});
 		
+	}else if(type === 'get'){
+		var cid = get_param(req).cid;
+
+		MongoClient.connect(DB_CONN_STR, function(err, db) {
+			if (cid) { //如果有专辑CID就拉取CID所对应的video list
+				selectDataOne(db, 'video', {cid: cid}, function(result){
+					res.send(result);
+					db.close();
+				});
+			}else{
+				selectData(db, 'video', function(result) {
+					res.send(result);
+					db.close();
+				});
+			}
+		});
+		
 	}else if(type === 'list'){
 		var page = get_param(req).page || 1;  //默认第一页
 		var rows = 10; //每次拉取10条
@@ -196,15 +213,13 @@ app.get('/album/:type', function(req, res){
 	if (type === 'get') {
 		var cid = get_param(req).cid;
 
-		if (cid) { //如果有专辑CID就拉取单个
-			MongoClient.connect(DB_CONN_STR, function(err, db) {
+		MongoClient.connect(DB_CONN_STR, function(err, db) {
+			if (cid) { //如果有专辑CID就拉取单个
 				selectDataOne(db, 'album', {cid: cid}, function(result) {
 					res.send(result);
 					db.close();
 				});
-			});
-		}else{ //默认返回全部专辑信息
-			MongoClient.connect(DB_CONN_STR, function(err, db) {
+			}else{ //默认返回全部专辑信息
 				db.collection("album").find().sort({ "order" : 1 }).toArray(function(err, result) {
 					if(err){
 					  console.log('Error:'+ err);
@@ -213,8 +228,8 @@ app.get('/album/:type', function(req, res){
 					res.send(result);
 					db.close();
 				});
-			});
-		}
+			}
+		});
 		
 	}else if(type === 'set'){
 		res.render('cover-add', {
@@ -358,10 +373,9 @@ app.post('/', function(req, res){
 	}else if(param.type && param.type === 'addvideo'){//存储视频信息
 
 		param.time = Date.now();//定义一个更新时间
-		
 		//这里定义多一个VID作为查询主键入库
 		param.vid = utils.randomString(16);
-		param.playcount = 0; //初始值播放量
+		param.playcount = Math.random() * 1000 >> 0; //随机定义一个初始播放量，你懂的 :)
 
 		MongoClient.connect(DB_CONN_STR, function(err, db) {
 			insertData(db, 'video', param, function(result) {
@@ -392,6 +406,7 @@ app.post('/', function(req, res){
 	}else if(param.type && param.type === 'updateAlbum'){//更新视频信息
 
 		param.time = Date.now();//定义一个更新时间
+		param.order = Number(param.order); //序列号float
 		
 		MongoClient.connect(DB_CONN_STR, function(err, db) {
 			db.collection('album').update({cid: param.cid}, param);

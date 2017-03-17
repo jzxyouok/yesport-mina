@@ -1,5 +1,6 @@
 {
   "pages":[
+    "pages/discover/discover",
     "pages/index/index",
     "pages/user/user",
     "pages/detail/detail",
@@ -20,6 +21,12 @@
                 "iconPath": "static/icon-home.png",
                 "selectedIconPath": "static/icon-home-cur.png",
                 "text": "首页"
+            },
+            {
+                "pagePath": "pages/discover/discover",
+                "iconPath": "static/icon-disc.png",
+                "selectedIconPath": "static/icon-disc-cur.png",
+                "text": "栏目"
             },
             {
                 "pagePath": "pages/subscript/subscript",

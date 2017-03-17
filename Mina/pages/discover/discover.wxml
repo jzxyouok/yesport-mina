@@ -1,0 +1,8 @@
+<block wx:for="{{albumlist}}">
+<view class="item-cover" data-cid="{{item.cid}}" bindtap="reqdetail">
+    <image src="{{item.banner}}" mode="aspectFill"></image>
+    <text class="tit">{{item.title}}</text>
+    <view class="subtit">{{item.subtitle}}</view>
+    <view class="desc"><text>{{item.counts}}个视频</text><text>{{item.playcount}}次播放</text></view>
+</view>
+</block>
