@@ -9,7 +9,7 @@
 
 <block wx:for="{{outlist}}">
 
-  <swiper-item class="section" id="2016{{item.cate}}001" data-banner="{{item.banner}}" bindtap="reqdetail">
+  <swiper-item class="section" data-cid="{{item.cid}}" data-banner="{{item.banner}}" bindtap="reqdetail">
 
       <view class="detail-summary">
           <view class="ab-avatar"><image src="{{item.albumimg}}"></image><view class="mask">{{item.counts}}个视频</view></view>

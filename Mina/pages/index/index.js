@@ -1,4 +1,5 @@
 const utils = require('../../utils/utils');
+const conf = require('../../utils/conf');
 
 Page({
   data: {
@@ -21,21 +22,26 @@ Page({
   onLoad: function (options) {
     var that = this;
     wx.request({
-      url: 'https://dev.yechtv.com/api/',
+      url: conf.apiURL+'/album/get',
       data: {
-        type: 'index',
-        time: new Date().getTime()
+        t: new Date().getTime()
       },
       method: 'GET',
       success: function (res) {
-        var bnNewArry = [];
+        var arrBanner = [];
+        var arrData = [];
         for(var i = 0;i < res.data.length;i++){
-          bnNewArry.push(res.data[i].banner)
+          //推荐到首页的才显示
+          if(res.data[i].toindex === 'true'){
+            arrData.push(res.data[i]);
+            arrBanner.push(res.data[i].banner);
+          }
         }
+
         that.setData({
-          outlist: res.data,
-          bannerimg: res.data[that.data.current].banner,
-          bannerArr: bnNewArry,
+          outlist: arrData,
+          bannerimg: arrData[that.data.current].banner,
+          bannerArr: arrBanner,
           loading: false
         });
       },
@@ -46,25 +52,22 @@ Page({
       }
     })
   },
-  onReady: function () {
-    // console.log(this.data.outlist);
-  },
   reqdetail: function (e) {
-    var vid = e.currentTarget.id;
+    var cid = e.currentTarget.dataset.cid;
     wx.navigateTo({
-      url: '../detail/detail?vid=' + vid
+      url: '../detail/detail?cid=' + cid
     });
   },
   setbanner: function(e){
-    //每滚动一次都会触发
-    var cur = e.detail.current;
-    var that = this;
-    //跳动太快延迟500ms
-    setTimeout(function(){
-      that.setData({
-        bannerimg: that.data.bannerArr[cur]
-      })
-    }, 500);
+      //每滚动一次都会触发
+      var cur = e.detail.current;
+      var that = this;
+      //跳动太快延迟500ms
+      setTimeout(function(){
+        that.setData({
+          bannerimg: that.data.bannerArr[cur]
+        })
+      }, 500);
   }
 
 })

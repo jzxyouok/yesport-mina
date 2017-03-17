@@ -1,4 +1,15 @@
 /**golbal.wxss**/
+.icon-play{
+  width: 60rpx;
+  height: 60rpx;
+  background: url(http://olppdb3c8.bkt.clouddn.com/icon-play.png) no-repeat;
+  background-size: 100% 100%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate3d(-50%, -80%, 0);
+  opacity: .5;
+}
 .sub-title{
   font-size: 30rpx;
   line-height: 30rpx;
@@ -27,6 +38,7 @@
   display: inline-block;
   margin-right: 20rpx;
   position: relative;
+  vertical-align: top;
 }
 .mod-listvideo .item image{
   width: 260rpx;
@@ -90,4 +102,22 @@
 .list-placeh image{
   width: 32rpx;
   height: 32rpx;
+}
+
+.list-album .item{
+  width: 200rpx;
+}
+.list-album .item > image{
+  width: 200rpx;
+  height: 260rpx;
+  border-radius: 6rpx;
+}
+.list-album .item .mask{
+  top: 220rpx;
+}
+.list-album .item .tit{
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  white-space: normal;
 }

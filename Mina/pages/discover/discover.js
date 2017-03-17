@@ -1,5 +1,6 @@
 const utils = require('../../utils/utils');
 const conf = require('../../utils/conf');
+var app = getApp();
 
 Page({
   onLoad:function(options){
@@ -18,7 +19,7 @@ Page({
       fail: function() {
         // fail
       }
-    })
+    });
   },
   reqdetail: function(d){
       var cid = d.currentTarget.dataset.cid;
@@ -26,11 +27,10 @@ Page({
           url: '../detail/detail?cid=' + cid
       });
   },
-  
-  onHide:function(){
-    // 页面隐藏
-  },
   onUnload:function(){
-    // 页面关闭
+      var openid = app.globalData.userInfo.openid;
+      utils.upRemoteData(openid, function(res){
+        console.log(res);
+      });
   }
 })

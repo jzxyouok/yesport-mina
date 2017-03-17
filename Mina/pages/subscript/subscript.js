@@ -14,25 +14,8 @@ Page({
     var that = this;
     //调用应用实例的方法获取全局数据
     app.getUserInfo(function(userInfo){
-      // console.log(userInfo);//用户信息
-      var userInfo = userInfo || {};
-      var code = app.globalData.wxcode;//用户code
-      wx.request({
-        url: conf.apiURL+'/onLogin',
-        data: {
-          code: code
-        },
-        success: function(res){
-          if (!res['data']['errcode']) {
-            userInfo.openid = res['data']['openid'];//把openid写入userinfo对象
-            that.setData({
-              userInfo: userInfo
-            });
-          }else{
-            //错误session过期
-            console.log(res['data']['errmsg']);
-          }
-        }
+      that.setData({
+        userInfo: userInfo
       });
     });
   },

@@ -403,7 +403,7 @@ app.post('/', function(req, res){
 			res.send(_res);
 			db.close();
 		});
-	}else if(param.type && param.type === 'updateAlbum'){//更新视频信息
+	}else if(param.type && param.type === 'updateAlbum'){//更新专辑信息
 
 		param.time = Date.now();//定义一个更新时间
 		param.order = Number(param.order); //序列号float
@@ -417,6 +417,21 @@ app.post('/', function(req, res){
 				type: 'updateAlbum'
 			}
 			res.send(_res);
+			db.close();
+		});
+	}else if(param.openid && param.type === 'prossup'){//用户关闭页面，remote更新用户观看历史记录和用户收藏列表
+
+		var hisArr = JSON.parse(param.hisArr),
+			collectArr = JSON.parse(param.collectArr),
+			time = Date.now();
+		
+		MongoClient.connect(DB_CONN_STR, function(err, db) {
+			//更新观看历史记录
+			db.collection('history').update({ openid: param.openid }, {$set:{'data': hisArr, 'time': time} });
+			//更新收藏列表
+			db.collection('collect').update({ openid: param.openid }, {$set:{'data': collectArr, 'time': time} });
+
+			res.json({'status': '200'});
 			db.close();
 		});
 	}

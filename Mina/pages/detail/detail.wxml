@@ -14,8 +14,9 @@
     <view class="list-placeh" wx:elif="{{loadst == 'fail'}}">加载错误请返回再试 :(</view>
     <scroll-view scroll-x="true" class="mod-listvideo" wx:else>
         <block wx:for="{{listAlbum}}">
-        <view class="item" bindtap="getdetail" id="{{item.vid}}">
+        <view class="item" bindtap="getdetail" data-vid="{{item.vid}}">
             <image src="{{item.imgurl}}"></image>
+            <view class="icon-play"></view>
             <view class="like" data-index="{{index}}" catchtap="listlike" id="{{item.vid}}"><image src="../../static/icon-heart{{item.like == 1 ? '-cur' : ''}}.png"></image></view>
             <view class="mask">{{item.duration}}</view>
             <view class="tit">{{item.title}}</view>
@@ -26,12 +27,12 @@
     <view class="sub-title">精彩推荐</view>
     <view class="list-placeh" wx:if="{{loadst == 'loading'}}"><image src="../../static/reload-m.gif"></image></view>
     <view class="list-placeh" wx:elif="{{loadst == 'fail'}}">加载错误请返回再试 :(</view>
-    <scroll-view scroll-x="true" class="mod-listvideo" wx:else>
+    <scroll-view scroll-x="true" class="mod-listvideo list-album" wx:else>
         <block wx:for="{{ramDataArr}}">
-        <view class="item" bindtap="getAlbum" id="{{item[0].vid}}">
-            <image src="{{item[0].imgurl}}"></image>
-            <view class="mask">{{item[0].duration}}</view>
-            <view class="tit">{{item[0].title}}</view>
+        <view class="item" bindtap="getAlbum" data-cid="{{item.cid}}">
+            <image src="{{item.albumimg}}" mode="aspectFill"></image>
+            <view class="mask">{{item.counts}}个视频</view>
+            <view class="tit">{{item.title}}</view>
         </view>
         </block>
     </scroll-view>

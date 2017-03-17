@@ -1,28 +1,47 @@
-//app.js
+const conf = require('./utils/conf');
+
 App({
-  getUserInfo:function(cb){
+  getUserInfo: function(cb){
     var that = this;
     if(this.globalData.userInfo){
       typeof cb == "function" && cb(this.globalData.userInfo)
     }else{
       //调用登录接口
       wx.login({
-        success: function (_r) {
-          //存一个code给到其他页面获取openid
-          that.globalData.wxcode = _r.code;
+        success: function (loginRes) {
 
           wx.getUserInfo({
             success: function (res) {
-              that.globalData.userInfo = res.userInfo;
-              typeof cb == "function" && cb(that.globalData.userInfo)
+
+                //请求用户openid
+                wx.request({
+                  url: conf.apiURL+'/onLogin',
+                  data: {
+                    code: loginRes.code
+                  },
+                  success: function(openidRes){
+                    if (!openidRes['data']['errcode']) {
+                      //新增一个openid对象构造新的userInfo
+                      res.userInfo.openid = openidRes['data']['openid']
+
+                      that.globalData.userInfo = res.userInfo;
+
+                      typeof cb == "function" && cb(that.globalData.userInfo)
+                    }else{
+                      //错误session过期
+                      console.log(openidRes['data']['errmsg']);
+                    }
+                  }
+                });
+                
             }
           })
+
         }
       });
     }
   },
   globalData:{
-    userInfo:null,
-    wxcode:null
+    userInfo: null,
   }
 })

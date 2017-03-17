@@ -1,7 +1,17 @@
-function setStorage(vid){
-    //传入值是001三位数字长度为cateid，需要补全默认第一个视频vid，否则就为vid
-    // var vid = vid.length > 3 ? vid : "2016"+vid+"001";
+//存储专辑信息
+function setAlbumList(cid, data){
+    var time = new Date().getTime();
+    var albumDataArr = wx.getStorageSync('albumListData') ? wx.getStorageSync('albumListData') : [],
+        obj = {};
+        obj.cid = cid;
+        obj.data = data;
+    albumDataArr.push(obj);
 
+    wx.setStorageSync('albumListData', albumDataArr);
+};
+
+//更新历史观看记录
+function setStorage(vid){
     var time = new Date().getTime(),
         obj = {};
 
@@ -34,6 +44,30 @@ function setStorage(vid){
         });
       }
     });
+};
+
+//用户关闭或者离开当前页面onHide/onUnload 的时候触发，把openid和data更新到接口
+function upRemoteData(openid, cb){
+    var collectArr = wx.getStorageSync('likelist') ? wx.getStorageSync('likelist') : [];
+    var hisArr = wx.getStorageSync('historyStor') ? wx.getStorageSync('historyStor') : [];
+
+      wx.request({
+        url: conf.apiURL,
+        data: {
+          'openid': openid,
+          'type': 'prossup',
+          'hisArr': JSON.stringify(hisArr),
+          'collectArr': JSON.stringify(collectArr)
+        },
+        method: 'POST',
+        success: function(res){
+          typeof cb == "function" && cb(res.data);
+        },
+        fail: function(res) {
+          typeof cb == "function" && cb(res.data);
+        }
+      });
+
 };
 
 function formatTime(date) {
@@ -143,5 +177,7 @@ module.exports = {
   isEmail: isEmail,
   timeFormat: timeFormat,
   likeStatus: likeStatus,
-  reqLikeSt: reqLikeSt
+  reqLikeSt: reqLikeSt,
+  upRemoteData: upRemoteData,
+  setAlbumList: setAlbumList
 }

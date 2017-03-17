@@ -1,4 +1,5 @@
 const utils = require('../../utils/utils');
+const conf = require('../../utils/conf');
 
 Page({
   data: {
@@ -23,106 +24,147 @@ Page({
     }
   },
   onLoad:function(options){
-
-      var vid = options.vid || '2016001001';//默认vid用做调试数据接口
-      var cateID = utils.getCate(vid);
       var that = this;
+      if(options.cid){
+          //拉取专辑列表
+          var cid = options.cid;
+          wx.request({
+            url: conf.apiURL+'/video/get',
+            data: {
+                cid: cid,
+                t: new Date().getTime()
+            },
+            method: 'GET',
+            success: function(res){
+              var curdata = res.data,
+                  vid = curdata[0].vid;
 
-      wx.request({
-        url: 'https://dev.yechtv.com/api/',
-        data: {
-          type: 'detail',
-          time: new Date().getTime()
-        },
-        method: 'GET', 
-        success: function(res){
+              //写入同系列是否有收藏的对象字段
+              var likelist = wx.getStorageSync('likelist') || [];
+              for(var k = 0;k < curdata.length;k ++){
+                if('liked' == utils.likeStatus(curdata[k].vid, likelist)){
+                  curdata[k].like = true
+                }else{
+                  curdata[k].like = false
+                }
+              }
+              that.setData({
+                  cid: cid,
+                  listAlbum: curdata,
+                  vid: vid,
+                  curvideo: curdata[0].source,
+                  curtitle: curdata[0].title,
+                  cursummary: curdata[0].content,
+                  curPro: curdata[0].production,
+                  loadst: "normal"
+              });
 
-          var curdata = res.data[cateID];
-          //写入是否有收藏的对象字段
-          var likelist = wx.getStorageSync('likelist') || [];
-          for(var k = 0;k < curdata.length;k ++){
-            if('liked' == utils.likeStatus(curdata[k].vid, likelist)){
-              curdata[k].like = true
-            }else{
-              curdata[k].like = false
+              //设置标题栏提示
+              wx.setNavigationBarTitle({
+                title: curdata[0].title
+              });
+
+              // 检查当前项有没有收藏过
+              utils.reqLikeSt("likelist", vid, function(){
+                that.setData({
+                  iconlike: 'cur'
+                });
+              });
+
+              //检查wifi情况
+              wx.getNetworkType({
+                success: function(res) {
+                  // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
+                  var networkType = res.networkType
+
+                  if(networkType === 'wifi'){
+                    //如果检测到WIFI网络环境自动播放，并写入storage计算播放过
+                    that.setData({
+                      autoplay: !that.data.autoplay
+                    });
+
+                    //记录到hisStorage观看记录
+                    utils.setStorage(vid);
+
+                  }
+                }
+              });
+
+              //把当前专辑信息存储在本地
+              utils.setAlbumList(cid, curdata);
+
+            },
+            fail: function() {
+                wx.showToast({
+                  title: '请求数据错误~',
+                  icon: 'loading'
+                });
+                that.setData({
+                  loadst: 'fail'
+                });
             }
-          }
-
-          var newDataArr = [];
-          for(var d in res.data){
-            newDataArr.push(res.data[d]);
-          }
-
-          //数组打乱随机
-          newDataArr.sort(function(){
-            return 0.5 - Math.random();
-          });
-
-          that.setData({
-            vid: curdata[0].vid,
-            ramDataArr: newDataArr,
-            listAlbum: curdata,
-            curvideo: curdata[0].source,
-            curtitle: curdata[0].title,
-            // curUrl: '/page/detail/detail?vid='+curdata[0].vid,
-            cursummary: curdata[0].content,
-            curPro: curdata[0].production,
-            loadst: "normal"
-          });
-
-          wx.setNavigationBarTitle({
-            title: curdata[0].title
-          });
-
-          //存储一份数据给观看历史记录用，不用再次拉新数据
-          wx.setStorage({
-            key: 'reqApiData',
-            data: res.data
-          });
-          
+          })
+      }else if(options.vid){
+          //拉取单个视频
+          var vid = options.vid;
+          wx.request({
+            url: conf.apiURL+'/video/get',
+            data: {
+                vid: vid,
+                ac: album,
+                t: new Date().getTime()
+            },
+            method: 'GET',
+            success: function(res){
+              console.log(res.data);
+            },
+            fail: function() {
+                wx.showToast({
+                  title: '请求数据错误~',
+                  icon: 'loading'
+                });
+                that.setData({
+                  loadst: 'fail'
+                });
+            }
+          })
+      }else{
+        //没有参数跳转到栏目汇总
+        wx.redirectTo({
+          url: '../discover/discover'
+        });
+        return;
+      }
+      //请求全部专辑列表，并做随机打散显示 {{#专辑推荐区}}  —— 这里要做个本地缓存，减少一次请求
+      wx.request({
+        url: conf.apiURL+'/album/get',
+        data: {
+          t: new Date().getTime()
+        },
+        method: 'GET',
+        success: function(res){
+            //随机打乱，截取前五个数组
+            var newDataArr = res['data'].sort(function(){
+                    return 0.5 - Math.random();
+                }).slice(0).splice(0, 5);
+            that.setData({
+              ramDataArr: newDataArr
+            });
         },
         fail: function() {
           wx.showToast({
             title: '请求数据错误~',
             icon: 'loading'
           });
-          this.setData({
-            loadst: fail
+          that.setData({
+            loadst: 'fail'
           });
-        }
-      });
-
-      //检查有没有收藏过
-      utils.reqLikeSt("likelist", vid, function(){
-        that.setData({
-          iconlike: 'cur'
-        });
-      });
-
-      wx.getNetworkType({
-        success: function(res) {
-          // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
-          var networkType = res.networkType
-
-          if(networkType === 'wifi'){
-            //如果检测到WIFI网络环境自动播放，并写入storage计算播放过
-            that.setData({
-              autoplay: !that.data.autoplay
-            });
-
-            //记录到hisStorage观看记录
-            utils.setStorage(vid);
-
-          }
         }
       });
       
   },
-  onShow: function(){
-    var that = this, vid = this.data.vid;
-  },
   getdetail: function(e){
-    var vid = e.currentTarget.id,
+    var vid = e.currentTarget.dataset.vid,
         listAlbum = this.data.listAlbum,
         that = this;
 
@@ -133,6 +175,12 @@ Page({
 
     for(var i = 0; i < listAlbum.length;i++){
       if(vid === listAlbum[i].vid){
+
+        //更新标题栏
+        wx.setNavigationBarTitle({
+          title: listAlbum[i].title
+        });
+
         this.setData({
           curvideo: listAlbum[i].source,
           curtitle: listAlbum[i].title,
@@ -169,10 +217,10 @@ Page({
     });
   },
   getAlbum: function(e){
-    var vid = e.currentTarget.id;
+    var cid = e.currentTarget.dataset.cid;
 
     wx.redirectTo({
-      url: '../detail/detail?vid=' + vid
+      url: '../detail/detail?cid=' + cid
     });
 
   },
