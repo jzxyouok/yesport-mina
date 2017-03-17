@@ -1,13 +1,24 @@
 //存储专辑信息
 function setAlbumList(cid, data){
     var time = new Date().getTime();
-    var albumDataArr = wx.getStorageSync('albumListData') ? wx.getStorageSync('albumListData') : [],
-        obj = {};
-        obj.cid = cid;
-        obj.data = data;
-    albumDataArr.push(obj);
+    var albumDataArr = wx.getStorageSync('albumListData') ? wx.getStorageSync('albumListData') : [];
+    
+    if(detectSame(cid, albumDataArr) !== 'yes'){
+      var obj = {};
+          obj.cid = cid;
+          obj.data = data;
+      albumDataArr.push(obj);
 
-    wx.setStorageSync('albumListData', albumDataArr);
+      wx.setStorageSync('albumListData', albumDataArr);
+    }
+};
+
+function detectSame(cid, array){
+  for(var i = 0;i < array.length;i++){
+    if(array[i]['cid'] === cid){
+      return 'yes';
+    }
+  }
 };
 
 //更新历史观看记录
@@ -98,14 +109,6 @@ function unique(array){
   return r;
 };
 
-function getCate(vid){
-  return vid.substring(4,7);
-};
-
-function returnVid(cateID){
-  return "2016"+cateID+"001";
-};
-
 function isEmail(str){
    var re=/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
    if (re.test(str) != true) {
@@ -172,12 +175,11 @@ function likeStatus(vid, array){
 module.exports = {
   setStorage: setStorage,
   formatTime: formatTime,
-  getCate: getCate,
-  returnVid: returnVid,
   isEmail: isEmail,
   timeFormat: timeFormat,
   likeStatus: likeStatus,
   reqLikeSt: reqLikeSt,
   upRemoteData: upRemoteData,
-  setAlbumList: setAlbumList
+  setAlbumList: setAlbumList,
+  unique: unique
 }

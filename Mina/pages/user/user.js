@@ -5,7 +5,6 @@ var app = getApp();
 Page({
   data: {
     storage: 0,
-    reqApiData: '',
     newHisList: '',
     likeList: '',
     dload: 'loading',
@@ -23,40 +22,38 @@ Page({
   },
   onShow: function(){
     var that = this;
-    //先从storage拿到api数据，设置数据
-    this.setData({
-      reqApiData: wx.getStorageSync('reqApiData')
-    });
-    
-    function getLocalHis(res){
-      var storArray = res.data.reverse();//按时间倒序排列记录
-      var apiData = that.data.reqApiData;
+
+    function getLocalHis(array){
+      var storArray = array.reverse();//按时间倒序排列记录
+      var albumListData = wx.getStorageSync('albumListData') || [];
       var arr = [];
 
       for(var i = 0;i < storArray.length;i++){
         var curVid = storArray[i].vid;
-        var cateID = utils.getCate(curVid);
         var o = {};
 
-        for(var j = 0;j < apiData[cateID].length;j++){
-
-          if(apiData[cateID][j].vid === curVid){
-            o.vid = apiData[cateID][j].vid;
-            o.imgurl = apiData[cateID][j].imgurl;
-            o.title = apiData[cateID][j].title;
-            o.time = utils.timeFormat(storArray[i].time);
-            arr.push(o);
+        for(var j = 0;j < albumListData.length;j++){
+          
+          for(var k = 0;k < albumListData[j]['data'].length;k++){
+            if(albumListData[j]['data'][k].vid === curVid){
+              o.vid = albumListData[j]['data'][k].vid;
+              o.imgurl = albumListData[j]['data'][k].imgurl;
+              o.title = albumListData[j]['data'][k].title;
+              o.time = utils.timeFormat(storArray[i].time);
+              arr.push(o);
+            }
           }
+
         }
       }
-      return arr;
+      return utils.unique(arr);
     };
 
     //找到记录历史记录的列表数组
     wx.getStorage({
       key: 'historyStor',
       success: function(res){
-        var arr = getLocalHis(res);
+        var arr = getLocalHis(res['data']);
         
         that.setData({
           newHisList: arr,
@@ -75,7 +72,7 @@ Page({
     wx.getStorage({
       key: 'likelist',
       success: function(res){
-        var arr = getLocalHis(res);
+        var arr = getLocalHis(res['data']);
 
         that.setData({
           likeList: arr,

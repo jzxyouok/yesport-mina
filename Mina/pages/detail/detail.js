@@ -72,23 +72,23 @@ Page({
               });
 
               //检查wifi情况
-              wx.getNetworkType({
-                success: function(res) {
-                  // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
-                  var networkType = res.networkType
+              // wx.getNetworkType({
+              //   success: function(res) {
+              //     // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
+              //     var networkType = res.networkType
 
-                  if(networkType === 'wifi'){
-                    //如果检测到WIFI网络环境自动播放，并写入storage计算播放过
-                    that.setData({
-                      autoplay: !that.data.autoplay
-                    });
+              //     if(networkType === 'wifi'){
+              //       //如果检测到WIFI网络环境自动播放，并写入storage计算播放过
+              //       that.setData({
+              //         autoplay: !that.data.autoplay
+              //       });
 
-                    //记录到hisStorage观看记录
-                    utils.setStorage(vid);
+              //       //记录到hisStorage观看记录
+              //       utils.setStorage(vid);
 
-                  }
-                }
-              });
+              //     }
+              //   }
+              // });
 
               //把当前专辑信息存储在本地
               utils.setAlbumList(cid, curdata);
@@ -198,23 +198,21 @@ Page({
       });
     });
 
-    wx.getNetworkType({
-      success: function(res) {
-        // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
-        var networkType = res.networkType
+    // wx.getNetworkType({
+    //   success: function(res) {
+    //     var networkType = res.networkType
+    //     if(networkType === 'wifi'){
+    //       //如果检测到WIFI网络环境自动播放，并写入storage计算播放过
+    //       that.setData({
+    //         autoplay: true
+    //       });
 
-        if(networkType === 'wifi'){
-          //如果检测到WIFI网络环境自动播放，并写入storage计算播放过
-          that.setData({
-            autoplay: true
-          });
+    //       //记录到hisStorage观看记录
+    //       utils.setStorage(vid);
 
-          //记录到hisStorage观看记录
-          utils.setStorage(vid);
-
-        }
-      }
-    });
+    //     }
+    //   }
+    // });
   },
   getAlbum: function(e){
     var cid = e.currentTarget.dataset.cid;
