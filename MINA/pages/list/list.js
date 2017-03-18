@@ -6,18 +6,22 @@ Page({
     dataArr: ''
   },
   onLoad:function(options){
-    var vid = options.vid || '2016002001',
-        cateID = utils.getCate(vid), that = this;
+    var cid = options.cid,
+        that = this;
 
     //先从storage拿到api数据，设置数据
     wx.getStorage({
-      key: 'reqApiData',
+      key: 'albumListData',
       success: function(res){
-        var data = res.data[cateID];
-        that.setData({
-          cateTitle: data[0]['title'],
-          dataArr: data
-        });
+        var data = res.data;
+        for(var i = 0;i < data.length;i++){
+          if(data[i].cid === cid){
+             that.setData({
+                cateTitle: data[i].data[0]['cname'],
+                dataArr: data[i].data
+              });
+          }
+        }
       },
       fail: function() {
         wx.showToast({
@@ -27,8 +31,5 @@ Page({
       }
     });
 
-  },
-  onPullDownRefresh: function(){
-    wx.stopPullDownRefresh()
   }
 })

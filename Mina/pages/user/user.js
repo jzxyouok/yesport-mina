@@ -104,7 +104,7 @@ Page({
     })
   },
   getdetail: function(e){
-    var vid = e.currentTarget.id;
+    var vid = e.currentTarget.dataset.vid;
 
     wx.navigateTo({
       url: '../detail/detail?vid=' + vid

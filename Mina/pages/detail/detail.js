@@ -111,12 +111,46 @@ Page({
             url: conf.apiURL+'/video/get',
             data: {
                 vid: vid,
-                ac: album,
+                plus: 'album',
                 t: new Date().getTime()
             },
             method: 'GET',
             success: function(res){
-              console.log(res.data);
+              var curdata = res.data,
+                  cid = curdata['cid'],
+                  albumvlist = curdata['albumvlist'];
+
+              //写入同系列是否有收藏的对象字段
+              var likelist = wx.getStorageSync('likelist') || [];
+              for(var k = 0;k < albumvlist.length;k ++){
+                if('liked' == utils.likeStatus(albumvlist[k].vid, likelist)){
+                  albumvlist[k].like = true
+                }else{
+                  albumvlist[k].like = false
+                }
+              }
+              that.setData({
+                  cid: cid,
+                  listAlbum: albumvlist,
+                  vid: vid,
+                  curvideo: curdata.source,
+                  curtitle: curdata.title,
+                  cursummary: curdata.content,
+                  curPro: curdata.production,
+                  loadst: "normal"
+              });
+
+              //设置标题栏提示
+              wx.setNavigationBarTitle({
+                title: curdata.title
+              });
+
+              // 检查当前项有没有收藏过
+              utils.reqLikeSt("likelist", vid, function(){
+                that.setData({
+                  iconlike: 'cur'
+                });
+              });
             },
             fail: function() {
                 wx.showToast({

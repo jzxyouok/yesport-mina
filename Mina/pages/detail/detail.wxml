@@ -9,7 +9,7 @@
     <view class="summary" wx:else><text class="txt">简介：</text>{{cursummary}}</view>
     <view class="summary subs sumlast">出品方：{{curPro}}</view>
 
-    <view class="sub-title">专辑列表<navigator open-type="navigate" class="more" url="../list/list?vid={{vid}}">更多</navigator></view>
+    <view class="sub-title">专辑列表<navigator open-type="navigate" class="more" url="../list/list?cid={{cid}}">更多</navigator></view>
     <view class="list-placeh" wx:if="{{loadst == 'loading'}}"><image src="../../static/reload-m.gif"></image></view>
     <view class="list-placeh" wx:elif="{{loadst == 'fail'}}">加载错误请返回再试 :(</view>
     <scroll-view scroll-x="true" class="mod-listvideo" wx:else>

@@ -10,7 +10,7 @@
     <view class="list-placeh" wx:elif="{{dload == 'noresult'}}">没有观看记录 :(</view>
     <scroll-view scroll-x="true" class="mod-listvideo" wx:else>
         <block wx:for="{{newHisList}}">
-        <view class="item" bindtap="getdetail" id="{{item.vid}}">
+        <view class="item" bindtap="getdetail" data-vid="{{item.vid}}">
             <image src="{{item.imgurl}}"></image>
             <!--<view class="like"><image src="../../static/icon-heart.png"></image></view>-->
             <view class="tit">{{item.title}}</view>
@@ -24,7 +24,7 @@
     <view class="list-placeh" wx:elif="{{likeload == 'noresult'}}">没有收藏记录 :(</view>
     <scroll-view scroll-x="true" class="mod-listvideo" wx:else>
         <block wx:for="{{likeList}}">
-        <view class="item" bindtap="getdetail" id="{{item.vid}}">
+        <view class="item" bindtap="getdetail" data-vid="{{item.vid}}">
              <image src="{{item.imgurl}}"></image>
             <view class="like"><image src="../../static/icon-heart-cur.png"></image></view>
             <view class="tit">{{item.title}}</view>

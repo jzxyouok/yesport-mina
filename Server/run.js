@@ -45,8 +45,8 @@ var insertData = function(db, collection, param, callback) {
 var selectData = function(db, collection, callback) {
 	//连接到表  
 	var collection = db.collection(collection);
-	//查询全部或者某个字段
-	collection.find().sort({ time : -1 }).toArray(function(err, result) {
+	//查询全部或者某个字段，去掉原生的_id字段
+	collection.find({}, {_id: 0}).sort({ time : -1 }).toArray(function(err, result) {
 	if(err)
 	{
 	  console.log('Error:'+ err);
@@ -57,10 +57,8 @@ var selectData = function(db, collection, callback) {
 };
 
 var selectDataOne = function(db, collection, obj, callback) {
-	//连接到表  
 	var collection = db.collection(collection);
-	//查询全部或者某个字段
-	collection.find(obj).toArray(function(err, result) {
+	collection.find(obj, {_id: 0}).toArray(function(err, result) {
 		if(err){
 			console.log('Error:'+ err);
 			return;
@@ -116,11 +114,30 @@ app.get('/video/:type', function(req, res){
 		});
 		
 	}else if(type === 'get'){
-		var cid = get_param(req).cid;
+		var cid = get_param(req).cid,
+			vid = get_param(req).vid,
+			plus = get_param(req).plus;
 
 		MongoClient.connect(DB_CONN_STR, function(err, db) {
 			if (cid) { //如果有专辑CID就拉取CID所对应的video list
 				selectDataOne(db, 'video', {cid: cid}, function(result){
+					res.send(result);
+					db.close();
+				});
+			}else if(vid && plus && plus === 'album'){ //拉取单个视频以外还要所对应的专辑系列
+				selectDataOne(db, 'video', {vid: vid}, function(result){
+					var cid = result[0].cid;
+
+					selectDataOne(db, 'video', {cid: cid}, function(_res){
+						var obj = result[0];
+							obj.albumvlist = _res;
+						res.send(obj);
+						db.close();
+					});
+
+				});
+			}else if(vid){ //如果有单个视频VID就拉取所对应的video
+				selectDataOne(db, 'video', {vid: vid}, function(result){
 					res.send(result);
 					db.close();
 				});
