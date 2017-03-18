@@ -26,7 +26,7 @@
                 "pagePath": "pages/discover/discover",
                 "iconPath": "static/icon-disc.png",
                 "selectedIconPath": "static/icon-disc-cur.png",
-                "text": "栏目"
+                "text": "发现"
             },
             {
                 "pagePath": "pages/subscript/subscript",

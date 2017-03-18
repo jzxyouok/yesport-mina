@@ -25,12 +25,11 @@ page{
 .content .title{
   font-size: 32rpx;
   font-weight: bold;
-  white-space: nowrap;
-  /*overflow: hidden;*/
-  text-overflow: ellipsis;
-  margin: 40rpx 0 20rpx;
+  margin: 35rpx 0 15rpx;
   color: #f28300;
   position: relative;
+  line-height: 1.6;
+  padding-right: 80rpx;
 }
 .content .title .like{
   width: 32rpx;
@@ -45,10 +44,33 @@ page{
   height: 100%;
 }
 .content .summary{
+  position: relative;
   font-size: 28rpx;
   line-height: 1.6;
   margin-bottom: 10rpx;
   color: #666;
+  overflow : hidden;
+  text-align: justify;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+.content .summary.open{
+  overflow: visible;
+  display: block;
+}
+.content .summary .more{
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  color: #ccc;
+  padding-left: 50rpx;
+  line-height: 1;
+  background: linear-gradient(to right,rgba(255,255,255,.2) 0,#fff 20px)
+}
+.content .summary.open .more{
+  display: none;
 }
 .content .summary .txt{
   color: #999;

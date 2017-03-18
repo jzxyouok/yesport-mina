@@ -242,8 +242,21 @@ app.get('/album/:type', function(req, res){
 					  console.log('Error:'+ err);
 					  return;
 					}
-					res.send(result);
-					db.close();
+
+					var arr = result;
+					db.collection("video").aggregate([{$group : {_id : "$cid", playcount : {$sum : "$playcount"}}}]).toArray(function(err, _res){
+						// 计算每个专辑里面对应的视频播放量
+						for (var i = 0; i < arr.length; i++) {
+							for (var k = 0; k < _res.length; k++) {
+								if (arr[i].cid === _res[k]['_id']) {
+									arr[i].playcount = _res[k].playcount;
+								}
+							}
+						}
+						res.send(arr);
+						db.close();
+					});
+
 				});
 			}
 		});

@@ -8,7 +8,6 @@ Page({
     scrollTop: 0,
     curvideo: '',
     curtitle: '',
-    // curUrl: '',
     cursummary: '',
     curPro: '',
     ramDataArr: '',
@@ -48,6 +47,7 @@ Page({
                   curdata[k].like = false
                 }
               }
+
               that.setData({
                   cid: cid,
                   listAlbum: curdata,
@@ -56,6 +56,7 @@ Page({
                   curtitle: curdata[0].title,
                   cursummary: curdata[0].content,
                   curPro: curdata[0].production,
+                  playcount: utils.numconvert(curdata[0].playcount),
                   loadst: "normal"
               });
 
@@ -137,6 +138,7 @@ Page({
                   curtitle: curdata.title,
                   cursummary: curdata.content,
                   curPro: curdata.production,
+                  playcount: utils.numconvert(curdata.playcount),
                   loadst: "normal"
               });
 
@@ -321,5 +323,10 @@ Page({
     var vid = this.data.vid;
     //记录到hisStorage观看记录，点击播放触发
     utils.setStorage(vid);
+  },
+  showmore: function(){
+    this.setData({
+      expand: 'open'
+    })
   }
 })

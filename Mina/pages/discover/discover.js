@@ -7,13 +7,17 @@ Page({
     var that = this;
     wx.request({
       url: conf.apiURL+'/album/get',
+      data: {
+        t: new Date().getTime()
+      },
       method: 'GET',
       success: function(res){
-        for(var i = 0;i < res['data'].length;i++){
-          res['data'][i].playcount = Math.random() * 1000 >> 0;
+        var data = res['data'];
+        for(var i = 0;i < data.length;i++){
+          data[i].playcount = utils.numconvert(data[i].playcount);
         }
         that.setData({
-          albumlist: res['data']
+          albumlist: data
         });
       },
       fail: function() {
