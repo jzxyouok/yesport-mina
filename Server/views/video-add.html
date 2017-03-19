@@ -88,7 +88,7 @@
 							</div>
 
 							<div class="btn-line">
-								<a href="javascript:;" class="btn btn-info" id="btn-upvideo">确认上传</a>
+								<a href="javascript:;" class="btn btn-info" id="btn-upvideo">确认添加</a>
 							</div>
 						</div>
 					</div>
@@ -107,6 +107,9 @@
 	<script src="https://cdn.staticfile.org/plupload/2.1.8/plupload.full.min.js"></script>
 	<script src="/public/system/js/qiniu.min.js"></script>
 <script>
+//后台拿到option对应数据
+var optionTab = {% autoescape false %}{{optionTab}}{% endautoescape %};
+
 $(function(){
 	function timer_format(s) {
 		var t = "", s = Math.ceil(s);
@@ -258,8 +261,9 @@ $(function(){
 
 
 	$("#coverlist").change(function(){
-		var cid = $(this).val();
-		console.log($(this).find("option:selected").text())
+		var index = $(this).find("option:selected").index();
+		$("#production").val(optionTab[index]['pr']);
+		$("#sponsor").val(optionTab[index]['sp']);
 	});
 
 	$('#btn-upvideo').click(function(){
@@ -310,9 +314,9 @@ $(function(){
 				'content': $("#vsum").val()
 			},
 			success: function(data){
-				// console.log(data);
-				alert('提交成功，跳转到专辑管理！');
-				window.location.href = '/video/list';
+				console.log(data);
+				// alert('提交成功，跳转到专辑管理！');
+				// window.location.href = '/video/list';
 			}
 		});
 	});

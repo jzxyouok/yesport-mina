@@ -97,16 +97,22 @@ app.get('/video/:type', function(req, res){
 	if(type === 'add'){
 		MongoClient.connect(DB_CONN_STR, function(err, db) {
 			selectData(db, 'album', function(result) {
-				var albumoption = '<select class="form-control" id="coverlist"><option selected value="-1">请选择专辑</option>';
+				var albumoption = '<select class="form-control" id="coverlist"><option selected value="-1">请选择专辑</option>',
+					arr = [{"pr":"——","sp":"——"}];
 				for (var i = 0; i < result.length; i++) {
 					albumoption += '<option value="'+result[i].cid+'">'+result[i].title+'</option>';
+					var obj = {};
+					obj.pr = result[i].production;
+					obj.sp = result[i].sponsor;
+					arr.push(obj);
 				}
 				albumoption += '</select>';
 
 				res.render('video-add', {
 					'title': '新建视频',
 					'menu' : 'addvideo',
-					'albumoption' : albumoption
+					'albumoption' : albumoption,
+					'optionTab' : JSON.stringify(arr)
 				});
 
 				db.close();
@@ -385,6 +391,7 @@ app.post('/', function(req, res){
 	}else if(param.type && param.type === 'setalbum'){//存储专辑信息
 
 		param.time = Date.now();//定义一个更新时间
+		param.counts = Number(0);//初始视频个数都是0
 
 		//这里定义多一个CID作为查询主键入库
 		param.cid = utils.randomString(16);
@@ -408,15 +415,20 @@ app.post('/', function(req, res){
 		param.playcount = Math.random() * 1000 >> 0; //随机定义一个初始播放量，你懂的 :)
 
 		MongoClient.connect(DB_CONN_STR, function(err, db) {
-			insertData(db, 'video', param, function(result) {
-				//写入数据表成功
-				var _res = {
-					status: 'ok',
-					vid: result.ops[0].vid
-				}
-				res.send(_res);
-				db.close();
-			});
+				insertData(db, 'video', param, function(result) {
+					//更新对应专辑下的视频个数
+					db.collection('album').findAndModify(
+						{ cid: param.cid }, [],
+						{ $inc: { "counts": 1 } },
+						{ upsert: true, new: true },
+						function(err, doc) {
+							// res.send(doc.value);
+							res.send({status: 'ok', vid: result.ops[0].vid});
+							db.close();
+						}
+					);
+				});
+
 		});
 	}else if(param.type && param.type === 'updateVideo'){//更新视频信息
 
@@ -426,11 +438,7 @@ app.post('/', function(req, res){
 			db.collection('video').update({vid: param.vid}, param);
 
 			//写入数据表成功
-			var _res = {
-				status: 'ok',
-				type: 'updateVideo'
-			}
-			res.send(_res);
+			res.send({status: 'ok', type: 'updateVideo'});
 			db.close();
 		});
 	}else if(param.type && param.type === 'updateAlbum'){//更新专辑信息
@@ -469,17 +477,17 @@ app.post('/', function(req, res){
 
 app.get('/uptoken', function(req, res){
 	var myUptoken = new qiniu.rs.PutPolicy(FADE.buket);
-    var token = myUptoken.token();
-    // moment.locale('en');
-    // var currentKey = moment(new Date()).format('YYYY-MM-DD-HH:mm:ss');
-    res.header("Cache-Control", "max-age=0, private, must-revalidate");
-    res.header("Pragma", "no-cache");
-    res.header("Expires", 0);
-    if (token) {
-        res.json({
-            uptoken: token
-        });
-    }
+	var token = myUptoken.token();
+	// moment.locale('en');
+	// var currentKey = moment(new Date()).format('YYYY-MM-DD-HH:mm:ss');
+	res.header("Cache-Control", "max-age=0, private, must-revalidate");
+	res.header("Pragma", "no-cache");
+	res.header("Expires", 0);
+	if (token) {
+		res.json({
+			uptoken: token
+		});
+	}
 });
 
 // 持久化数据处理，对已有key的文件做处理，可以对视频转码、截图(有坑)
@@ -498,9 +506,9 @@ app.get('/pfop', function(req, respon){
 		if (res.statusCode == 200) {
 			respon.send(res);
 
-	    } else {
+		} else {
 			respon.send(err);
-	    }
+		}
 	});
 
 });
@@ -544,6 +552,6 @@ app.get('/onLogin', function(req, res){
 });
 
 app.listen(app.get('port'), function () {
-    console.log( '服务器启动完成，端口为： '+app.get('port') );
+	console.log( '服务器启动完成，端口为： '+app.get('port') );
 });
 
