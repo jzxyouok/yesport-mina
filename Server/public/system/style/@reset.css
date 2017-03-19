@@ -1,0 +1,119 @@
+/*===========================================
+		项目: 腾讯视频
+		作者: blankyu
+		日期: 2013-01-29
+		作用: 全站样式reset
+===========================================*/
+html{
+	color:#434a54;
+	background-color:#F1F2F6;
+	-webkit-text-size-adjust:100%;
+	-ms-text-size-adjust:100%;
+	-webkit-tap-highlight-color:rgba(0,0,0,0);
+}
+body,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td,hr,button,article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{
+	margin:0;
+	padding:0;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{
+	display:block;
+}
+audio,canvas,video{
+	display:inline-block;
+	*display:inline;
+	*zoom:1;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+body,button,input,select,textarea{
+	font:16px/1.5 tahoma,arial,'microsoft yahei',sans-serif;
+}
+h1,h2,h3,h4,h5,h6{
+	font-size:1em;
+}
+a{
+	text-decoration:none;
+}
+a:active{
+	outline:0 none;
+}
+strong,small,cite,code,em,th,i,b{
+	font-size:1em;
+	font-style:normal;
+	font-weight:normal;
+}
+input,select,textarea,button{
+	font-size:1em;
+}
+textarea{
+	resize:vertical;
+	overflow:auto;
+	vertical-align:top;
+}
+input[type=text]:focus,textarea:focus{
+	outline:0 none;
+}
+input[type="text"],
+input[type="submit"],
+input[type="reset"],
+input[type="button"],
+textarea,
+button{
+	-webkit-appearance: none;
+}
+table{
+	border-collapse:collapse;
+	border-spacing:0;
+}
+fieldset,img,iframe{
+	border:0 none;
+}
+img{
+	display:inline-block;
+	vertical-align:bottom;
+}
+iframe{
+	display:block;
+}
+ul,ol{
+	list-style:none;
+}
+li{
+	vertical-align:top;
+}
+q:before,q:after{
+	content:'';
+}
+div,span,a,em,strong{
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+/* 清理浮动 */
+/*.cl {
+	clear: both;
+	display: block;
+	overflow: hidden;
+	visibility: hidden;
+	width: 0;
+	height: 0;
+	line-height: 0;
+}*/
+.cf:before, .cf:after {
+	content: '';
+	display: table;
+}
+.cf:after {
+	clear: both
+}
+
+*,
+*:before,
+*:after,{
+	-webkit-box-sizing:border-box;
+	box-sizing:border-box;
+}
+.none{
+	display: none;
+}

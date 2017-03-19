@@ -1,0 +1,313 @@
+.playlist-wrap{
+
+}
+.playlist-wrap .input-group-addon{
+	width: auto;
+}
+.playlist-wrap .btn{
+	border-radius: 3px;
+}
+/* 搜索 */
+.form-playlist-search .form-control{
+	margin-right: 15px;
+}
+.form-playlist-search .btn-line .btn{
+	width: 5em;
+	text-align: center;
+}
+@media (min-width: 768px){
+	.form-playlist-search input.form-control{
+		width: 10em;
+	}	
+}
+
+/* 表格 */
+.playlist-wrap .panel-success .panel-body{
+	padding: 0;
+}
+.playlist-wrap thead tr th{
+	text-align: center;
+}
+.table-playlist thead tr:nth-child(1){
+	width: 3em;
+}
+.table-playlist tr td:nth-child(2){
+	width: 4em;
+}
+.table-playlist tr td:nth-child(3){
+	min-width: 10em;
+}
+.table-playlist tr td:nth-child(4){
+	width: 4em;
+}
+.table-playlist tr td:nth-child(5){
+	width: 11em;
+}
+.table-playlist tr td:nth-child(6){
+	text-transform: capitalize;
+	white-space: normal;
+	width: 5em;
+}
+.playlist-wrap .table{
+	text-align: center;
+}
+.playlist-wrap .table .btn{
+	padding: 3px 8px;
+	font-size: 14px;
+}
+.playlist-wrap .table .btn:nth-child(n+2){
+	margin-left: 8px;
+}
+.playlist-wrap tr td:last-child{
+	padding: 8px 0;
+}
+
+/* 看单表格 */
+.panel-head{
+	margin-bottom: 20px;
+	padding: 10px;
+	text-align: center;
+	background-color: #eee;
+	border-radius: 4px;
+}
+.panel-head .panel-title{
+	font-size: 22px;
+	color: #333;
+	font-weight: normal;
+}
+.panel-head .panel-title .title{
+	font-size: 24px;
+	font-weight: normal;
+}
+/*.panel-head .panel-title a{
+	color: #5CB85C;
+}*/
+.panel-head .panel-title .desc{
+	font-size: 16px;
+	color: #A0A0A0;
+}
+.panel-head .panel-title .desc:before,
+.panel-head .panel-title .desc:after{
+	content:'<';
+	display: inline-block;
+	padding-right: 5px;
+	margin-left: 5px;
+	font-size: 14px;
+	vertical-align: 1px;
+	color: #ccc;
+}
+.panel-head .panel-title .desc:after{
+	content:'>';
+}
+.panel-head .panel-title .preview{
+	font-size: 16px;
+	color: #444;
+}
+.panel-head .panel-title a{
+	font-size: 14px;
+}
+.panel-head .panel-title .btn{
+	padding: 3px 10px;
+	font-size: 13px;
+	font-weight: normal;
+}
+
+
+.content-side{
+	float: left;
+	width: 200px;
+}
+.content-main{
+	margin-left: 220px;
+}
+
+
+/* 左侧图 */
+.content-side-pic .pic img,
+.content-side-pic .pic video{
+	max-width: 100%;
+	padding: 3px;
+	border: 1px solid #E6E9ED;
+	border-radius: 3px;
+}
+.content-side-pic .btn{
+	display: block;
+	margin: 10px auto 20px;
+	padding: 3px 12px;
+	font-size: 14px;
+}
+.content-side-pic .desc{
+	text-align: center;
+	font-size: 14px;
+}
+.content-side-pic .pic{
+	position: relative;
+	text-align: center;
+	color: #666;
+	font-size: 14px;
+	min-height: 110px;
+}
+
+
+/* 编辑表单 */
+.form-detail-edit .form-control{
+	display: inline-block;
+	width: 55%;
+	/*min-width: 200px;*/
+}
+.form-detail-status textarea.form-control,
+.form-detail-edit textarea.form-control{
+	display: inline-block;
+	width: 80%;
+	max-width: -webkit-calc(100% - 7em);
+	max-width: calc(100% - 7em);
+}
+.form-detail-status .operator-recoard{
+	display: inline-block;
+	padding-left: 20px;
+	vertical-align: middle;
+}
+.form-detail-status .operator{
+	text-transform: capitalize;
+	color: #333;
+}
+.form-detail-status textarea.form-control{
+	max-width: -webkit-calc(100% - 7em);
+	max-width: calc(100% - 7em);
+}
+
+
+
+/* 看单资料列表 */
+.table-playlist-detail tr td:nth-child(1),
+.table-playlist-relative tr td:nth-child(1){
+	width: 1em;
+}
+.table-playlist-detail tr td:nth-child(2),
+.table-playlist-relative tr td:nth-child(2){
+	width: 2em;
+}
+.table-playlist-detail tr th:nth-child(4),
+.table-playlist-detail tr td:nth-child(4),
+.table-playlist-relative tr th:nth-child(3),
+.table-playlist-relative tr td:nth-child(3){
+	font-size: 14px;
+	width: 7em;
+}
+.table-playlist-detail tr td:nth-child(7),
+.table-playlist-relative tr td:nth-child(5){
+	width: 4em;
+}
+.table-playlist-detail tr td:nth-child(8),
+.table-playlist-relative tr td:nth-child(6){
+	width: 3em;
+}
+.table-playlist-detail tr td:nth-last-child(2),
+.table-playlist-relative tr td:nth-last-child(2){
+	font-size: 14px;
+	width: 11em;
+	padding-top: 10px;
+}
+.table-playlist-detail tr td:last-child{
+	min-width: 11em;
+}
+.table-playlist-relative tr td:last-child{
+	min-width: 7em;
+}
+.table-checkbox-operate{
+	padding-bottom: 8px;
+	/*border-bottom: 1px solid #E6E9ED;*/
+}
+.table-checkbox-operate .btn{
+	font-size: 13px;
+	padding: 3px 8px;
+}
+.table-checkbox-operate .btn{
+	margin-right: 8px;
+}
+.table-checkbox-operate .btn:after{
+
+}
+.table-checkbox-operate .gap{
+	margin-right: 8px;
+}
+
+/* 看单详情编辑 */
+.modal-form{
+	vertical-align: top;
+}
+.modal-form .modal-dialog{
+	width: 500px;
+}
+.modal-form .form-control{
+	display: inline-block;
+	width: 24em;
+}
+.modal-form .control-label{
+	width: 6em;
+	text-align: right;
+	font-weight: normal;
+}
+.modal-form .alert{
+	padding: 8px 10px;
+	margin-bottom: 0;
+	font-size: 14px;
+}
+/* 搜索 */
+.playlist-search{
+	margin-bottom: 20px;
+	/*text-align: center;*/
+}
+.playlist-search .form-control{
+	display: inline-block;
+	width: 15em;
+	margin-right: 8px;
+	vertical-align: top;
+}
+.playlist-detail-search label{
+	vertical-align: middle;
+	margin-bottom: 0;
+}
+.playlist-detail-search .form-group{
+	display: inline-block;
+}
+.playlist-detail-search .form-control{
+	display: inline-block;
+	width: 15em;
+	margin-right: 8px;
+}
+.playlist-detail-search select.form-control{
+	width: auto;
+}
+/* 新建看单 */
+.form-playlist-add .control-label{
+	width: 5em;
+}
+.form-playlist-add .btn-line{
+	text-align: left;
+}
+.form-playlist-add .btn-line .btn{
+	display: inline-block;
+	margin-left: 6em;
+	margin-top: 10px;
+	width: 6em;
+}
+.form-playlist-add textarea.form-control{
+	width: 60%;
+	min-width: 20em;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

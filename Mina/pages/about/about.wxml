@@ -1,0 +1,10 @@
+<view class="userinfo">
+    <image class="avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+    <text class="nickname">{{userInfo.nickName}}</text>
+    <text class="title">产品总监</text>
+    <text class="subtit">夜动体育</text>
+    <view class="txt"><image src="../../static/icon-tel.png"></image>13751700752</view>
+    <view class="txt"><image src="../../static/icon-mail.png"></image>kuepay@foxmail.com</view>
+    <view class="txt"><image src="../../static/icon-site.png"></image>www.yechtv.com</view>
+    <view class="txt"><image src="../../static/icon-addre.png"></image>广东省广州市天河区华强路2号富力盈丰A623</view>
+</view>

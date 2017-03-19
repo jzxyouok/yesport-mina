@@ -1,0 +1,115 @@
+.column-wrap{
+
+}
+.column-wrap .input-group-addon{
+	width: auto;
+}
+.column-wrap .btn{
+	border-radius: 3px;
+}
+/* 搜索 */
+.form-column-search{
+	font-size: 14px;
+}
+.form-column-search .form-control{
+	margin-right: 10px;
+}
+.form-column-search .control-label{
+	width: 5.5em;
+	text-align: right;
+}
+.form-column-search .btn-line{
+	display: block;
+}
+.form-column-search .btn-line .btn{
+	width: 5em;
+	text-align: center;
+}
+@media (min-width: 768px){
+	.form-column-search .form-control{
+		width: 10em;
+	}	
+}
+
+/* 表格 */
+.column-wrap .panel-success .panel-body{
+	padding: 0;
+}
+.column-wrap thead tr th{
+	text-align: center;
+}
+.column-wrap .table{
+	text-align: center;
+}
+.column-wrap .table .btn{
+	padding: 3px 8px;
+	font-size: 14px;
+}
+.column-wrap .table .btn:nth-child(n+2){
+	margin-left: 8px;
+}
+.column-wrap tr td:last-child{
+	padding: 8px 0;
+}
+
+
+/* 特殊广告位 */
+.form-ads-advanced .form-control{
+	display: inline-block;	
+	width: 10em;
+}
+.form-ads-advanced .form-control-datatime{
+	width: 12em;
+}
+
+/* 栏目状态 */
+.table-column-platform,
+.table-column-platform-status{
+	table-layout: fixed;
+	/*border: 1px solid #ddd;*/
+}
+.table-column-platform td,
+.table-column-platform-status td{
+	width: 14.2857143%;
+}
+.table-column-platform th:first-child,
+.table-column-platform-status th:first-child{
+	width: 5.5em;
+}
+.table-column-platform-status .glyphicon{
+	color: #44B549;
+}
+
+/* 新建栏目 */
+.form-column-add .control-label{
+	width: 5em;
+	text-align: right;
+}
+.form-column-add .btn-line{
+	margin-left: 5.3em;
+	text-align: left;
+}
+.form-column-add .btn-line .btn{
+	width: 6em;
+}
+
+
+
+/* 栏目编辑 */
+.column-wrap .form-detail-edit input.form-control{
+	width: 220px;
+}
+.column-wrap .form-detail-edit .control-label{
+	width: 7em;
+	text-align: right;
+}
+.column-wrap .form-detail-edit .from-control-line+.from-control-line{
+	margin-left: 7.3em;
+}
+.column-wrap .form-detail-edit input.form-control-widely{
+	width: 50%;
+}
+.column-wrap .form-detail-edit .help-block,
+.column-wrap .form-detail-edit .control-img-preview{
+	margin-left: 7.3em;
+}

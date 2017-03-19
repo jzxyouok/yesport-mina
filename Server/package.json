@@ -10,6 +10,7 @@
     "moment": "^2.17.1",
     "path": "^0.12.7",
     "qiniu": "^6.1.13",
+    "request": "^2.81.0",
     "swig": "^1.4.2"
   },
   "devDependencies": {},

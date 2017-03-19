@@ -1,0 +1,51 @@
+.form-crias{
+	padding-left: 75px;
+}
+.form-crias .form-group{
+	width: 100%;
+}
+.group-radio{
+	margin-right: 30px;
+	font-weight: normal;
+}
+.form-group input[type=file]{
+	display: inline-block;
+}
+.icon-status{
+	display: inline-block;
+	vertical-align: top;
+	margin: -2px 0 0 0;
+	/*margin: 0 auto;*/
+	width: 22px;
+	height: 22px;
+	line-height: 22px;
+	text-align: center;
+	border: 1px solid #666;
+	color: #666;
+	border-radius: 50%;
+}
+.status-right{
+	color: #fff;
+	background: #38AB50;
+	border-color: #38AB50;
+}
+.status-wrong{
+	color: #fff;
+	background: #B34546;
+	border-color: #B34546;
+}
+.cover-wrap .btn-line{
+	margin: 30px 0;
+}
+
+.mod-textarea{
+	display: inline-block;
+	background: #fff;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	width: 100%;
+	height: 5em;
+}
+
+
+

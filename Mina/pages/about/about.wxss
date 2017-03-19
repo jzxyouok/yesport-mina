@@ -1,0 +1,48 @@
+.userinfo{
+    border: 10rpx solid #f0f0ff;
+    background: #fafaff;
+    margin: 0 0 40rpx;
+    padding-bottom: 50rpx;
+    position: relative;
+    min-height: 300rpx;
+    box-sizing: border-box;
+    padding: 80rpx 0 0 48rpx;
+    font-size: 24rpx;
+}
+.avatar{
+    width: 160rpx;
+    height: 160rpx;
+    border-radius: 50%;
+    border: 1rpx solid #f0f0ff;
+    position: absolute;
+    top: 60rpx;
+    right: 50rpx;
+}
+.userinfo view,
+.userinfo text{
+    display: block;
+    font-size: 28rpx;
+    line-height: 1;
+    min-height: 1;
+    margin-bottom: 25rpx;
+    color: #999;
+}
+.userinfo .nickname{
+    font-size: 45rpx;
+    color: #666;
+    /*min-height: 45rpx;*/
+    font-weight: bold;
+}
+.userinfo .title{
+    color: #999;
+    margin-bottom: 50rpx;
+}
+.userinfo .subtit{
+    color: #666;
+}
+.userinfo .txt image{
+    width: 26rpx;
+    height: 26rpx;
+    margin-right: 8rpx;
+    opacity: .7;
+}

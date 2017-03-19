@@ -1,0 +1,118 @@
+.form-detail-edit-cover .form-control-inline{
+	min-width: 0;
+}
+.form-detail-edit-cover .form-group .control-label{
+	width: 8em;
+	text-align: right;
+}
+.form-detail-comments-cover .control-label{
+	width: 9em;
+	text-align: right;
+}
+.form-detail-edit-cover .from-control-line .form-control{
+	width: 170px;
+}
+.form-detail-edit-cover .from-control-line+.from-control-line{
+	margin-left: 8.2em;
+}
+/*
+.form-comments-cover select.form-control{
+	width: 5em;
+}
+.form-comments-cover .form-groups-3 .form-group{
+	width: 240px;
+	margin-right: 10px;
+}
+.form-comments-cover .form-groups-3 .form-group:nth-child(3){
+	width: auto;
+	margin-right: 0;
+}*/
+.form-comments .form-groups-3 .form-group{
+	width: auto;
+}
+.form-comments .form-groups-3 .control-label{
+	width: 9em;
+	text-align: right;
+}
+.list-search .form-group,
+.list-search .form-control{
+	display: inline-block;
+	width: auto;
+	vertical-align: middle;
+}
+
+.list-search-cover .form-group:nth-child(1):after{
+	content: '|';
+	margin: 0 5px;
+	color: #aaa;
+}
+
+/* 版权 */
+.form-copyright .form-group .control-label{
+	width: 7em;
+	text-align: right;
+}
+.form-copyright .form-group select.form-control{
+	width: 80px;
+	min-width: 0;
+}
+
+
+/* 转码 */
+.tab-pane .form-transcoding{
+	margin-bottom: 0;
+	padding: 10px 0;
+}
+.form-transcoding .control-label{
+	width: 10em;
+	text-align: right;
+}
+.form-transcoding select.form-control-inline{
+	width: 140px;
+}
+
+/* 添加专辑 */
+.form-cover-add .control-label{
+	width: 7em;
+	text-align: right;
+	padding: 0;
+}
+.form-cover-add .form-group .fn-upload{
+	display: inline-block;
+}
+.form-cover-add .form-group .form-control{
+	width: 190px;
+}
+// .form-cover-add .form-group .form-control-long{
+// 	width: 400px;
+// }
+.form-cover-add .btn-line .btn{
+	width: 8em;
+}
+
+.preview-cont{
+	width: 20%;
+	position: absolute;
+	right: 0;
+	top: 0;
+	display: none;
+	text-align: center;
+	font-size: 12px;
+	color: #666;
+	-webkit-transform: translateY(-50%);
+}
+.preview-cont img,
+.preview-cont video{
+	width: 100%;
+}
+.fn-upload .preview-cont{
+	width: 50%;
+	right: auto;
+	left: 100%;
+}
+
+/* 外站关联 */
+.form-external .control-label{
+	width: 8em;
+	text-align: right;
+}

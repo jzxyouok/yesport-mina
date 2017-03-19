@@ -1,0 +1,59 @@
+.task-list{
+	margin: 0 30%;
+}
+.task-list .item{
+	min-height: 20px;
+	position: relative;
+	padding-left: 85px;
+	margin-bottom: 15px;
+}
+.task-list .item .label{
+	position: absolute;
+	width: 75px;
+	left: 0;
+	top: 0;
+	line-height: normal;
+	color: #999;
+	text-align: right;
+	font-weight: normal;
+	font-size: 14px;
+	padding: 0;
+}
+.task-list .item .content{
+	font-size: 14px;
+}
+.task-list .content .tags{
+	border: 1px solid #ccc;
+	border-radius: 2px;
+	color: #666;
+	display: inline-block;
+	line-height: 23px;
+	padding: 0 5px;
+	margin-right: 10px;
+}
+.task-list .content .thumb{
+	display: inline-block;
+	margin-right: 10px;
+}
+.task-list .content .thumb img{
+	width: 110px;
+	height: 110px;
+}
+.task-list .item .btn-line{
+	text-align: left;
+}
+.panel-body-task{
+	position: relative;
+}
+.panel-body-task .btn-warning{
+	position: absolute;
+	top: 30%;
+}
+.panel-body-task .btn-prev{
+	left: 10%;
+}
+.panel-body-task .btn-next{
+	right: 10%;
+}
+
+
