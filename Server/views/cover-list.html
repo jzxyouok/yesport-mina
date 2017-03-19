@@ -47,7 +47,10 @@
 							<td data-value="已下架">已下架</td>
 							{% endif %}
 							<td class="timestamp" data-timestamp='{{items.time}}'>{{items._time}}</td>
-							<td><a class="btn btn-info" href="/album/detail?cid={{items.cid}}">编辑</a></td>
+							<td>
+								<a class="btn btn-info" href="/album/detail?cid={{items.cid}}">编辑</a>
+								<a class="btn btn-danger ac-delete" data-cid="{{items.cid}}" data-title="{{ items.title }}" href="javascript:;">删除</a>
+							</td>
 							</tr>
 						{% endfor %}
 						</tbody>
@@ -89,6 +92,7 @@
 <script>
 $(function(){
 
+	//更新序列号
 	$("#btn-updateOrder").on("click", function(){
 		var order = [];
 		$("#list-album tr").each(function(i){
@@ -115,6 +119,36 @@ $(function(){
 				}
 			}
 		});
+	});
+
+	//删除专辑，如果专辑不为空，把所属的视频列表放到默认专辑
+	$(".ac-delete").on("click", function(){
+		var that = $(this),
+			cid = that.attr('data-cid'),
+			txt = that.attr('data-title');
+		if (that.attr("disabled") === 'disabled') return;
+
+		if(confirm("确定要删除"+txt+"吗？")){
+			$.ajax({
+				url: '/',
+				method: 'post',
+				timeout: 6000,
+				before: function(){
+					that.attr('disabled', 'disabled');
+				},
+				data: {
+					'ac': 'delete',
+					'type': 'album',
+					'cid': cid
+				},
+				success: function(data){
+					if (data['status']) {
+						alert('提交成功，跳转到专辑列表！');
+						window.location.href = '/album/list';
+					}
+				}
+			});
+		}
 	});
 });
 </script>

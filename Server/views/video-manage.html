@@ -78,7 +78,7 @@
 								<td class="time" data-timestamp='{{items.time}}'>{{items._time}}</td>
 								<td>
 									<a class="btn btn-info" href="/video/detail?vid={{items.vid}}">编辑</a>
-									<a class="btn btn-danger" href="/video/detail?ac=delete&vid={{items.vid}}">删除</a>
+									<a class="btn btn-danger ac-delete" data-vid="{{items.vid}}" data-cname="{{items.cname}}" href="javascript:;">删除</a>
 								</td>
 							</tr>
 							{%endfor%}
@@ -93,7 +93,8 @@
 					</div>
 				</div>
 			</div>
-			<div class="panel panel-danger">
+
+			<div class="panel panel-danger" style="display: none;">
 				<div class="panel-heading">
 					<h3 class="panel-title">未找到视频</h3>
 				</div>
@@ -113,9 +114,34 @@
 	<script src="/public/system/js/utils.js"></script>
 	<script>
 	$(function(){
-		// $("#list-video .time").each(function(i, items){
-		// 	console.log(timeFormat($(this).text()))
-		// });
+		$(".ac-delete").on("click", function(){
+			var that = $(this),
+				vid = that.attr('data-vid'),
+				txt = that.attr('data-cname');
+			if (that.attr("disabled") === 'disabled') return;
+
+			if(confirm("确定要删除"+txt+"吗？")){
+				$.ajax({
+					url: '/',
+					method: 'post',
+					timeout: 6000,
+					before: function(){
+						that.attr('disabled', 'disabled');
+					},
+					data: {
+						'ac': 'delete',
+						'type': 'video',
+						'vid': vid
+					},
+					success: function(data){
+						if (data['ok']) {
+							alert('提交成功，跳转到视频列表！');
+							window.location.href = '/video/list';
+						}
+					}
+				});
+			}
+		});
 	});
 	</script>
 {% endblock %}

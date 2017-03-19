@@ -1,14 +1,14 @@
-var url = require('url');
-var qs = require('querystring');
-var request = require('request');
-var fs = require('fs');
-var express = require('express');
-var app = express();
-var path = require('path');
-var swig  = require('swig');
-var moment = require('moment');
-var utils  = require('./utils/utils');
-var FADE  = require('./utils/fadecode');//appid等重要信息
+var url = require('url'),
+	qs = require('querystring'),
+	request = require('request'),
+	fs = require('fs'),
+	express = require('express'),
+	app = express(),
+	path = require('path'),
+	swig  = require('swig'),
+	moment = require('moment'),
+	utils  = require('./utils/utils'),
+	FADE  = require('./utils/fadecode');//appid等重要信息
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
@@ -415,20 +415,35 @@ app.post('/', function(req, res){
 		param.playcount = Math.random() * 1000 >> 0; //随机定义一个初始播放量，你懂的 :)
 
 		MongoClient.connect(DB_CONN_STR, function(err, db) {
-				insertData(db, 'video', param, function(result) {
-					//更新对应专辑下的视频个数
-					db.collection('album').findAndModify(
-						{ cid: param.cid }, [],
-						{ $inc: { "counts": 1 } },
-						{ upsert: true, new: true },
-						function(err, doc) {
-							// res.send(doc.value);
-							res.send({status: 'ok', vid: result.ops[0].vid});
-							db.close();
-						}
-					);
-				});
+			insertData(db, 'video', param, function(result) {
+				//更新对应专辑下的视频个数
+				db.collection('album').findAndModify(
+					{ cid: param.cid }, [],
+					{ $inc: { "counts": 1 } },
+					{ upsert: true, new: true },
+					function(err, doc) {
+						// res.send(doc.value);
+						res.send({status: 'ok', vid: result.ops[0].vid});
+						db.close();
+					}
+				);
+			});
 
+		});
+	}else if(param.vid && param.type === 'playvideo'){//用户播放视频，更新播放量、写入历史记录等操作
+
+		// param.time = Date.now();
+		
+		MongoClient.connect(DB_CONN_STR, function(err, db) {
+			db.collection('video').findAndModify(
+				{ vid: param.vid }, [],
+				{ $inc: { "playcount": 1 } },
+				{ upsert: true, new: true },
+				function(err, doc) {
+					res.send({status: 'ok', msg: 'success'});
+					db.close();
+				}
+			);
 		});
 	}else if(param.type && param.type === 'updateVideo'){//更新视频信息
 
@@ -440,6 +455,34 @@ app.post('/', function(req, res){
 			//写入数据表成功
 			res.send({status: 'ok', type: 'updateVideo'});
 			db.close();
+		});
+	}else if(param.ac === 'delete'){//删除专辑or视频
+		
+		MongoClient.connect(DB_CONN_STR, function(err, db) {
+			if (param.type === 'video') {
+				db.collection('video').findAndRemove({ vid: param.vid }, [],
+					function(err, doc) {
+						res.send(doc);
+						db.close();
+					}
+				);
+			}else if(param.type === 'album'){
+				db.collection('album').findAndRemove(
+					{ cid: param.cid }, [],
+					function(err, doc) {
+						db.collection('video').update(
+							{cid: param.cid},
+							{$set:
+								{'cname': '请选择专辑', 'cid': '-1'}
+							},
+							{multi: true} //找到的视频列表全部都改了
+						);
+
+						res.send({status: 'ok', msg: 'delete album success'});
+						db.close();
+					}
+				);
+			}
 		});
 	}else if(param.type && param.type === 'updateAlbum'){//更新专辑信息
 

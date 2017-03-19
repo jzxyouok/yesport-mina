@@ -40,7 +40,7 @@ Page({
 
               //写入同系列是否有收藏的对象字段
               var likelist = wx.getStorageSync('likelist') || [];
-              for(var k = 0;k < curdata.length;k ++){
+              for(let k = 0;k < curdata.length;k ++){
                 if('liked' == utils.likeStatus(curdata[k].vid, likelist)){
                   curdata[k].like = true
                 }else{
@@ -104,7 +104,7 @@ Page({
                   loadst: 'fail'
                 });
             }
-          })
+          });
       }else if(options.vid){
           //拉取单个视频
           var vid = options.vid;
@@ -123,7 +123,7 @@ Page({
 
               //写入同系列是否有收藏的对象字段
               var likelist = wx.getStorageSync('likelist') || [];
-              for(var k = 0;k < albumvlist.length;k ++){
+              for(let k = 0;k < albumvlist.length;k ++){
                 if('liked' == utils.likeStatus(albumvlist[k].vid, likelist)){
                   albumvlist[k].like = true
                 }else{
@@ -209,7 +209,7 @@ Page({
       iconlike: 'd'
     });
 
-    for(var i = 0; i < listAlbum.length;i++){
+    for(let i = 0; i < listAlbum.length;i++){
       if(vid === listAlbum[i].vid){
 
         //更新标题栏
@@ -220,10 +220,10 @@ Page({
         this.setData({
           curvideo: listAlbum[i].source,
           curtitle: listAlbum[i].title,
-          // curUrl: '/page/detail/detail?vid='+listAlbum[i].vid,
           cursummary: listAlbum[i].content,
-          curPro: listAlbum[i].production
-        })
+          curPro: listAlbum[i].production,
+          playcount: utils.numconvert(listAlbum[i].playcount)
+        });
       }
     };
 
@@ -320,9 +320,20 @@ Page({
     // }    
   },
   bindplay: function(e){
-    var vid = this.data.vid;
-    //记录到hisStorage观看记录，点击播放触发
-    utils.setStorage(vid);
+    var pc = this.data.playcount,
+        pc = Number(pc.replace(',', '')),
+        obj = {
+          vid : this.data.vid,
+          playcount : pc
+        },
+        that = this;
+    //记录到playvideo()观看记录，点击播放触发
+    utils.playvideo(obj, function(res){
+      that.setData({
+        playcount: utils.numconvert(pc + 1)
+      });
+    });
+
   },
   showmore: function(){
     this.setData({

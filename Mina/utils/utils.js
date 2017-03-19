@@ -28,51 +28,61 @@ function getLocalHis(array){
 
 //存储专辑信息
 function setAlbumList(cid, data){
-    var time = new Date().getTime();
-    var albumDataArr = wx.getStorageSync('albumListData') ? wx.getStorageSync('albumListData') : [],
+    let time = new Date().getTime();
+    let albumDataArr = wx.getStorageSync('albumListData') ? wx.getStorageSync('albumListData') : [],
         obj = {};
         obj.cid = cid;
         obj.data = data;
       albumDataArr.push(obj);
-    var _arr = uniqueCID(albumDataArr);
+    let _arr = uniqueCID(albumDataArr);
 
       wx.setStorageSync('albumListData', _arr);
 };
 
 //更新历史观看记录
-function setStorage(vid){
-    var time = new Date().getTime(),
-        obj = {};
+function playvideo(data, cb){
+    let time = new Date().getTime(),
+        obj = {},
+        vid = data.vid,
+        playcount = data.playcount;
 
     wx.getStorage({
       key: "historyStor",
       success: function(res){
-        var historyStor = res.data;
+        let historyStor = res.data;
         //push后再去重
         obj.vid = vid;
         obj.time = time;
 
         historyStor.push(obj);
-        var nh = unique(historyStor);
+        let nh = unique(historyStor);
 
-        wx.setStorage({
-          key: 'historyStor',
-          data: nh
-        });
+        wx.setStorageSync('historyStor', nh);
       },
       fail: function(res){
         //如果没有找到本地缓存，就新建一个数组对象存储vid
-        var historyStor = [];
+        let historyStor = [];
         obj.vid = vid;
         obj.time = time;
         historyStor.push(obj);
-
-        wx.setStorage({
-          key: 'historyStor',
-          data: historyStor
-        });
+        wx.setStorageSync('historyStor', historyStor);
       }
     });
+
+    wx.request({
+      url: conf.apiURL,
+      data: {
+        type: 'playvideo',
+        vid: vid
+      },
+      method: 'POST',
+      success: function(res){
+        typeof cb == "function" && cb(res.data);
+      },
+      fail: function(err) {
+        console.log(err);
+      }
+    })
 };
 
 //用户关闭或者离开当前页面onHide/onUnload 的时候触发，把用户资料和本地数据更新到接口
@@ -111,19 +121,6 @@ function upRemoteData(userInfo, cb){
         }
       });
 
-};
-
-function formatTime(date) {
-  var year = date.getFullYear()
-  var month = date.getMonth() + 1
-  var day = date.getDate()
-
-  var hour = date.getHours()
-  var minute = date.getMinutes()
-  var second = date.getSeconds()
-
-
-  return [year, month, day].map(formatNumber).join('/') + ' ' + [hour, minute, second].map(formatNumber).join(':')
 };
 
 function formatNumber(n) {
@@ -229,8 +226,7 @@ function numconvert(nStr){
 
 module.exports = {
   getLocalHis: getLocalHis,
-  setStorage: setStorage,
-  formatTime: formatTime,
+  playvideo: playvideo,
   isEmail: isEmail,
   timeFormat: timeFormat,
   likeStatus: likeStatus,

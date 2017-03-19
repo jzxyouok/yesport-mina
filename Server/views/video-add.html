@@ -314,9 +314,11 @@ $(function(){
 				'content': $("#vsum").val()
 			},
 			success: function(data){
-				console.log(data);
-				// alert('提交成功，跳转到专辑管理！');
-				// window.location.href = '/video/list';
+				// console.log(data);
+				if(data['status']){
+					alert('提交成功，跳转到视频列表！');
+					window.location.href = '/video/list';
+				}
 			}
 		});
 	});
