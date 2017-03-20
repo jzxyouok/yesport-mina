@@ -24,6 +24,7 @@ Page({
   },
   onLoad:function(options){
       var that = this;
+      var options = options || {}; options.cid = '2G2BNiWtfbB14Fi8';// debug model
       if(options.cid){
           //拉取专辑列表
           var cid = options.cid;

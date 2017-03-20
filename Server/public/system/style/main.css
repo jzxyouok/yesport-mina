@@ -7,3 +7,48 @@
 @import url(@cover.css);
 @import url(@video.css);
 @import url(@live.css);
+
+.form-artist-add .fn-upload{
+	display: inline-block;
+}
+.form-artist-add .form-control-input{
+	width: 200px;
+	height: 34px;
+	line-height: 34px;
+	vertical-align: middle;
+	font-size: 20px;
+	color: #666;
+	position: relative;
+	padding: 0;
+	overflow: hidden;
+}
+.form-artist-add .form-control-input:focus{
+	outline: 0;
+}
+/*.form-artist-add .form-control-input:after{
+	content: '添加相片';
+	font-size: 20px;
+	color: #666;
+	line-height: 36px;
+	height: 36px;
+	width: 100%;
+	position: absolute;
+	left: 0;
+	text-align: center;
+	top: 0;
+}*/
+.form-artist-add .control-label{
+	width: 65px;
+	text-align: right;
+}
+.form-artist-add .preview{
+	display: inline-block;
+	position: relative;
+}
+.form-artist-add .preview img{
+	width: 70px;
+	height: 70px;
+}
+
+
+

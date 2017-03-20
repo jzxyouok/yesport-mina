@@ -1,0 +1,356 @@
+{% extends '@layout.html' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block head %}
+	{% parent %}
+{% endblock %}
+
+
+{% block content %}
+	<!-- 右侧主体 开始 -->
+	<div class="site-container">
+		<div class="cover-wrap">
+			<div class="cover-add">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">添加艺人</h3>
+					</div>
+					<div class="panel-body">
+						<div class="form form-horizontal form-artist-add">
+							<div class="form-group">
+								<label class="control-label">ATID：</label>
+								<input type="text" class="form-control" value="自动生成" disabled="">
+							</div>
+
+							<div class="form-group">
+								<label class="control-label">姓名：</label>
+								<input type="text" class="form-control" id="aname">
+							</div>
+
+							<div class="form-group">
+								<label class="control-label">艺名：</label>
+								<input type="text" class="form-control" id="subname">
+							</div>
+
+							<div class="form-group">
+								<label class="control-label">身高：</label>
+								<input type="text" class="form-control" id="height">
+							</div>
+
+							<div class="form-group">
+								<label class="control-label">三围：</label>
+								<input type="text" class="form-control" id="sanwei">
+							</div>
+
+							<div class="form-group">
+								<label class="control-label">体重：</label>
+								<input type="text" class="form-control" id="weight">
+							</div>
+
+							<div class="form-group">
+								<label class="control-label">微信：</label>
+								<input type="text" class="form-control" id="wechat">
+							</div>
+
+							<div class="form-group">
+								<label class="control-label">头像：150*150　</label>
+								<div class="fn-upload">
+									<button class="form-control-input" id="avatar">添加相片</button>
+									<input type="text" class="form-control" id="prev-avatar">
+									<div class="preview" id="img-avatar"></div>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="control-label">形象片1：250*250　</label>
+								<div class="fn-upload">
+									<button class="form-control-input" id="beaut01">添加相片</button>
+									<input type="text" class="form-control" id="prev-beaut01">
+									<div class="preview" id="img-beaut01"></div>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="control-label">形象片2：250*250　</label>
+								<div class="fn-upload">
+									<button class="form-control-input" id="beaut02">添加相片</button>
+									<input type="text" class="form-control" id="prev-beaut02">
+									<div class="preview" id="img-beaut02"></div>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="control-label">形象片3：250*250　</label>
+								<div class="fn-upload">
+									<button class="form-control-input" id="beaut03">添加相片</button>
+									<input type="text" class="form-control" id="prev-beaut03">
+									<div class="preview" id="img-beaut03"></div>
+								</div>
+							</div>
+							
+							<div class="btn-line">
+								<a href="javascript:;" class="btn btn-info" id="btn-creatArtist">添加上传</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 右侧主体 结束 -->
+</div>
+{% endblock %}
+
+{% block foot %}
+	{% parent %}
+	<script src="https://cdn.staticfile.org/plupload/2.1.8/plupload.full.min.js"></script>
+	<script src="/public/system/js/qiniu.min.js"></script>
+	<script>
+		$(function(){
+			var Qiniu1 = new QiniuJsSDK();
+			var Qiniu2 = new QiniuJsSDK();
+			var Qiniu3 = new QiniuJsSDK();
+			var Qiniu4 = new QiniuJsSDK();
+
+			//灯片大图：150*150
+			var uploadthumbimg = Qiniu1.uploader({
+			    runtimes: 'html5,flash,html4',
+			    browse_button: 'avatar',
+			    uptoken_url: '/uptoken',
+			    get_new_uptoken: false,
+			    unique_names: false,
+			    save_key: false,
+			    domain: 'http://omsd78olk.bkt.clouddn.com',
+			    max_file_size: '100mb',
+			    flash_swf_url: 'https://cdn.staticfile.org/plupload/2.1.8/Moxie.swf',
+			    max_retries: 3,
+			    dragdrop: false,
+			    chunk_size: '4mb',
+			    auto_start: true,
+
+			    init: {
+			        'BeforeUpload': function(up, file) {
+			               // 每个文件上传前，处理相关的事情
+			        },
+			        'UploadProgress': function(up, file) {
+			               $("#prev-avatar").val('上传中请稍候...');
+			        },
+			        'FileUploaded': function(up, file, info) {
+
+			               var domain = up.getOption('domain');
+			               var res = JSON.parse(info);
+			               var sourceLink = domain +"/"+ res.key; //获取上传成功后的文件的Url
+			               // console.log(sourceLink);
+			               $("#prev-avatar").val(sourceLink);
+			               $("#img-avatar").html('<img src="'+sourceLink+'?imageView2/1/w/150/h/150" />');
+			        },
+			        'Error': function(up, err, errTip) {
+			               alert(errTip);
+			        }
+			    },
+			    filters : {
+				    max_file_size : '4mb',
+				    prevent_duplicates: true,
+				    mime_types: [
+				        {title : "Image files", extensions : "jpg,gif,png,jpeg"} // 限定jpg,gif,png后缀上传
+				    ]
+				}
+			});
+
+			//海报封面：250*255
+			var uploadthumbimg = Qiniu2.uploader({
+			    runtimes: 'html5,flash,html4',
+			    browse_button: 'beaut01',
+			    uptoken_url: '/uptoken',
+			    get_new_uptoken: false,
+			    unique_names: false,
+			    save_key: false,
+			    domain: 'http://omsd78olk.bkt.clouddn.com',
+			    max_file_size: '100mb',
+			    flash_swf_url: 'https://cdn.staticfile.org/plupload/2.1.8/Moxie.swf',
+			    max_retries: 3,
+			    dragdrop: false,
+			    chunk_size: '4mb',
+			    auto_start: true,
+
+			    init: {
+			        'BeforeUpload': function(up, file) {
+			               // 每个文件上传前，处理相关的事情
+			        },
+			        'UploadProgress': function(up, file) {
+			               $("#prev-beaut01").val('上传中请稍候...');
+			        },
+			        'FileUploaded': function(up, file, info) {
+
+			               var domain = up.getOption('domain');
+			               var res = JSON.parse(info);
+			               var sourceLink = domain +"/"+ res.key; //获取上传成功后的文件的Url
+			               // console.log(sourceLink);
+			               $("#prev-beaut01").val(sourceLink);
+			               $("#img-beaut01").html('<img src="'+sourceLink+'?imageView2/1/w/250/h/250" />');
+			        },
+			        'Error': function(up, err, errTip) {
+			               alert(errTip);
+			        }
+			    },
+
+			    filters : {
+				    max_file_size : '5mb',
+				    prevent_duplicates: true,
+				    // Specify what files to browse for
+				    mime_types: [
+				        {title : "Image files", extensions : "jpg,gif,png,jpeg"} // 限定jpg,gif,png后缀上传
+				    ]
+				}
+			});
+
+			//海报封面：250*255
+			var uploadthumbimg = Qiniu3.uploader({
+			    runtimes: 'html5,flash,html4',
+			    browse_button: 'beaut02',
+			    uptoken_url: '/uptoken',
+			    get_new_uptoken: false,
+			    unique_names: false,
+			    save_key: false,
+			    domain: 'http://omsd78olk.bkt.clouddn.com',
+			    max_file_size: '100mb',
+			    flash_swf_url: 'https://cdn.staticfile.org/plupload/2.1.8/Moxie.swf',
+			    max_retries: 3,
+			    dragdrop: false,
+			    chunk_size: '4mb',
+			    auto_start: true,
+
+			    init: {
+			        'BeforeUpload': function(up, file) {
+			               // 每个文件上传前，处理相关的事情
+			        },
+			        'UploadProgress': function(up, file) {
+			               $("#prev-beaut02").val('上传中请稍候...');
+			        },
+			        'FileUploaded': function(up, file, info) {
+
+			               var domain = up.getOption('domain');
+			               var res = JSON.parse(info);
+			               var sourceLink = domain +"/"+ res.key; //获取上传成功后的文件的Url
+			               // console.log(sourceLink);
+			               $("#prev-beaut02").val(sourceLink);
+			               $("#img-beaut02").html('<img src="'+sourceLink+'?imageView2/1/w/250/h/250" />');
+			        },
+			        'Error': function(up, err, errTip) {
+			               alert(errTip);
+			        }
+			    },
+
+			    filters : {
+				    max_file_size : '5mb',
+				    prevent_duplicates: true,
+				    // Specify what files to browse for
+				    mime_types: [
+				        {title : "Image files", extensions : "jpg,gif,png,jpeg"} // 限定jpg,gif,png后缀上传
+				    ]
+				}
+			});
+
+			//海报封面：250*255
+			var uploadthumbimg = Qiniu4.uploader({
+			    runtimes: 'html5,flash,html4',
+			    browse_button: 'beaut03',
+			    uptoken_url: '/uptoken',
+			    get_new_uptoken: false,
+			    unique_names: false,
+			    save_key: false,
+			    domain: 'http://omsd78olk.bkt.clouddn.com',
+			    max_file_size: '100mb',
+			    flash_swf_url: 'https://cdn.staticfile.org/plupload/2.1.8/Moxie.swf',
+			    max_retries: 3,
+			    dragdrop: false,
+			    chunk_size: '4mb',
+			    auto_start: true,
+
+			    init: {
+			        'BeforeUpload': function(up, file) {
+			               // 每个文件上传前，处理相关的事情
+			        },
+			        'UploadProgress': function(up, file) {
+			               $("#prev-beaut03").val('上传中请稍候...');
+			        },
+			        'FileUploaded': function(up, file, info) {
+
+			               var domain = up.getOption('domain');
+			               var res = JSON.parse(info);
+			               var sourceLink = domain +"/"+ res.key; //获取上传成功后的文件的Url
+			               // console.log(sourceLink);
+			               $("#prev-beaut03").val(sourceLink);
+			               $("#img-beaut03").html('<img src="'+sourceLink+'?imageView2/1/w/250/h/250" />');
+			        },
+			        'Error': function(up, err, errTip) {
+			               alert(errTip);
+			        }
+			    },
+
+			    filters : {
+				    max_file_size : '5mb',
+				    prevent_duplicates: true,
+				    // Specify what files to browse for
+				    mime_types: [
+				        {title : "Image files", extensions : "jpg,gif,png,jpeg"} // 限定jpg,gif,png后缀上传
+				    ]
+				}
+			});
+
+			$('#btn-creatArtist').click(function(){
+				var that = $(this);
+
+				if (that.attr('disabled') === 'disabled')return;
+
+				if($('#aname').val() === ''){
+					alert('请填写艺人名~');
+					return;
+				}else if($('#subname').val() === ''){
+					alert('请填写艺名~');
+					return;
+				}else if($('#height').val() === ''){
+					alert('请填写身高~');
+					return;
+				}else if($('#sanwei').val() === ''){
+					alert('请填写三围~');
+					return;
+				}else if($('#weight').val() === ''){
+					alert('请填写体重~');
+					return;
+				}else if($('#prev-avatar').val() === ''){
+					alert('请上传头像~');
+					return;
+				}
+
+				$.ajax({
+					url: '/',
+					method: 'post',
+					timeout: 6000,
+					before: function(){
+						that.attr('disabled', 'disabled');
+					},
+					data: {
+						'type': 'addartist',
+						'aname': $('#aname').val(),
+						'subname': $('#subname').val(),
+						'height': $('#height').val(),
+						'sanwei': $('#sanwei').val(),
+						'weight': $('#weight').val(),
+						'wechat': $('#wechat').val(),
+						'avatar': $('#prev-avatar').val(),
+						'beaut01': $('#prev-beaut01').val(),
+						'beaut02': $('#prev-beaut02').val(),
+						'beaut03': $('#prev-beaut03').val()
+					},
+					success: function(data){
+						console.log(data);
+						// alert('提交成功，跳转到艺人列表！');
+						// window.location.href = '/artist/list';
+					}
+				});
+			});
+		});
+	</script>
+{% endblock %}

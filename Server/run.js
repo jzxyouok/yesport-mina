@@ -231,6 +231,7 @@ app.get('/video/:type', function(req, res){
 	}
 });
 
+/*专辑管理*/
 app.get('/album/:type', function(req, res){
 	var type = req.params.type;
 	if (type === 'get') {
@@ -330,6 +331,97 @@ app.get('/album/:type', function(req, res){
 	}
 });
 
+/*用户管理*/
+app.get('/user/:type', function(req, res){
+	var type = req.params.type;
+	if(type === 'list'){
+
+		MongoClient.connect(DB_CONN_STR, function(err, db) {
+			selectData(db, 'user', function(result) {
+				for (var i = 0; i < result.length; i++) {
+					result[i]._time = moment(new Date(result[i].time)).format('YYYY-MM-DD HH:mm:ss');
+				}
+
+				res.render('user-list', {
+					'title': '用户列表',
+					'menu' : 'userlist',
+					'userlist' : result,
+					'ucounts' : result.length
+				});
+				db.close();
+			});
+		});
+		
+	}else if(type === 'detail'){
+		var openid = get_param(req).openid;
+
+		MongoClient.connect(DB_CONN_STR, function(err, db) {
+			selectDataOne(db, 'user', {openid: openid}, function(result) {
+				res.send(result);
+				db.close();
+			});
+		});
+	}else if (type === 'email') {
+
+		MongoClient.connect(DB_CONN_STR, function(err, db) {
+			selectData(db, 'mailist', function(result) {
+				for (var i = 0; i < result.length; i++) {
+					result[i]._time = moment(new Date(result[i].time)).format('YYYY-MM-DD HH:mm:ss');
+				}
+
+				res.render('email-list', {
+					'title': '订阅邮箱列表',
+					'menu' : 'emailist',
+					'mailist' : result,
+					'ucounts' : result.length
+				});
+				db.close();
+			});
+		});
+	}
+});
+
+/*用户管理*/
+app.get('/artist/:type', function(req, res){
+	var type = req.params.type;
+
+	if(type === 'add'){
+
+		res.render('artist-add', {
+			'title': '添加艺人',
+			'menu' : 'artistadd'
+		});
+		
+	}else if(type === 'list'){
+
+		MongoClient.connect(DB_CONN_STR, function(err, db) {
+			selectData(db, 'artist', function(result) {
+				for (var i = 0; i < result.length; i++) {
+					result[i]._time = moment(new Date(result[i].time)).format('YYYY-MM-DD HH:mm:ss');
+				}
+
+				res.render('artist-list', {
+					'title': '用户列表',
+					'menu' : 'userlist',
+					'userlist' : result,
+					'ucounts' : result.length
+				});
+				db.close();
+			});
+		});
+		
+	}else if(type === 'detail'){
+		var openid = get_param(req).openid;
+
+		MongoClient.connect(DB_CONN_STR, function(err, db) {
+			selectDataOne(db, 'user', {openid: openid}, function(result) {
+				res.send(result);
+				db.close();
+			});
+		});
+	}
+});
+
 /*
 	mongod存储数据
 */
@@ -352,6 +444,29 @@ app.post('/', function(req, res){
 				}else{
 					//数据库里面存在相同的openid，不用做任何处理
 					res.json({"status":"201", "msg":"已有用户"});
+					db.close();
+				}
+			});
+			
+		});
+
+	}else if (param.type && param.type === 'addartist') {//存储用户授权的公开信息
+
+		param.time = Date.now();//定义一个初始时间
+		//这里定义多一个ATID作为查询主键入库
+		param.atid = utils.randomString(6);
+
+		MongoClient.connect(DB_CONN_STR, function(err, db) {
+			selectDataOne(db, 'artist', {aneme: param.aneme}, function(result) {
+				if (result.length === 0) {
+					insertData(db, 'artist', param, function(_res) {
+						//写入数据表成功
+						res.json({"status":"200"});
+						db.close();
+					});
+				}else{
+					//数据库里面存在相同的openid，不用做任何处理
+					res.json({"status":"201", "msg":"已有艺人"});
 					db.close();
 				}
 			});
@@ -508,9 +623,17 @@ app.post('/', function(req, res){
 		
 		MongoClient.connect(DB_CONN_STR, function(err, db) {
 			//更新观看历史记录
-			db.collection('history').update({ openid: param.openid }, {$set:{'data': hisArr, 'time': time} });
+			db.collection('history').update(
+				{ openid: param.openid }, 
+				{$set:{'data': hisArr, 'time': time} }, 
+				{upsert: true}
+			);
 			//更新收藏列表
-			db.collection('collect').update({ openid: param.openid }, {$set:{'data': collectArr, 'time': time} });
+			db.collection('collect').update(
+				{ openid: param.openid }, 
+				{$set:{'data': collectArr, 'time': time} }, 
+				{upsert: true}
+			);
 
 			res.json({'status': '200'});
 			db.close();

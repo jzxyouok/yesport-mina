@@ -25,8 +25,9 @@
 							<tr>
 								<th>No.</th>
 								<th>CID</th>
+								<th>专辑大图</th>
 								<th>专辑标题</th>
-								<th>专辑标题</th>
+								<th>专辑次标题</th>
 								<th>视频个数</th>
 								<th>专辑状态</th>
 								<th>更新时间</th>
@@ -36,21 +37,22 @@
 						<tbody id="list-album">
 						{% for items in albumlist %}
 							<tr>
-							<td><input type="text" value="{{ items.order }}" class="form-control"></td>
-							<td><a href="/album/detail?cid={{ items.cid }}" class="n-cid">{{ items.cid }}</a></td>
-							<td>{{ items.title }}</td>
-							<td>{{ items.subtitle }}</td>
-							<td>{{ items.counts }}</td>
-							{% if items.toindex == 'true' %}
-							<td data-value="已上架">已上架</td>
-							{% else %}
-							<td data-value="已下架">已下架</td>
-							{% endif %}
-							<td class="timestamp" data-timestamp='{{items.time}}'>{{items._time}}</td>
-							<td>
-								<a class="btn btn-info" href="/album/detail?cid={{items.cid}}">编辑</a>
-								<a class="btn btn-danger ac-delete" data-cid="{{items.cid}}" data-title="{{ items.title }}" href="javascript:;">删除</a>
-							</td>
+								<td><input type="text" value="{{ items.order }}" class="form-control"></td>
+								<td><a href="/album/detail?cid={{ items.cid }}" class="n-cid">{{ items.cid }}</a></td>
+								<td><img src="{{ items.banner }}" class="album-img"></td>
+								<td>{{ items.title }}</td>
+								<td>{{ items.subtitle }}</td>
+								<td>{{ items.counts }}</td>
+								{% if items.toindex == 'true' %}
+								<td data-value="已上架">已上架</td>
+								{% else %}
+								<td data-value="已下架">已下架</td>
+								{% endif %}
+								<td class="timestamp" data-timestamp='{{items.time}}'>{{items._time}}</td>
+								<td>
+									<a class="btn btn-info" href="/album/detail?cid={{items.cid}}">编辑</a>
+									<a class="btn btn-danger ac-delete" data-cid="{{items.cid}}" data-title="{{ items.title }}" href="javascript:;">删除</a>
+								</td>
 							</tr>
 						{% endfor %}
 						</tbody>

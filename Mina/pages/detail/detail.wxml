@@ -8,7 +8,14 @@
     <view class="list-placeh" wx:elif="{{loadst == 'fail'}}">加载错误请返回再试 :(</view>
     <view class="summary {{expand}}" wx:else><text class="txt">简介：</text>{{cursummary}}<view class="more" bindtap="showmore">[更多]</view></view>
     <view class="summary subs">出品方：{{curPro}}</view>
-    <view class="summary subs sumlast">播放量：{{playcount}}</view>
+    <view class="summary subs">播放量：{{playcount}}</view>
+    <view class="artist">
+        <view class="art-left">
+            <image src="http://placehold.it/60x60" class="avatar"></image>
+            <text class="name">周洛希</text>
+        </view>
+        <view class="artistinfo"><text>艺人介绍：</text>周洛希的介绍周洛希的介绍周洛希的介绍周洛希的介绍周洛希的介绍周洛希的介绍周洛希的介绍<view class="more" data-asid="32dfsf" bindtap="showmore">[更多]</view></view>
+    </view>
 
     <view class="sub-title">专辑列表<navigator open-type="navigate" class="more" url="../list/list?cid={{cid}}">更多</navigator></view>
     <view class="list-placeh" wx:if="{{loadst == 'loading'}}"><image src="../../static/reload-m.gif"></image></view>

@@ -103,7 +103,7 @@
 								{% for items in videolist %}
 								<tr>
 									<td><input type="checkbox" /></td>
-									<td>1</td>
+									<td>{{loop.index}}</td>
 									<td><a href="/video/detail?vid={{items.vid}}">{{items.vid}}</a></td>
 									<td>{{items.title}}</td>
 									<td>

@@ -60,17 +60,28 @@
 				<dt class="menu_title">
 					<i class="glyphicon_menu glyphicon glyphicon-list-alt"></i>用户管理
 				</dt>
-				<dd class="menu_item">
+				<dd class="menu_item {% if menu == 'userlist' %}selected{% endif %}">
 					<a href="/user/list">用户列表</a>
 				</dd>
-				<dd class="menu_item">
+				<dd style="display: none;" class="menu_item {% if menu == 'history' %}selected{% endif %}">
 					<a href="/user/history">观看历史</a>
 				</dd>
-				<dd class="menu_item">
+				<dd style="display: none;" class="menu_item {% if menu == 'collect' %}selected{% endif %}">
 					<a href="/user/collect">收藏列表</a>
 				</dd>
-				<dd class="menu_item">
+				<dd class="menu_item {% if menu == 'emailist' %}selected{% endif %}">
 					<a href="/user/email">邮箱订阅</a>
+				</dd>
+			</dl>
+			<dl class="menu">
+				<dt class="menu_title">
+					<i class="glyphicon_menu glyphicon glyphicon-user"></i>艺人管理
+				</dt>
+				<dd class="menu_item {% if menu == 'artistadd' %}selected{% endif %}">
+					<a href="/artist/add">添加艺人</a>
+				</dd>
+				<dd class="menu_item {% if menu == 'artistlist' %}selected{% endif %}">
+					<a href="/artist/list">艺人库</a>
 				</dd>
 			</dl>
 			<dl class="menu">
@@ -79,9 +90,6 @@
 				</dt>
 				<dd class="menu_item">
 					<a href="/upload">数据上传</a>
-				</dd>
-				<dd class="menu_item">
-					<a href="/artist/list">艺人库</a>
 				</dd>
 				<dd class="menu_item ">
 					<a href="/other/cards">名片</a>
