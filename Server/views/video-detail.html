@@ -41,47 +41,59 @@
 						
 							<div class="form-group">
 								<label class="control-label">标题：</label>
-								<input type="text" class="form-control" value="{{result.title}}" placeholder="" id="vname">
+								<input type="text" class="form-control" value="{{result.title}}" id="vname">
 							</div>
 							<div class="form-group">
 								<label class="control-label">次标题：</label>
-								<input type="text" class="form-control" value="{{result.subtitle}}" placeholder="" id="subtit">
+								<input type="text" class="form-control" value="{{result.subtitle}}" id="subtit">
 							</div>
 							<div class="form-group">
-								<label class="control-label">栏目：</label>
+								<label class="control-label">所属专辑：</label>
 								{% autoescape false %}
 								{{result.catelist}}
 								{% endautoescape %}
 							</div>
 
 							<div class="form-group">
+								<label class="control-label">所属艺人：</label>
+								{% autoescape false %}
+								{{result.artistlist}}
+								{% endautoescape %}
+							</div>
+
+							<div class="form-group">
 								<label class="control-label">标签：</label>
-								<input type="text" class="form-control" value="{{result.tags}}" placeholder="" id="vtags">
+								<input type="text" class="form-control" value="{{result.tags}}" id="vtags">
 							</div>
 
 							<div class="form-group">
 								<label class="control-label">视频地址：</label>
-								<input type="text" class="form-control" value="{{result.source}}" placeholder="" id="source">
+								<input type="text" class="form-control" value="{{result.source}}" id="source">
 							</div>
 
 							<div class="form-group">
 								<label class="control-label">缩略图：</label>
-								<input type="text" class="form-control" value="{{result.imgurl}}" placeholder="" id="imgurl">
+								<input type="text" class="form-control" value="{{result.imgurl}}" id="imgurl">
 							</div>
 
 							<div class="form-group">
 								<label class="control-label">视频时长：</label>
-								<input type="text" class="form-control" value="{{result.duration}}" placeholder="" id="duration">
+								<input type="text" class="form-control" value="{{result.duration}}" id="duration">
+							</div>
+
+							<div class="form-group">
+								<label class="control-label">播放量：</label>
+								<input type="text" class="form-control" value="{{result.playcount}}" id="playcount">
 							</div>
 
 							<div class="form-group">
 								<label class="control-label">赞助商：</label>
-								<input type="text" class="form-control" value="{{result.sponsor}}" placeholder="" id="sponsor">
+								<input type="text" class="form-control" value="{{result.sponsor}}" id="sponsor">
 							</div>
 
 							<div class="form-group">
 								<label class="control-label">出品方：</label>
-								<input type="text" class="form-control" value="{{result.production}}" placeholder="" id="production">
+								<input type="text" class="form-control" value="{{result.production}}" id="production">
 							</div>
 
 							<div class="form-group">
@@ -257,10 +269,13 @@
 						'sponsor': $('#sponsor').val(),
 						'cid': $('#coverlist').val(),
 						'cname': $('#coverlist').find("option:selected").text(),
+						'atid': $('#artistlist').val(),
+						'aname': $('#artistlist').find("option:selected").text(),
 						'tags': vtagArr,
 						'source': $("#source").val(),
 						'imgurl': $("#imgurl").val(),
 						'duration': $("#duration").val(),
+						'playcount': $("#playcount").val(),
 						'content': $("#vsum").val()
 					},
 					success: function(data){

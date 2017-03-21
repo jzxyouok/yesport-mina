@@ -4,6 +4,7 @@
 
 {% block head %}
 	{% parent %}
+	<link rel="stylesheet" type="text/css" href="/Public/system/style/wangEditor.min.css">
 {% endblock %}
 
 
@@ -88,6 +89,13 @@
 									<div class="preview" id="img-beaut03"></div>
 								</div>
 							</div>
+
+							<div class="form-group">
+								<label class="control-label">介绍：　</label>
+								<div class="fn-upload" id="editor-container">
+									<div class="artist-detail" id="editor-trigger"></div>
+								</div>
+							</div>
 							
 							<div class="btn-line">
 								<a href="javascript:;" class="btn btn-info" id="btn-creatArtist">添加上传</a>
@@ -104,10 +112,98 @@
 
 {% block foot %}
 	{% parent %}
+	<script type="text/javascript" src="/Public/system/js/wangEditor.min.js"></script>
 	<script src="https://cdn.staticfile.org/plupload/2.1.8/plupload.full.min.js"></script>
-	<script src="/public/system/js/qiniu.min.js"></script>
+	<script src="/Public/system/js/qiniu.min.js"></script>
 	<script>
 		$(function(){
+			// 阻止输出log
+			// wangEditor.config.printLog = false;
+
+			var editor = new wangEditor('editor-trigger');
+
+			// 上传图片
+			editor.config.uploadImgUrl = '/upload';
+			editor.config.uploadParams = {
+				// token1: 'abcde',
+				// token2: '12345'
+			};
+			editor.config.uploadHeaders = {
+				// 'Accept' : 'text/x-json'
+			}
+			// editor.config.uploadImgFileName = 'myFileName';
+
+			// 隐藏网络图片
+			// editor.config.hideLinkImg = true;
+
+			// 表情显示项
+			editor.config.emotionsShow = 'value';
+			editor.config.emotions = {
+				'default': {
+					title: '默认',
+					data: '/Public/system/style/emotions.data'
+				}
+			};
+
+			// 插入代码时的默认语言
+			// editor.config.codeDefaultLang = 'html'
+
+			// 只粘贴纯文本
+			// editor.config.pasteText = true;
+
+			// 跨域上传
+			// editor.config.uploadImgUrl = 'http://localhost:8012/upload';
+
+			// 第三方上传
+			// editor.config.customUpload = true;
+
+			// 普通菜单配置
+			// editor.config.menus = [
+			//     'img',
+			//     'insertcode',
+			//     'eraser',
+			//     'fullscreen'
+			// ];
+			// 只排除某几个菜单（兼容IE低版本，不支持ES5的浏览器），支持ES5的浏览器可直接用 [].map 方法
+			// editor.config.menus = $.map(wangEditor.config.menus, function(item, key) {
+			//     if (item === 'insertcode') {
+			//         return null;
+			//     }
+			//     if (item === 'fullscreen') {
+			//         return null;
+			//     }
+			//     return item;
+			// });
+
+			// onchange 事件
+			editor.onchange = function () {
+				console.log(this.$txt.html());
+			};
+
+			// 取消过滤js
+			// editor.config.jsFilter = false;
+
+			// 取消粘贴过来
+			// editor.config.pasteFilter = false;
+
+			// 设置 z-index
+			// editor.config.zindex = 20000;
+
+			// 语言
+			// editor.config.lang = wangEditor.langs['en'];
+
+			// 自定义菜单UI
+			// editor.UI.menus.bold = {
+			//     normal: '<button style="font-size:20px; margin-top:5px;">B</button>',
+			//     selected: '.selected'
+			// };
+			// editor.UI.menus.italic = {
+			//     normal: '<button style="font-size:20px; margin-top:5px;">I</button>',
+			//     selected: '<button style="font-size:20px; margin-top:5px;"><i>I</i></button>'
+			// };
+
+        	editor.create();
+			
 			var Qiniu1 = new QiniuJsSDK();
 			var Qiniu2 = new QiniuJsSDK();
 			var Qiniu3 = new QiniuJsSDK();
@@ -115,187 +211,187 @@
 
 			//灯片大图：150*150
 			var uploadthumbimg = Qiniu1.uploader({
-			    runtimes: 'html5,flash,html4',
-			    browse_button: 'avatar',
-			    uptoken_url: '/uptoken',
-			    get_new_uptoken: false,
-			    unique_names: false,
-			    save_key: false,
-			    domain: 'http://omsd78olk.bkt.clouddn.com',
-			    max_file_size: '100mb',
-			    flash_swf_url: 'https://cdn.staticfile.org/plupload/2.1.8/Moxie.swf',
-			    max_retries: 3,
-			    dragdrop: false,
-			    chunk_size: '4mb',
-			    auto_start: true,
+				runtimes: 'html5,flash,html4',
+				browse_button: 'avatar',
+				uptoken_url: '/uptoken',
+				get_new_uptoken: false,
+				unique_names: false,
+				save_key: false,
+				domain: 'http://omsd78olk.bkt.clouddn.com',
+				max_file_size: '100mb',
+				flash_swf_url: 'https://cdn.staticfile.org/plupload/2.1.8/Moxie.swf',
+				max_retries: 3,
+				dragdrop: false,
+				chunk_size: '4mb',
+				auto_start: true,
 
-			    init: {
-			        'BeforeUpload': function(up, file) {
-			               // 每个文件上传前，处理相关的事情
-			        },
-			        'UploadProgress': function(up, file) {
-			               $("#prev-avatar").val('上传中请稍候...');
-			        },
-			        'FileUploaded': function(up, file, info) {
+				init: {
+					'BeforeUpload': function(up, file) {
+						   // 每个文件上传前，处理相关的事情
+					},
+					'UploadProgress': function(up, file) {
+						   $("#prev-avatar").val('上传中请稍候...');
+					},
+					'FileUploaded': function(up, file, info) {
 
-			               var domain = up.getOption('domain');
-			               var res = JSON.parse(info);
-			               var sourceLink = domain +"/"+ res.key; //获取上传成功后的文件的Url
-			               // console.log(sourceLink);
-			               $("#prev-avatar").val(sourceLink);
-			               $("#img-avatar").html('<img src="'+sourceLink+'?imageView2/1/w/150/h/150" />');
-			        },
-			        'Error': function(up, err, errTip) {
-			               alert(errTip);
-			        }
-			    },
-			    filters : {
-				    max_file_size : '4mb',
-				    prevent_duplicates: true,
-				    mime_types: [
-				        {title : "Image files", extensions : "jpg,gif,png,jpeg"} // 限定jpg,gif,png后缀上传
-				    ]
+						   var domain = up.getOption('domain');
+						   var res = JSON.parse(info);
+						   var sourceLink = domain +"/"+ res.key; //获取上传成功后的文件的Url
+						   // console.log(sourceLink);
+						   $("#prev-avatar").val(sourceLink);
+						   $("#img-avatar").html('<img src="'+sourceLink+'?imageView2/1/w/150/h/150" />');
+					},
+					'Error': function(up, err, errTip) {
+						   alert(errTip);
+					}
+				},
+				filters : {
+					max_file_size : '4mb',
+					prevent_duplicates: true,
+					mime_types: [
+						{title : "Image files", extensions : "jpg,gif,png,jpeg"} // 限定jpg,gif,png后缀上传
+					]
 				}
 			});
 
 			//海报封面：250*255
 			var uploadthumbimg = Qiniu2.uploader({
-			    runtimes: 'html5,flash,html4',
-			    browse_button: 'beaut01',
-			    uptoken_url: '/uptoken',
-			    get_new_uptoken: false,
-			    unique_names: false,
-			    save_key: false,
-			    domain: 'http://omsd78olk.bkt.clouddn.com',
-			    max_file_size: '100mb',
-			    flash_swf_url: 'https://cdn.staticfile.org/plupload/2.1.8/Moxie.swf',
-			    max_retries: 3,
-			    dragdrop: false,
-			    chunk_size: '4mb',
-			    auto_start: true,
+				runtimes: 'html5,flash,html4',
+				browse_button: 'beaut01',
+				uptoken_url: '/uptoken',
+				get_new_uptoken: false,
+				unique_names: false,
+				save_key: false,
+				domain: 'http://omsd78olk.bkt.clouddn.com',
+				max_file_size: '100mb',
+				flash_swf_url: 'https://cdn.staticfile.org/plupload/2.1.8/Moxie.swf',
+				max_retries: 3,
+				dragdrop: false,
+				chunk_size: '4mb',
+				auto_start: true,
 
-			    init: {
-			        'BeforeUpload': function(up, file) {
-			               // 每个文件上传前，处理相关的事情
-			        },
-			        'UploadProgress': function(up, file) {
-			               $("#prev-beaut01").val('上传中请稍候...');
-			        },
-			        'FileUploaded': function(up, file, info) {
+				init: {
+					'BeforeUpload': function(up, file) {
+						   // 每个文件上传前，处理相关的事情
+					},
+					'UploadProgress': function(up, file) {
+						   $("#prev-beaut01").val('上传中请稍候...');
+					},
+					'FileUploaded': function(up, file, info) {
 
-			               var domain = up.getOption('domain');
-			               var res = JSON.parse(info);
-			               var sourceLink = domain +"/"+ res.key; //获取上传成功后的文件的Url
-			               // console.log(sourceLink);
-			               $("#prev-beaut01").val(sourceLink);
-			               $("#img-beaut01").html('<img src="'+sourceLink+'?imageView2/1/w/250/h/250" />');
-			        },
-			        'Error': function(up, err, errTip) {
-			               alert(errTip);
-			        }
-			    },
+						   var domain = up.getOption('domain');
+						   var res = JSON.parse(info);
+						   var sourceLink = domain +"/"+ res.key; //获取上传成功后的文件的Url
+						   // console.log(sourceLink);
+						   $("#prev-beaut01").val(sourceLink);
+						   $("#img-beaut01").html('<img src="'+sourceLink+'?imageView2/1/w/250/h/250" />');
+					},
+					'Error': function(up, err, errTip) {
+						   alert(errTip);
+					}
+				},
 
-			    filters : {
-				    max_file_size : '5mb',
-				    prevent_duplicates: true,
-				    // Specify what files to browse for
-				    mime_types: [
-				        {title : "Image files", extensions : "jpg,gif,png,jpeg"} // 限定jpg,gif,png后缀上传
-				    ]
+				filters : {
+					max_file_size : '5mb',
+					prevent_duplicates: true,
+					// Specify what files to browse for
+					mime_types: [
+						{title : "Image files", extensions : "jpg,gif,png,jpeg"} // 限定jpg,gif,png后缀上传
+					]
 				}
 			});
 
 			//海报封面：250*255
 			var uploadthumbimg = Qiniu3.uploader({
-			    runtimes: 'html5,flash,html4',
-			    browse_button: 'beaut02',
-			    uptoken_url: '/uptoken',
-			    get_new_uptoken: false,
-			    unique_names: false,
-			    save_key: false,
-			    domain: 'http://omsd78olk.bkt.clouddn.com',
-			    max_file_size: '100mb',
-			    flash_swf_url: 'https://cdn.staticfile.org/plupload/2.1.8/Moxie.swf',
-			    max_retries: 3,
-			    dragdrop: false,
-			    chunk_size: '4mb',
-			    auto_start: true,
+				runtimes: 'html5,flash,html4',
+				browse_button: 'beaut02',
+				uptoken_url: '/uptoken',
+				get_new_uptoken: false,
+				unique_names: false,
+				save_key: false,
+				domain: 'http://omsd78olk.bkt.clouddn.com',
+				max_file_size: '100mb',
+				flash_swf_url: 'https://cdn.staticfile.org/plupload/2.1.8/Moxie.swf',
+				max_retries: 3,
+				dragdrop: false,
+				chunk_size: '4mb',
+				auto_start: true,
 
-			    init: {
-			        'BeforeUpload': function(up, file) {
-			               // 每个文件上传前，处理相关的事情
-			        },
-			        'UploadProgress': function(up, file) {
-			               $("#prev-beaut02").val('上传中请稍候...');
-			        },
-			        'FileUploaded': function(up, file, info) {
+				init: {
+					'BeforeUpload': function(up, file) {
+						   // 每个文件上传前，处理相关的事情
+					},
+					'UploadProgress': function(up, file) {
+						   $("#prev-beaut02").val('上传中请稍候...');
+					},
+					'FileUploaded': function(up, file, info) {
 
-			               var domain = up.getOption('domain');
-			               var res = JSON.parse(info);
-			               var sourceLink = domain +"/"+ res.key; //获取上传成功后的文件的Url
-			               // console.log(sourceLink);
-			               $("#prev-beaut02").val(sourceLink);
-			               $("#img-beaut02").html('<img src="'+sourceLink+'?imageView2/1/w/250/h/250" />');
-			        },
-			        'Error': function(up, err, errTip) {
-			               alert(errTip);
-			        }
-			    },
+						   var domain = up.getOption('domain');
+						   var res = JSON.parse(info);
+						   var sourceLink = domain +"/"+ res.key; //获取上传成功后的文件的Url
+						   // console.log(sourceLink);
+						   $("#prev-beaut02").val(sourceLink);
+						   $("#img-beaut02").html('<img src="'+sourceLink+'?imageView2/1/w/250/h/250" />');
+					},
+					'Error': function(up, err, errTip) {
+						   alert(errTip);
+					}
+				},
 
-			    filters : {
-				    max_file_size : '5mb',
-				    prevent_duplicates: true,
-				    // Specify what files to browse for
-				    mime_types: [
-				        {title : "Image files", extensions : "jpg,gif,png,jpeg"} // 限定jpg,gif,png后缀上传
-				    ]
+				filters : {
+					max_file_size : '5mb',
+					prevent_duplicates: true,
+					// Specify what files to browse for
+					mime_types: [
+						{title : "Image files", extensions : "jpg,gif,png,jpeg"} // 限定jpg,gif,png后缀上传
+					]
 				}
 			});
 
 			//海报封面：250*255
 			var uploadthumbimg = Qiniu4.uploader({
-			    runtimes: 'html5,flash,html4',
-			    browse_button: 'beaut03',
-			    uptoken_url: '/uptoken',
-			    get_new_uptoken: false,
-			    unique_names: false,
-			    save_key: false,
-			    domain: 'http://omsd78olk.bkt.clouddn.com',
-			    max_file_size: '100mb',
-			    flash_swf_url: 'https://cdn.staticfile.org/plupload/2.1.8/Moxie.swf',
-			    max_retries: 3,
-			    dragdrop: false,
-			    chunk_size: '4mb',
-			    auto_start: true,
+				runtimes: 'html5,flash,html4',
+				browse_button: 'beaut03',
+				uptoken_url: '/uptoken',
+				get_new_uptoken: false,
+				unique_names: false,
+				save_key: false,
+				domain: 'http://omsd78olk.bkt.clouddn.com',
+				max_file_size: '100mb',
+				flash_swf_url: 'https://cdn.staticfile.org/plupload/2.1.8/Moxie.swf',
+				max_retries: 3,
+				dragdrop: false,
+				chunk_size: '4mb',
+				auto_start: true,
 
-			    init: {
-			        'BeforeUpload': function(up, file) {
-			               // 每个文件上传前，处理相关的事情
-			        },
-			        'UploadProgress': function(up, file) {
-			               $("#prev-beaut03").val('上传中请稍候...');
-			        },
-			        'FileUploaded': function(up, file, info) {
+				init: {
+					'BeforeUpload': function(up, file) {
+						   // 每个文件上传前，处理相关的事情
+					},
+					'UploadProgress': function(up, file) {
+						   $("#prev-beaut03").val('上传中请稍候...');
+					},
+					'FileUploaded': function(up, file, info) {
 
-			               var domain = up.getOption('domain');
-			               var res = JSON.parse(info);
-			               var sourceLink = domain +"/"+ res.key; //获取上传成功后的文件的Url
-			               // console.log(sourceLink);
-			               $("#prev-beaut03").val(sourceLink);
-			               $("#img-beaut03").html('<img src="'+sourceLink+'?imageView2/1/w/250/h/250" />');
-			        },
-			        'Error': function(up, err, errTip) {
-			               alert(errTip);
-			        }
-			    },
+						   var domain = up.getOption('domain');
+						   var res = JSON.parse(info);
+						   var sourceLink = domain +"/"+ res.key; //获取上传成功后的文件的Url
+						   // console.log(sourceLink);
+						   $("#prev-beaut03").val(sourceLink);
+						   $("#img-beaut03").html('<img src="'+sourceLink+'?imageView2/1/w/250/h/250" />');
+					},
+					'Error': function(up, err, errTip) {
+						   alert(errTip);
+					}
+				},
 
-			    filters : {
-				    max_file_size : '5mb',
-				    prevent_duplicates: true,
-				    // Specify what files to browse for
-				    mime_types: [
-				        {title : "Image files", extensions : "jpg,gif,png,jpeg"} // 限定jpg,gif,png后缀上传
-				    ]
+				filters : {
+					max_file_size : '5mb',
+					prevent_duplicates: true,
+					// Specify what files to browse for
+					mime_types: [
+						{title : "Image files", extensions : "jpg,gif,png,jpeg"} // 限定jpg,gif,png后缀上传
+					]
 				}
 			});
 
@@ -342,12 +438,13 @@
 						'avatar': $('#prev-avatar').val(),
 						'beaut01': $('#prev-beaut01').val(),
 						'beaut02': $('#prev-beaut02').val(),
-						'beaut03': $('#prev-beaut03').val()
+						'beaut03': $('#prev-beaut03').val(),
+						'adetail': $("#editor-trigger").html()
 					},
 					success: function(data){
-						console.log(data);
-						// alert('提交成功，跳转到艺人列表！');
-						// window.location.href = '/artist/list';
+						// console.log(data);
+						alert('提交成功，跳转到艺人列表！');
+						window.location.href = '/artist/list';
 					}
 				});
 			});

@@ -127,27 +127,51 @@ app.get('/video/:type', function(req, res){
 		MongoClient.connect(DB_CONN_STR, function(err, db) {
 			if (cid) { //如果有专辑CID就拉取CID所对应的video list
 				selectDataOne(db, 'video', {cid: cid}, function(result){
-					res.send(result);
-					db.close();
+						var videolist = result;
+						selectData(db, 'artist', function(artistlist){
+
+							for (var i = 0; i < videolist.length; i++) {
+
+								for (var k = 0; k < artistlist.length; k++) {
+									if (videolist[i].atid === artistlist[k].atid) {
+										videolist[i].artistinfo = artistlist[k]
+									}
+								}
+							}
+							res.send(videolist);
+							db.close();
+
+						});
+					
 				});
 			}else if(vid && plus && plus === 'album'){ //拉取单个视频以外还要所对应的专辑系列
 				selectDataOne(db, 'video', {vid: vid}, function(result){
-					var cid = result[0].cid;
+					var obj = result[0],
+						cid = result[0].cid;
 
-					selectDataOne(db, 'video', {cid: cid}, function(_res){
-						var obj = result[0];
-							obj.albumvlist = _res;
-						res.send(obj);
-						db.close();
+					selectDataOne(db, 'video', {cid: cid}, function(videolist){
+						obj.albumvlist = videolist;
+						
+						selectDataOne(db, 'artist', {atid: result[0].atid}, function(artist){
+							obj.artistinfo = artist[0];
+							res.send(obj);
+							db.close();
+						});
 					});
 
 				});
 			}else if(vid){ //如果有单个视频VID就拉取所对应的video
 				selectDataOne(db, 'video', {vid: vid}, function(result){
-					res.send(result);
-					db.close();
+					var obj = result[0];
+					
+					selectDataOne(db, 'artist', {atid: result[0].atid}, function(artist){
+						obj.artistinfo = artist[0];
+						res.send(obj);
+						db.close();
+					});
 				});
 			}else{
+				//拉取全部，查询比较慢，不带入对应的艺人信息了
 				selectData(db, 'video', function(result) {
 					res.send(result);
 					db.close();
@@ -204,26 +228,40 @@ app.get('/video/:type', function(req, res){
 		MongoClient.connect(DB_CONN_STR, function(err, db) {
 			selectDataOne(db, 'video', {vid: vid}, function(result) {
 
-				selectData(db, 'album', function(_result) {
-					var albumoption = '<select class="form-control" id="coverlist">';
-					for (var i = 0; i < _result.length; i++) {
-						if (result[0].cid === _result[i].cid) {
-							albumoption +='<option selected value="'+_result[i].cid+'">'+_result[i].title+'</option>';
+				selectData(db, 'album', function(album) {
+					var albumoption = '<select class="form-control" id="coverlist"><option value="-1">请选择专辑</option>';
+					for (var i = 0; i < album.length; i++) {
+						if (result[0].cid === album[i].cid) {
+							albumoption +='<option selected value="'+album[i].cid+'">'+album[i].title+'</option>';
 						}else{
-							albumoption +='<option value="'+_result[i].cid+'">'+_result[i].title+'</option>';
+							albumoption +='<option value="'+album[i].cid+'">'+album[i].title+'</option>';
 						}
 					}
 					albumoption += '</select>';
 
-					result[0].catelist = albumoption;
+					selectData(db, 'artist', function(artist) {
+						var artistoption = '<select class="form-control" id="artistlist"><option value="-1">请选择艺人</option>';
+						for (var i = 0; i < artist.length; i++) {
+							if (result[0].atid === artist[i].atid) {
+								artistoption +='<option selected value="'+artist[i].atid+'">'+artist[i].aname+'</option>';
+							}else{
+								artistoption +='<option value="'+artist[i].atid+'">'+artist[i].aname+'</option>';
+							}
+						}
+						artistoption += '</select>';
 
-					res.render('video-detail', {
-						'title': '视频详情',
-						'menu' : 'videolist',
-						'result' : result[0]
+						result[0].catelist = albumoption;
+						result[0].artistlist = artistoption;
+
+						res.render('video-detail', {
+							'title': '视频详情',
+							'menu' : 'videolist',
+							'result' : result[0]
+						});
+
+						db.close();
+
 					});
-
-					db.close();
 				});
 			});
 		});
@@ -401,9 +439,9 @@ app.get('/artist/:type', function(req, res){
 				}
 
 				res.render('artist-list', {
-					'title': '用户列表',
-					'menu' : 'userlist',
-					'userlist' : result,
+					'title': '艺人列表',
+					'menu' : 'artistlist',
+					'artistlist' : result,
 					'ucounts' : result.length
 				});
 				db.close();
@@ -450,14 +488,14 @@ app.post('/', function(req, res){
 			
 		});
 
-	}else if (param.type && param.type === 'addartist') {//存储用户授权的公开信息
+	}else if (param.type && param.type === 'addartist') {//存储艺人资料库
 
 		param.time = Date.now();//定义一个初始时间
 		//这里定义多一个ATID作为查询主键入库
-		param.atid = utils.randomString(6);
+		param.atid = utils.randomString(8);
 
 		MongoClient.connect(DB_CONN_STR, function(err, db) {
-			selectDataOne(db, 'artist', {aneme: param.aneme}, function(result) {
+			selectDataOne(db, 'artist', {aneme: param.aname}, function(result) {
 				if (result.length === 0) {
 					insertData(db, 'artist', param, function(_res) {
 						//写入数据表成功
@@ -465,7 +503,7 @@ app.post('/', function(req, res){
 						db.close();
 					});
 				}else{
-					//数据库里面存在相同的openid，不用做任何处理
+					//数据库里面存在相同的艺人，不用做任何处理
 					res.json({"status":"201", "msg":"已有艺人"});
 					db.close();
 				}
@@ -563,9 +601,10 @@ app.post('/', function(req, res){
 	}else if(param.type && param.type === 'updateVideo'){//更新视频信息
 
 		param.time = Date.now();//定义一个更新时间
+		param.playcount = Number(param.playcount);
 		
 		MongoClient.connect(DB_CONN_STR, function(err, db) {
-			db.collection('video').update({vid: param.vid}, param);
+			db.collection('video').update({vid: param.vid}, param, {upsert: true});
 
 			//写入数据表成功
 			res.send({status: 'ok', type: 'updateVideo'});

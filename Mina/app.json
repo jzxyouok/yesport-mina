@@ -1,9 +1,9 @@
 {
   "pages":[
-    "pages/detail/detail",
     "pages/index/index",
     "pages/user/user",
     "pages/discover/discover",
+    "pages/detail/detail",
     "pages/list/list",
     "pages/about/about",
     "pages/subscript/subscript"

@@ -121,3 +121,11 @@
   -webkit-box-orient: vertical;
   white-space: normal;
 }
+
+.cont-ad{
+  margin-bottom: 20rpx;
+}
+.cont-ad image{
+  width: 100%;
+  height: 190rpx;
+}

@@ -1,5 +1,6 @@
 const utils = require('../../utils/utils');
 const conf = require('../../utils/conf');
+var WxParse = require('../../wxParse/wxParse.js');
 
 Page({
   data: {
@@ -24,7 +25,7 @@ Page({
   },
   onLoad:function(options){
       var that = this;
-      var options = options || {}; options.cid = '2G2BNiWtfbB14Fi8';// debug model
+      // var options = options || {}; options.cid = '2G2BNiWtfbB14Fi8';// debug model
       if(options.cid){
           //拉取专辑列表
           var cid = options.cid;
@@ -49,10 +50,14 @@ Page({
                 }
               }
 
+              let adetail = curdata[0].artistinfo.adetail;
+              WxParse.wxParse('adetail', 'html', adetail, that, 0);
+
               that.setData({
                   cid: cid,
                   listAlbum: curdata,
                   vid: vid,
+                  artistinfo: curdata[0].artistinfo,
                   curvideo: curdata[0].source,
                   curtitle: curdata[0].title,
                   cursummary: curdata[0].content,
@@ -131,10 +136,14 @@ Page({
                   albumvlist[k].like = false
                 }
               }
+
+              let adetail = curdata.artistinfo.adetail;
+              WxParse.wxParse('adetail', 'html', adetail, that, 0);
               that.setData({
                   cid: cid,
                   listAlbum: albumvlist,
                   vid: vid,
+                  artistinfo: curdata.artistinfo,
                   curvideo: curdata.source,
                   curtitle: curdata.title,
                   cursummary: curdata.content,
@@ -218,10 +227,15 @@ Page({
           title: listAlbum[i].title
         });
 
+        //目前同一个专辑里面的艺人都是相同的，不做处理，以后不排除专辑内有多个艺人数据
+        // let adetail = listAlbum[i].artistinfo.adetail;
+        // WxParse.wxParse('adetail', 'html', adetail, that, 0);
+
         this.setData({
           curvideo: listAlbum[i].source,
           curtitle: listAlbum[i].title,
           cursummary: listAlbum[i].content,
+          artistinfo: listAlbum[i].artistinfo,
           curPro: listAlbum[i].production,
           playcount: utils.numconvert(listAlbum[i].playcount)
         });

@@ -1,3 +1,5 @@
+<import src="../../wxParse/wxParse.wxml"/>
+
 <view class="contain-player">
     <video src="{{curvideo}}" controls bindplay="bindplay" autoplay="{{autoplay}}"></video>
 </view>
@@ -11,10 +13,10 @@
     <view class="summary subs">播放量：{{playcount}}</view>
     <view class="artist">
         <view class="art-left">
-            <image src="http://placehold.it/60x60" class="avatar"></image>
-            <text class="name">周洛希</text>
+            <image src="{{artistinfo.avatar}}" class="avatar"></image>
+            <text class="name">{{artistinfo.aname}}</text>
         </view>
-        <view class="artistinfo"><text>艺人介绍：</text>周洛希的介绍周洛希的介绍周洛希的介绍周洛希的介绍周洛希的介绍周洛希的介绍周洛希的介绍<view class="more" data-asid="32dfsf" bindtap="showmore">[更多]</view></view>
+        <view class="artistinfo"><text>艺人介绍：</text><template is="wxParse" data="{{wxParseData:adetail.nodes}}"/><view class="more" data-atid="{{artistinfo.atid}}" bindtap="showmore">[更多]</view></view>
     </view>
 
     <view class="sub-title">专辑列表<navigator open-type="navigate" class="more" url="../list/list?cid={{cid}}">更多</navigator></view>
@@ -44,5 +46,9 @@
         </view>
         </block>
     </scroll-view>
+
+    <view class="sub-title">赞助商广告</view>
+    <view class="list-placeh" wx:if="{{loadst == 'loading'}}"><image src="../../static/reload-m.gif"></image></view>
+    <view class="cont-ad" wx:else><image src="http://placehold.it/375x95" mode="aspectFill"></image></view>
 
 </scroll-view>
