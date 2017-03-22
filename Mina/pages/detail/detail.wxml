@@ -16,8 +16,24 @@
             <image src="{{artistinfo.avatar}}" class="avatar"></image>
             <text class="name">{{artistinfo.aname}}</text>
         </view>
-        <view class="artistinfo"><text>艺人介绍：</text><template is="wxParse" data="{{wxParseData:adetail.nodes}}"/><view class="more" data-atid="{{artistinfo.atid}}" bindtap="showmore">[更多]</view></view>
+        <view class="artistinfo"><text>艺人介绍：</text><template is="wxParse" data="{{wxParseData:adetail.nodes}}"/><view class="more atmore" bindtap="showartist"></view></view>
     </view>
+<view class="panel-artist {{exArtist}}">
+    <image src="{{artistinfo.avatar}}" class="avatar"></image>
+    <view class="item aname"><text>姓名：</text>{{artistinfo.aname}}</view>
+    <view class="item subname"><text>艺名：</text>{{artistinfo.subname}}</view>
+    <view class="item height"><text>身高：</text>{{artistinfo.height}}</view>
+    <view class="item sanwei"><text>三围：</text>{{artistinfo.sanwei}}</view>
+    <view class="item weight"><text>体重：</text>{{artistinfo.weight}}</view>
+    <view class="item wechat"><text>微信：</text>{{artistinfo.wechat}}</view>
+    <view class="item img-list">
+        <image src="{{artistinfo.beaut01}}" mode="aspectFill"></image>
+        <image src="{{artistinfo.beaut02}}" mode="aspectFill"></image>
+        <image src="{{artistinfo.beaut03}}" mode="aspectFill"></image>
+    </view>
+    <view class="adetail"><template is="wxParse" data="{{wxParseData:adetail.nodes}}"/></view>
+    <view class="close" bindtap="closeartist"></view>
+</view>
 
     <view class="sub-title">专辑列表<navigator open-type="navigate" class="more" url="../list/list?cid={{cid}}">更多</navigator></view>
     <view class="list-placeh" wx:if="{{loadst == 'loading'}}"><image src="../../static/reload-m.gif"></image></view>

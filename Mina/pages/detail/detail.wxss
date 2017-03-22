@@ -125,7 +125,91 @@ page{
 .content .artistinfo text{
   color: #999;
 }
-.content .artistinfo .more{
+.content .artistinfo .more.atmore{
   bottom: auto;
   top: 58rpx;
+  height: 40rpx;
+  line-height: 9999px;
+  overflow: hidden;
+  padding-left: 100rpx;
+  color: #fff;
+}
+.artistinfo .atmore:after{
+  content: '';
+  width: 18rpx;
+  height: 18rpx;
+  border-top: 2rpx solid #ddd;
+  border-right: 2rpx solid #ddd;
+  position: absolute;
+  right: 10rpx;
+  top: 16rpx;
+  transform: rotate(-45deg);
+  transform-origin: 0 100%;
+}
+
+/*@keyframes bouceUp{
+  0%{
+    -webkit-transform: translateY(100%);
+  }
+  100%{
+    -webkit-transform: translateY(0);
+  }
+}*/
+
+.panel-artist{
+  position: fixed;
+  z-index: 10;
+  top: 100%;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background: #fff;
+  padding-top: 30rpx;
+  text-align: center;
+  overflow-y: auto;
+  /*display: none;*/
+  -webkit-transition: top .3s ease-in-out;
+  /*-webkit-transform: translateY(100%);*/
+}
+.panel-artist.open{
+  /*display: block;*/
+  top: 420rpx;
+  /*-webkit-transform: translateY(0);*/
+  /*-webkit-animation: bouceUp .3s linear both;*/
+}
+.panel-artist .close{
+  position: absolute;
+  right: 20rpx;
+  top: 10rpx;
+  width: 24rpx;
+  height: 24rpx;
+  line-height: 999px;
+  overflow: hidden;
+  border-right: 4rpx solid #ddd;
+  border-bottom: 4rpx solid #ddd;
+  transform: rotate(45deg);
+  transform-origin: 0 0;
+  color: #fff;
+}
+.panel-artist .avatar{
+  display: block;
+  width: 200rpx;
+  height: 200rpx;
+  margin: 0 auto 20rpx auto;
+  border-radius: 50%;
+}
+.panel-artist .item{
+  border-bottom: 1px solid #ddd;
+  padding: 20rpx 0;
+}
+.img-list image{
+  width: 250rpx;
+  height: 250rpx;
+  display: inline-block;
+}
+.panel-artist .adetail{
+  font-size: 30rpx;
+  line-height: 1.6;
+  padding: 20rpx;
+  text-align: left;
 }

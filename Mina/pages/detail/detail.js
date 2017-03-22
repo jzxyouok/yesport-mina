@@ -354,5 +354,15 @@ Page({
     this.setData({
       expand: 'open'
     })
+  },
+  showartist: function(){
+    this.setData({
+      exArtist: 'open'
+    })
+  },
+  closeartist: function(){
+    this.setData({
+      exArtist: ''
+    })
   }
 })
