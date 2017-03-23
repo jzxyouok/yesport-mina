@@ -83,7 +83,7 @@
 						<div class="list-search list-search-cover">
 
 							<div class="form-group">
-								<label class="control-label">输入标题/专辑CID进行查询：</label>
+								<label class="control-label">输入标题/视频VID进行查询：</label>
 								<input type="text" class="form-control" placeholder="">
 								<button type="button" class="btn btn-info">查询</button>
 							</div>
@@ -108,7 +108,7 @@
 									<td>{{items.title}}</td>
 									<td>
 										<a class="btn btn-info" href="/video/detail?vid={{items.vid}}">修改</a>
-										<a class="btn btn-danger" href="javacript:;">移除</a>
+										<a class="btn btn-danger ac-delete" data-vid='{{items.vid}}' data-cname='{{items.cname}}' href="javacript:;">移除</a>
 									</td>
 								</tr>
 								{% endfor %}
@@ -304,6 +304,36 @@
 
 			$("#refresh").on("click", function(){
 				window.location.reload();
+			});
+
+			//删除专辑内单个视频
+			$(".ac-delete").on("click", function(){
+				var that = $(this),
+					vid = that.attr('data-vid'),
+					txt = that.attr('data-cname');
+				if (that.attr("disabled") === 'disabled') return;
+
+				if(confirm("确定要删除"+txt+"吗？")){
+					$.ajax({
+						url: '/',
+						method: 'post',
+						timeout: 6000,
+						before: function(){
+							that.attr('disabled', 'disabled');
+						},
+						data: {
+							'ac': 'delete',
+							'type': 'video',
+							'vid': vid
+						},
+						success: function(data){
+							if (data['ok']) {
+								alert('提交成功~');
+								window.location.reload();
+							}
+						}
+					});
+				}
 			});
 		});
 	</script>

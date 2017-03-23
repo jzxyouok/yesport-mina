@@ -21,63 +21,89 @@ Page({
     });
   },
   onShow: function(){
-    var that = this;
+    var that = this,
+        historyLen = wx.getStorageSync('historyStor') ? wx.getStorageSync('historyStor').length : 0,
+        collectLen = wx.getStorageSync('likelist') ? wx.getStorageSync('likelist').length : 0;
 
-    //找到记录历史记录的列表数组
-    wx.getStorage({
-      key: 'historyStor',
+    wx.request({
+      url: conf.apiURL,
+      data: {
+        type: 'checkpross',
+        historyLen: historyLen,
+        collectLen: collectLen,
+        openid: app.globalData.userInfo.openid
+      },
+      method: 'POST',
       success: function(res){
-        var arr = utils.getLocalHis(res['data']);
+        if(res['data'].hisModify === 'true' && res['data'].historyData){
+          //观看记录服务器的数据比较新
+          var arr = utils.getLocalHis(res['data'].historyData);
+
+          that.setData({
+            newHisList: arr,
+            dload: 'normal'
+          });
+
+          //重新存储到本地
+          wx.setStorageSync('historyStor', res['data'].historyData);
+        }else{
+          //找到记录历史记录的列表数组
+          wx.getStorage({
+            key: 'historyStor',
+            success: function(hisres){
+              var arr = utils.getLocalHis(hisres['data']);
+              
+              that.setData({
+                newHisList: arr,
+                dload: 'normal'
+              });
+
+            },
+            fail: function(){
+              that.setData({
+                dload: 'noresult'
+              })
+            }
+          });
+        }
         
-        that.setData({
-          newHisList: arr,
-          dload: 'normal'
-        });
+        if(res['data'].collModify === 'true' && res['data'].collectData){
+          //收藏记录服务器的数据比较新
+          var arr = utils.getLocalHis(res['data'].collectData);
 
+          that.setData({
+            likeList: arr,
+            likeload: 'normal'
+          });
+
+          //重新存储到本地
+          wx.setStorageSync('likelist', res['data'].collectData);
+        }else{
+          //找到收藏列表的本地存储
+          wx.getStorage({
+            key: 'likelist',
+            success: function(likeres){
+              var arr = utils.getLocalHis(likeres['data']);
+
+              that.setData({
+                likeList: arr,
+                likeload: 'normal'
+              });
+            },
+            fail: function() {
+              that.setData({
+                likeload: 'noresult'
+              });
+            }
+          });
+        }
       },
-      fail: function(){
-        that.setData({
-          dload: 'noresult'
-        })
+      fail: function(err) {
+        console.log(err);
       }
-    });
+    });        
 
-    //找到收藏列表的本地存储
-    wx.getStorage({
-      key: 'likelist',
-      success: function(res){
-        var arr = utils.getLocalHis(res['data']);
-
-        that.setData({
-          likeList: arr,
-          likeload: 'normal'
-        });
-      },
-      fail: function() {
-        that.setData({
-          likeload: 'noresult'
-        });
-      }
-    });
-  },
-  // onHide: function(){
-  //   //用户离开当前页面的时候存储已授权公开信息
-  //   var userInfo = this.data.userInfo;
-
-  //   wx.request({
-  //     url: conf.apiURL,
-  //     data: {
-  //       'type': 'adduser',
-  //       'data': userInfo
-  //     },
-  //     method: 'POST',
-  //     success: function(res){
-  //       console.log(res['data']);
-  //     }
-  //   })
-  // },
-  onReady: function () {
-    var that = this;
+    //查看本地缓存数据size
     wx.getStorageInfo({
       success: function(res) {
         that.setData({
@@ -85,6 +111,9 @@ Page({
         })
       }
     });
+  },
+  onReady: function () {
+    //
   },
   clearStor: function(){
     var that = this;

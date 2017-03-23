@@ -8,7 +8,7 @@
     <view class="title">{{curtitle}}<view class="like" bindtap="likeit" id="{{vid}}"><image src="../../static/icon-heart-{{iconlike}}.png"></image></view></view>
     <view class="list-placeh" wx:if="{{loadst == 'loading'}}"><image src="../../static/reload-m.gif"></image></view>
     <view class="list-placeh" wx:elif="{{loadst == 'fail'}}">加载错误请返回再试 :(</view>
-    <view class="summary {{expand}}" wx:else><text class="txt">简介：</text>{{cursummary}}<view class="more" bindtap="showmore">[更多]</view></view>
+    <view class="summary {{expand}}" wx:else><text class="txt">简介：</text>{{cursummary}}<view class="more smore" bindtap="showmore"></view></view>
     <view class="summary subs">出品方：{{curPro}}</view>
     <view class="summary subs">播放量：{{playcount}}</view>
     <view class="artist">
@@ -65,6 +65,6 @@
 
     <view class="sub-title">赞助商广告</view>
     <view class="list-placeh" wx:if="{{loadst == 'loading'}}"><image src="../../static/reload-m.gif"></image></view>
-    <view class="cont-ad" wx:else><image src="http://placehold.it/375x95" mode="aspectFill"></image></view>
+    <view class="cont-ad" wx:else><image src="http://omsd78olk.bkt.clouddn.com/375x95.jpg" mode="aspectFill"></image></view>
 
 </scroll-view>

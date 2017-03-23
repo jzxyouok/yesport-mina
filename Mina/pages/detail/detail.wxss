@@ -65,10 +65,40 @@ page{
   position: absolute;
   right: 0;
   bottom: -6rpx;
-  color: #ccc;
-  padding-left: 50rpx;
-  line-height: 40rpx;
-  background: linear-gradient(to right,rgba(255,255,255,.2) 0,#fff 20px)
+  padding-left: 100rpx;
+  height: 40rpx;
+  line-height: 9999px;
+  overflow: hidden;
+  color: #fff;
+  background: linear-gradient(to right,rgba(255,255,255,.2) 0,#fff 20px);
+}
+.content .smore:after{
+  content: '';
+  width: 22rpx;
+  height: 22rpx;
+  border-bottom: 2rpx solid #ddd;
+  border-right: 2rpx solid #ddd;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: rotate(45deg);
+  transform-origin: 0 0;
+}
+.artistinfo .atmore{
+  bottom: auto;
+  top: 58rpx;
+}
+.artistinfo .atmore:after{
+  content: '';
+  width: 18rpx;
+  height: 18rpx;
+  border-top: 2rpx solid #ddd;
+  border-right: 2rpx solid #ddd;
+  position: absolute;
+  right: 10rpx;
+  top: 16rpx;
+  transform: rotate(-45deg);
+  transform-origin: 0 100%;
 }
 .content .summary.open .more{
   display: none;
@@ -124,27 +154,6 @@ page{
 }
 .content .artistinfo text{
   color: #999;
-}
-.content .artistinfo .more.atmore{
-  bottom: auto;
-  top: 58rpx;
-  height: 40rpx;
-  line-height: 9999px;
-  overflow: hidden;
-  padding-left: 100rpx;
-  color: #fff;
-}
-.artistinfo .atmore:after{
-  content: '';
-  width: 18rpx;
-  height: 18rpx;
-  border-top: 2rpx solid #ddd;
-  border-right: 2rpx solid #ddd;
-  position: absolute;
-  right: 10rpx;
-  top: 16rpx;
-  transform: rotate(-45deg);
-  transform-origin: 0 100%;
 }
 
 /*@keyframes bouceUp{

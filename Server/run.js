@@ -602,7 +602,9 @@ app.post('/', function(req, res){
 
 		param.time = Date.now();//定义一个更新时间
 		param.playcount = Number(param.playcount);
-		
+
+		//更新视频如果栏目更换需要做一个判断，{{counts}}/视频个数需要+/- 1  ##to-do 20170322
+
 		MongoClient.connect(DB_CONN_STR, function(err, db) {
 			db.collection('video').update({vid: param.vid}, param, {upsert: true});
 
@@ -616,6 +618,13 @@ app.post('/', function(req, res){
 			if (param.type === 'video') {
 				db.collection('video').findAndRemove({ vid: param.vid }, [],
 					function(err, doc) {
+						db.collection('album').update(
+							{cid: doc.value.cid},
+							{$inc:
+								{'counts': -1} //视频所对应的专辑包含视频个数-1个
+							},false, false //只更新第一条记录
+						);
+
 						res.send(doc);
 						db.close();
 					}
@@ -677,6 +686,37 @@ app.post('/', function(req, res){
 			res.json({'status': '200'});
 			db.close();
 		});
+	}else if(param.openid && param.type === 'checkpross'){
+		var historyLen = param.historyLen || 0,
+			collectLen = param.collectLen || 0,
+			obj = {};
+
+		MongoClient.connect(DB_CONN_STR, function(err, db) {
+			selectDataOne(db, 'history', {openid: param.openid}, function(history) {
+				if(historyLen < history[0].data.length){
+					//本地观看历史的记录数比服务器存的数据要少，返回服务器的新数据
+					obj.historyData = history[0].data;
+					obj.hisModify = "true";
+				}else{
+					obj.hisModify = "false";
+				}
+
+				selectDataOne(db, 'collect', {openid: param.openid}, function(collect) {
+					if (collectLen < collect[0].data.length) {
+						//本地收藏的记录数比服务器存的数据要少，返回服务器的新数据
+						obj.collectData = collect[0].data;
+						obj.collModify = "true";
+					}else{
+						obj.collModify = "false";
+					}
+
+					res.send(obj);
+					db.close();
+				});
+
+			});
+		});
+		
 	}
 });
 
