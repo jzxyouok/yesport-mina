@@ -1,0 +1,146 @@
+{% extends '@layout.html' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block head %}
+	{% parent %}
+	<style>
+		#list-album .form-control{width: 50px;text-align: center;}
+	</style>
+{% endblock %}
+
+{% block content %}
+
+	<!-- 右侧主体 开始 -->
+	<div class="site-container">
+		<div class="cover-wrap">
+
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">内容上传</h3>
+				</div>
+				<div class="panel-body">
+					<div class="form-inline form-column-search">
+						<div class="form-group">
+							<label class="control-label">选择文件：</label>
+							<input type="file" class="form-control" id="upfile">
+						</div>
+						<div class="form-group" id="upload-cont">
+							<!-- <button type="button" class="btn btn-info">搜索</button> -->
+						</div>
+					</div>
+					
+				</div>
+			</div>
+
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">服务器共有<span class="num" id="count-album">{{ucounts}}</span>个文件</h3>
+				</div>
+				<div class="panel-body">
+					<table class="table table-hover table-cover">
+						<thead>
+							<tr>
+								<th>No.</th>
+								<th>文件名</th>
+								<th>文件大小</th>
+								<th>文件类型</th>
+								<th>加入时间</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody id="list-user">
+						{% for items in filelist %}
+							<tr>
+								<td>{{ loop.index }}</td>
+								<td><a href="{{buketurl}}/{{items.key}}" class="fid">{{items.key}}</a></td>
+								<td>{{items.fsize}}</td>
+								<td>{{items.mimeType}}</td>
+								<td class="timestamp" data-timestamp='{{items.time}}'>{{items.putTime}}</td>
+								<td>
+									<a class="btn btn-info" href="">复制地址</a>
+									<a class="btn btn-danger ac-delete" href="javascript:;">删除</a>
+								</td>
+							</tr>
+						{% endfor %}
+						</tbody>
+					</table>
+
+					<div class="pages-group" style="display: none;">
+						<ul class="pagination">
+							<li class="disabled"><a href="#">«</a></li>
+							<li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+							<li><a href="#">2</a></li>
+							<li><a href="#">3</a></li>
+							<li><a href="#">4</a></li>
+							<li><a href="#">5</a></li>
+							<li><a href="#">»</a></li>
+						</ul>	
+					</div>
+
+				</div>
+			</div>
+			<div class="panel panel-danger" style="display: none;">
+				<div class="panel-heading">
+					<h3 class="panel-title">未找到栏目</h3>
+				</div>
+				<div class="panel-body">
+					还没有专辑，可以<a href="./cover-add.html">新建一个专辑</a> :)
+				</div>
+			</div>	
+		</div>
+	</div>
+	<!-- 右侧主体 结束 -->
+</div>
+{% endblock %}
+
+{% block foot %}
+	{% parent %}
+	<script src="https://cdn.staticfile.org/plupload/2.1.8/plupload.full.min.js"></script>
+	<script src="/public/system/js/qiniu.min.js"></script>
+<script>
+$(function(){
+	var Qiniu1 = new QiniuJsSDK();
+
+	var uploadthumbimg = Qiniu1.uploader({
+		runtimes: 'html5,flash,html4',
+		browse_button: 'upfile',
+		uptoken_url: '/uptoken',
+		get_new_uptoken: false,
+		unique_names: false,
+		save_key: false,
+		domain: 'http://omsd78olk.bkt.clouddn.com',
+		flash_swf_url: 'https://cdn.staticfile.org/plupload/2.1.8/Moxie.swf',
+		max_retries: 3,
+		dragdrop: false,
+		chunk_size: '4mb',
+		auto_start: true,
+
+		init: {
+			'BeforeUpload': function(up, file) {
+				   $("#upload-cont").html('上传中请稍候...');
+			},
+			'UploadProgress': function(up, file) {
+				   $("#upload-cont").html('上传中请稍候...');
+			},
+			'FileUploaded': function(up, file, info) {
+
+				   var domain = up.getOption('domain');
+				   var res = JSON.parse(info);
+				   var sourceLink = domain +"/"+ res.key; //获取上传成功后的文件的Url
+
+				   $("#upload-cont").html(sourceLink);
+			},
+			'Error': function(up, err, errTip) {
+				   alert(errTip);
+			}
+		},
+		filters : {
+			max_file_size : '100mb',
+			prevent_duplicates: true
+		}
+	});
+	
+});
+</script>
+{% endblock %}

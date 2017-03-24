@@ -758,31 +758,17 @@ app.get('/pfop', function(req, respon){
 
 });
 
-app.get('/file', function(req, res){
-
-	fs.readdir('./', function(err,files){
-		if(err){
-			console.log("error:\n"+err);
-			return;
-		}
-
-		res.send(files);
-
-		files.forEach(function(file){
-			fs.stat("/"+file, function(err,stat){
-				if(err){
-					console.log(err);
-					return;
-				}
-
-				if(stat.isDirectory()){
-				}else{
-				}
-						
-			});
+app.get('/upload', function(req, res){
+	qiniu.rsf.listPrefix(FADE.buket, '', '', '', '', function(err, result, _res){
+		res.render('upload-list', {
+			'title': '数据上传',
+			'menu' : 'upload',
+			'ucounts' : result.items.length,
+			'buketurl' : FADE.buketurl,
+			'filelist' : result.items
 		});
-
 	});
+	
 });
 
 //获取用户openid
