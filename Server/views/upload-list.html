@@ -56,7 +56,7 @@
 								<td><a href="{{buketurl}}/{{items.key}}" class="fid">{{items.key}}</a></td>
 								<td>{{items.fsize}}</td>
 								<td>{{items.mimeType}}</td>
-								<td class="timestamp" data-timestamp='{{items.time}}'>{{items.putTime}}</td>
+								<td class="timestamp" data-timestamp='{{items.putTime}}'>{{ parseInt(items.putTime / 1000)|date('m-d') }}</td>
 								<td>
 									<a class="btn btn-info" href="">复制地址</a>
 									<a class="btn btn-danger ac-delete" href="javascript:;">删除</a>

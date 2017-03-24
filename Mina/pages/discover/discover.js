@@ -3,6 +3,12 @@ const conf = require('../../utils/conf');
 var app = getApp();
 
 Page({
+  onShareAppMessage: function () {
+    return {
+      title: "分享健身运动教学的自制短视频媒体",
+      path: "/pages/discover/discover"
+    }
+  },
   onLoad:function(options){
     var that = this;
     wx.request({

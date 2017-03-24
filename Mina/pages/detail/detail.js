@@ -4,10 +4,10 @@ var WxParse = require('../../wxParse/wxParse.js');
 
 Page({
   data: {
-    autoplay: false,
+    // autoplay: false,
     vid: '',
     scrollTop: 0,
-    curvideo: '',
+    // curvideo: '',
     curtitle: '',
     cursummary: '',
     curPro: '',
@@ -58,7 +58,7 @@ Page({
                   listAlbum: curdata,
                   vid: vid,
                   artistinfo: curdata[0].artistinfo,
-                  curvideo: curdata[0].source,
+                  // curvideo: curdata[0].source,
                   curtitle: curdata[0].title,
                   cursummary: curdata[0].content,
                   curPro: curdata[0].production,
@@ -79,23 +79,49 @@ Page({
               });
 
               //检查wifi情况
-              // wx.getNetworkType({
-              //   success: function(res) {
-              //     // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
-              //     var networkType = res.networkType
+              wx.getNetworkType({
+                success: function(res) {
+                  // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
+                  var networkType = res.networkType
 
-              //     if(networkType === 'wifi'){
-              //       //如果检测到WIFI网络环境自动播放，并写入storage计算播放过
-              //       that.setData({
-              //         autoplay: !that.data.autoplay
-              //       });
+                  if(networkType === 'wifi'){
+                    //如果检测到WIFI网络环境自动播放，并写入storage计算播放过
 
-              //       //记录到hisStorage观看记录
-              //       utils.setStorage(vid);
+                    var vplayerSt = {
+                      'curvideo' : curdata[0].source,
+                      'sybomclass' : 'wifi',
+                      'autoplay' : 'true',//即使用模板渲染也不能自动播放！！20170324
+                      'vsize' : '10240kb'
+                    }
+                    
+                    //自动播放更新播放数
+                    var pc = that.data.playcount,
+                        pc = Number(pc.replace(',', '')),
+                        obj = {
+                          vid : that.data.vid,
+                          playcount : pc
+                        };
+                    //记录到playvideo()观看记录，点击播放触发
+                    utils.playvideo(obj, function(res){
+                      that.setData({
+                        playcount: utils.numconvert(pc + 1)
+                      });
+                    });
 
-              //     }
-              //   }
-              // });
+                  }else{
+                    var vplayerSt = {
+                      'curvideo' : curdata[0].source,
+                      'sybomclass' : 'nowifi',
+                      'autoplay' : 'false',
+                      'vsize' : '10240kb'
+                    }
+                  }
+                    
+                  that.setData({
+                    vplayerSt: vplayerSt
+                  });
+                }
+              });
 
               //把当前专辑信息存储在本地
               utils.setAlbumList(cid, curdata);
@@ -144,12 +170,58 @@ Page({
                   listAlbum: albumvlist,
                   vid: vid,
                   artistinfo: curdata.artistinfo,
-                  curvideo: curdata.source,
+                  // curvideo: curdata.source,
                   curtitle: curdata.title,
                   cursummary: curdata.content,
                   curPro: curdata.production,
                   playcount: utils.numconvert(curdata.playcount),
                   loadst: "normal"
+              });
+
+
+              //检查wifi情况
+              wx.getNetworkType({
+                success: function(res) {
+                  // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
+                  var networkType = res.networkType
+
+                  if(networkType === 'wifi'){
+                    //如果检测到WIFI网络环境自动播放，并写入storage计算播放过
+
+                    var vplayerSt = {
+                      'curvideo' : curdata.source,
+                      'sybomclass' : 'wifi',
+                      'autoplay' : 'true',
+                      'vsize' : '10240kb'
+                    }
+                    
+                    //自动播放更新播放数
+                    var pc = that.data.playcount,
+                        pc = Number(pc.replace(',', '')),
+                        obj = {
+                          vid : that.data.vid,
+                          playcount : pc
+                        };
+                    //记录到playvideo()观看记录，点击播放触发
+                    utils.playvideo(obj, function(res){
+                      that.setData({
+                        playcount: utils.numconvert(pc + 1)
+                      });
+                    });
+
+                  }else{
+                    var vplayerSt = {
+                      'curvideo' : curdata.source,
+                      'sybomclass' : 'nowifi',
+                      'autoplay' : 'false',
+                      'vsize' : '10240kb'
+                    }
+                  }
+                    
+                  that.setData({
+                    vplayerSt: vplayerSt
+                  });
+                }
               });
 
               //设置标题栏提示
@@ -232,7 +304,10 @@ Page({
         // WxParse.wxParse('adetail', 'html', adetail, that, 0);
 
         this.setData({
-          curvideo: listAlbum[i].source,
+          vplayerSt: {
+              curvideo: listAlbum[i].source,
+              sybomclass: 'tirgger' //默认需要点击播放
+          },
           curtitle: listAlbum[i].title,
           cursummary: listAlbum[i].content,
           artistinfo: listAlbum[i].artistinfo,
@@ -254,13 +329,6 @@ Page({
     //     var networkType = res.networkType
     //     if(networkType === 'wifi'){
     //       //如果检测到WIFI网络环境自动播放，并写入storage计算播放过
-    //       that.setData({
-    //         autoplay: true
-    //       });
-
-    //       //记录到hisStorage观看记录
-    //       utils.setStorage(vid);
-
     //     }
     //   }
     // });
@@ -274,8 +342,6 @@ Page({
 
   },
   likeit: function(e){
-    // wx.removeStorageSync('likelist');return; //调试清理本地缓存
-    // this.data.iconlike === "d" ? this.setData({iconlike: 'cur'}) : this.setData({iconlike: 'd'});
 
     if(this.data.iconlike === 'cur'){
       wx.showToast({
@@ -348,7 +414,6 @@ Page({
         playcount: utils.numconvert(pc + 1)
       });
     });
-
   },
   showmore: function(){
     this.setData({

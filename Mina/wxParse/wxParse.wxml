@@ -10,6 +10,24 @@
  * detail : http://weappdev.com/t/wxparse-alpha0-1-html-markdown/184
  */-->
 
+ <!--播放器-->
+<template name="vplayer">
+    <view class="contain-player {{sybomclass}}">
+        <block wx:if="{{sybomclass == 'wifi'}}">
+            <video autoplay src="{{curvideo}}" controls bindplay="bindplay"></video>
+        </block>
+
+        <block wx:elif="{{sybomclass == 'nowifi'}}">
+            <video src="{{curvideo}}" controls bindplay="bindplay"></video>
+            <view class="tips">您用的是移动网络，播放需要消耗{{vsize}}流量</view>
+        </block>
+
+        <block wx:else>
+            <video src="{{curvideo}}" controls bindplay="bindplay"></video>
+        </block>
+    </view>
+</template>
+
  <!--基础元素-->
 <template name="wxParseVideo">
     <!--增加video标签支持，并循环添加-->

@@ -1,14 +1,13 @@
 <import src="../../wxParse/wxParse.wxml"/>
 
-<view class="contain-player">
-    <video src="{{curvideo}}" controls bindplay="bindplay" autoplay="{{autoplay}}"></video>
-</view>
+<template is="vplayer" data="{{...vplayerSt}}"/>
 
 <scroll-view scroll-y="true" scroll-top="{{scrollTop}}" class="content">
     <view class="title">{{curtitle}}<view class="like" bindtap="likeit" id="{{vid}}"><image src="../../static/icon-heart-{{iconlike}}.png"></image></view></view>
     <view class="list-placeh" wx:if="{{loadst == 'loading'}}"><image src="../../static/reload-m.gif"></image></view>
     <view class="list-placeh" wx:elif="{{loadst == 'fail'}}">加载错误请返回再试 :(</view>
-    <view class="summary {{expand}}" wx:else><text class="txt">简介：</text>{{cursummary}}<view class="more smore" bindtap="showmore"></view></view>
+    <block wx:else>
+    <view class="summary {{expand}}"><text class="txt">简介：</text>{{cursummary}}<view class="more smore" bindtap="showmore"></view></view>
     <view class="summary subs">出品方：{{curPro}}</view>
     <view class="summary subs">播放量：{{playcount}}</view>
     <view class="artist">
@@ -18,6 +17,8 @@
         </view>
         <view class="artistinfo"><text>艺人介绍：</text><template is="wxParse" data="{{wxParseData:adetail.nodes}}"/><view class="more atmore" bindtap="showartist"></view></view>
     </view>
+    </block>
+
 <view class="panel-artist {{exArtist}}">
     <image src="{{artistinfo.avatar}}" class="avatar"></image>
     <view class="item aname"><text>姓名：</text>{{artistinfo.aname}}</view>

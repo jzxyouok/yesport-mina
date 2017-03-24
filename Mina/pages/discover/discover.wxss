@@ -15,7 +15,7 @@ page {
     -webkit-justify-content: center;*/
     text-align: center;
     box-sizing: border-box;
-    padding: 130rpx 0 0 0;
+    padding: 250rpx 0 0 0;
 }
 .item-cover image{
     position: absolute;
@@ -34,7 +34,7 @@ page {
     top: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, .4);
+    background: rgba(0, 0, 0, .5);
 }
 .item-cover .tit,
 .item-cover .subtit,
@@ -48,13 +48,15 @@ page {
 }
 .item-cover .tit{
     color: #fff;
-    font-size: 38rpx;
+    font-size: 40rpx;
     margin-bottom: 20rpx;
+    /*font-weight: bold;*/
 }
 .item-cover .subtit{
     margin-bottom: 40rpx;
     color: #ddd;
     font-size: 28rpx;
+    display: none;
 }
 .item-cover .desc{
     color: #ccc;

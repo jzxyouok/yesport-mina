@@ -12,7 +12,6 @@
         <block wx:for="{{newHisList}}">
         <view class="item" bindtap="getdetail" data-vid="{{item.vid}}">
             <image src="{{item.imgurl}}"></image>
-            <!--<view class="like"><image src="../../static/icon-heart.png"></image></view>-->
             <view class="tit">{{item.title}}</view>
             <view class="time"><image src="../../static/icon-time.png"></image>{{item.time}}</view>
         </view>
